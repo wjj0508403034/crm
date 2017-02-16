@@ -12,6 +12,7 @@ import com.huoyun.locale.LocaleService;
 public class DefaultPropertyMeta implements PropertyMeta {
 
 	public DefaultPropertyMeta(Field field, LocaleService localeService) {
+		this.field = field;
 		this.localeService = localeService;
 		BoProperty boProp = field.getAnnotation(BoProperty.class);
 		if (boProp == null) {
@@ -34,6 +35,7 @@ public class DefaultPropertyMeta implements PropertyMeta {
 	private LocaleService localeService;
 	private boolean mandatory;
 	private boolean readonly;
+	private Field field;
 
 	@Override
 	public String getName() {
@@ -77,5 +79,10 @@ public class DefaultPropertyMeta implements PropertyMeta {
 
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	@Override
+	public Field getField() {
+		return field;
 	}
 }

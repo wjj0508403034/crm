@@ -29,13 +29,13 @@ public class DefaultBoMeta implements BoMeta {
 
 	@SuppressWarnings("unchecked")
 	public DefaultBoMeta(Class<?> boClass, LocaleService localeService) {
-		
+
 		this.localeService = localeService;
 		BoEntity annot = boClass.getAnnotation(BoEntity.class);
 		if (annot == null) {
 			throw new RuntimeException("No BoEntity annotation");
 		}
-		
+
 		this.setBoType((Class<BusinessObject>) boClass);
 
 		this.name = BusinessObjectUtils.getBoName(boClass);
@@ -72,6 +72,7 @@ public class DefaultBoMeta implements BoMeta {
 		this.label = label;
 	}
 
+	@Override
 	public List<PropertyMeta> getProperties() {
 		return properties;
 	}

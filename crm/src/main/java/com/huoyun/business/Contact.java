@@ -58,4 +58,5 @@ public class Contact extends DefaultBusinessObject {
 		this.lastName = lastName;
 	}
 
+
 }

@@ -1,5 +1,7 @@
 package com.huoyun.core.bo.metadata;
 
+import java.lang.reflect.Field;
+
 public interface PropertyMeta {
 
 	String getName();
@@ -11,4 +13,6 @@ public interface PropertyMeta {
 	boolean isMandatory();
 
 	boolean isReadonly();
+
+	Field getField();
 }

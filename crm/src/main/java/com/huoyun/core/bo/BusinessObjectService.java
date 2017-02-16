@@ -1,8 +1,10 @@
 package com.huoyun.core.bo;
 
-import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
+import com.huoyun.core.bo.query.QueryParam;
 import com.huoyun.exception.BusinessException;
 
 public interface BusinessObjectService {
@@ -21,6 +23,9 @@ public interface BusinessObjectService {
 	BusinessObject updateBo(String namespace, String name, Long id,
 			Map<String, Object> data) throws BusinessException;
 
-	List<BusinessObject> query(String namespace, String name)
+	Long count(String namespace, String name, QueryParam queryParam)
 			throws BusinessException;
+
+	Page<BusinessObject> query(String namespace, String name,
+			QueryParam queryParam) throws BusinessException;
 }

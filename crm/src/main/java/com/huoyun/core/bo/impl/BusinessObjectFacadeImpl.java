@@ -11,7 +11,6 @@ import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.DefaultBusinessObject;
 import com.huoyun.core.bo.LiteBusinessObject;
-import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 

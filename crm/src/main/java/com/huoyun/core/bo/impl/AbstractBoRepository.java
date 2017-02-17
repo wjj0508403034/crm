@@ -1,5 +1,6 @@
 package com.huoyun.core.bo.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -9,9 +10,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.util.Assert;
 
 import com.huoyun.core.bo.BoRepository;
@@ -25,8 +26,6 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	protected final BusinessObjectFacade boFacade;
 	protected final Class<T> boType;
 	protected final BoMeta boMeta;
-
-	// protected final JpaContext jpaContext;
 
 	public AbstractBoRepository(Class<T> boType, BusinessObjectFacade boFacade,
 			BoMeta boMeta) {
@@ -65,35 +64,38 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	}
 
 	@Override
-	public List<T> query(Specification<T> spec) {
-		CriteriaBuilder builder = this.boFacade.getEntityManager().getCriteriaBuilder();
+	public TypedQuery<T> newQuery(String sql) {
+		return this.boFacade.getEntityManager().createQuery(sql, this.boType);
+	}
+
+	@Override
+	public Page<T> query(Specification<T> spec, Pageable pageable) {
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
 
 		Root<T> root = applySpecificationToCriteria(spec, criteriaQuery);
 		criteriaQuery.select(root);
-		
-		TypedQuery<T> query =  this.boFacade.getEntityManager().createQuery(criteriaQuery);
-//		
-//		TypedQuery<T> query = this.boFacade.getEntityManager().createQuery(
-//				"select t from Contact t", this.boType);
-		query.setMaxResults(10);
 
-		List<T> list = query.getResultList();
-		for (T bo : list) {
+		TypedQuery<T> query = this.boFacade.getEntityManager().createQuery(
+				criteriaQuery);
+		Page<T> page = pageable == null ? new PageImpl<T>(query.getResultList())
+				: readPage(query, pageable, spec);
+
+		for (T bo : page.getContent()) {
 			bo.setBoFacade(this.boFacade);
 		}
 
-		return list;
+		return page;
 	}
-	
-	@Override
-	public Page<T> pageableQuery(Pageable pageable){
 
-		
-		return null;
+	@Override
+	public Long count(Specification<T> spec) {
+		return executeCountQuery(getCountQuery(spec));
 	}
-	
-	private <S> Root<T> applySpecificationToCriteria(Specification<T> spec, CriteriaQuery<S> query) {
+
+	private <S> Root<T> applySpecificationToCriteria(Specification<T> spec,
+			CriteriaQuery<S> query) {
 
 		Assert.notNull(query);
 		Root<T> root = query.from(this.boType);
@@ -102,7 +104,8 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 			return root;
 		}
 
-		CriteriaBuilder builder = this.boFacade.getEntityManager().getCriteriaBuilder();
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
 		Predicate predicate = spec.toPredicate(root, query, builder);
 
 		if (predicate != null) {
@@ -112,25 +115,47 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		return root;
 	}
 
-	@Override
-	public Long count(Specification<T> spec) {
+	private Page<T> readPage(TypedQuery<T> query, Pageable pageable,
+			Specification<T> spec) {
 
+		query.setFirstResult(pageable.getOffset());
+		query.setMaxResults(pageable.getPageSize());
 
-//		if (sort != null) {
-//			query.orderBy(toOrders(sort, root, builder));
-//		}
+		Long total = executeCountQuery(getCountQuery(spec));
+		List<T> content = total > pageable.getOffset() ? query.getResultList()
+				: Collections.<T> emptyList();
 
-		
-//		JpaSpecificationExecutor 
-//		Specification<T> spec = new Specification<T>(){
-//			 @Override
-//			   public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-//				   return null;
-//			   }
-//		};
+		return new PageImpl<T>(content, pageable, total);
+	}
 
-		TypedQuery<Long> query = this.boFacade.getEntityManager().createQuery(
-				"select count(t) from Contact t", Long.class);
-		return query.getSingleResult();
+	private TypedQuery<Long> getCountQuery(Specification<T> spec) {
+
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+
+		Root<T> root = applySpecificationToCriteria(spec, query);
+
+		if (query.isDistinct()) {
+			query.select(builder.countDistinct(root));
+		} else {
+			query.select(builder.count(root));
+		}
+
+		return this.boFacade.getEntityManager().createQuery(query);
+	}
+
+	private static Long executeCountQuery(TypedQuery<Long> query) {
+
+		Assert.notNull(query);
+
+		List<Long> totals = query.getResultList();
+		Long total = 0L;
+
+		for (Long element : totals) {
+			total += element == null ? 0 : element;
+		}
+
+		return total;
 	}
 }

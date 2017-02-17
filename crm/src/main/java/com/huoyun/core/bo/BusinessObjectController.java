@@ -1,15 +1,17 @@
 package com.huoyun.core.bo;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huoyun.core.bo.query.QueryParam;
@@ -22,13 +24,17 @@ public class BusinessObjectController {
 	@Autowired
 	private BusinessObjectService businessObjectService;
 
-	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.GET)
+	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.POST)
 	@ResponseBody
 	public Page<BusinessObject> query(
 			@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
+			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
 			@RequestBody QueryParam queryParam) throws BusinessException {
-		return this.businessObjectService.query(namespace, name, queryParam);
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		return this.businessObjectService.query(namespace, name, pageable,
+				queryParam);
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/count", method = RequestMethod.GET)
@@ -43,7 +49,7 @@ public class BusinessObjectController {
 	@ResponseBody
 	public BusinessObject init(
 			@PathVariable(value = "namespace") String namespace,
-			@PathVariable(value = "name") String name) {
+			@PathVariable(value = "name") String name) throws BusinessException {
 		return this.businessObjectService.initBo(namespace, name);
 	}
 

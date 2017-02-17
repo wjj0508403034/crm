@@ -2,7 +2,9 @@ package com.huoyun.core.bo.metadata.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Id;
 
@@ -26,6 +28,7 @@ public class DefaultBoMeta implements BoMeta {
 	private List<PropertyMeta> properties = new ArrayList<>();
 	private String primaryKey;
 	private Class<BusinessObject> boType;
+	private Map<String, PropertyMeta> propMap = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public DefaultBoMeta(Class<?> boClass, LocaleService localeService) {
@@ -74,11 +77,7 @@ public class DefaultBoMeta implements BoMeta {
 
 	@Override
 	public List<PropertyMeta> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(List<PropertyMeta> properties) {
-		this.properties = properties;
+		return this.properties;
 	}
 
 	private void setProps(Class<?> klass) {
@@ -91,6 +90,7 @@ public class DefaultBoMeta implements BoMeta {
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
 				propMeta = new DefaultPropertyMeta(field, localeService);
+				this.propMap.put(propMeta.getName(), propMeta);
 				this.properties.add(propMeta);
 
 				Id idAnnot = field.getAnnotation(Id.class);
@@ -118,5 +118,18 @@ public class DefaultBoMeta implements BoMeta {
 
 	public void setBoType(Class<BusinessObject> boType) {
 		this.boType = boType;
+	}
+
+	@Override
+	public boolean hasProperty(String propertyName) {
+		return this.propMap.containsKey(propertyName);
+	}
+
+	@Override
+	public PropertyMeta getPropertyMeta(String propertyName) {
+		if (this.propMap.containsKey(propertyName)) {
+			return this.propMap.get(propertyName);
+		}
+		return null;
 	}
 }

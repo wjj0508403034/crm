@@ -19,6 +19,8 @@ import com.huoyun.core.bo.BoRepository;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.metadata.BoMeta;
+import com.huoyun.core.bo.query.BoSpecification;
+import com.huoyun.exception.BusinessException;
 
 public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		BoRepository<T> {
@@ -69,7 +71,7 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	}
 
 	@Override
-	public Page<T> query(Specification<T> spec, Pageable pageable) {
+	public Page<T> query(BoSpecification<T> spec, Pageable pageable) throws BusinessException {
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
 				.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
@@ -90,12 +92,12 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	}
 
 	@Override
-	public Long count(Specification<T> spec) {
+	public Long count(BoSpecification<T> spec) throws BusinessException {
 		return executeCountQuery(getCountQuery(spec));
 	}
 
-	private <S> Root<T> applySpecificationToCriteria(Specification<T> spec,
-			CriteriaQuery<S> query) {
+	private <S> Root<T> applySpecificationToCriteria(BoSpecification<T> spec,
+			CriteriaQuery<S> query) throws BusinessException {
 
 		Assert.notNull(query);
 		Root<T> root = query.from(this.boType);
@@ -116,7 +118,7 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	}
 
 	private Page<T> readPage(TypedQuery<T> query, Pageable pageable,
-			Specification<T> spec) {
+			BoSpecification<T> spec) throws BusinessException {
 
 		query.setFirstResult(pageable.getOffset());
 		query.setMaxResults(pageable.getPageSize());
@@ -128,7 +130,7 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		return new PageImpl<T>(content, pageable, total);
 	}
 
-	private TypedQuery<Long> getCountQuery(Specification<T> spec) {
+	private TypedQuery<Long> getCountQuery(BoSpecification<T> spec) throws BusinessException {
 
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
 				.getCriteriaBuilder();

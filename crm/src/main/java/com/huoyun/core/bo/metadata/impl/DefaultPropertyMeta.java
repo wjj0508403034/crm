@@ -85,4 +85,9 @@ public class DefaultPropertyMeta implements PropertyMeta {
 	public Field getField() {
 		return field;
 	}
+
+	@Override
+	public Class<?> getRuntimeType() {
+		return this.field.getType();
+	}
 }

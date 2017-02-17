@@ -15,4 +15,6 @@ public interface PropertyMeta {
 	boolean isReadonly();
 
 	Field getField();
+	
+	Class<?> getRuntimeType();
 }

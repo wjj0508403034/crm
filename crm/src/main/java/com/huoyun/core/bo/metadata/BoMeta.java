@@ -9,4 +9,8 @@ public interface BoMeta {
 	Class<BusinessObject> getBoType();
 	
 	List<PropertyMeta> getProperties();
+	
+	boolean hasProperty(String propertyName);
+	
+	PropertyMeta getPropertyMeta(String propertyName);
 }

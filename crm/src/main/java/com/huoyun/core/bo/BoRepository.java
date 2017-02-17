@@ -1,12 +1,12 @@
 package com.huoyun.core.bo;
 
-import java.util.List;
-
 import javax.persistence.TypedQuery;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+
+import com.huoyun.core.bo.query.BoSpecification;
+import com.huoyun.exception.BusinessException;
 
 public interface BoRepository<T extends BusinessObject> {
 
@@ -20,9 +20,9 @@ public interface BoRepository<T extends BusinessObject> {
 
 	void flush();
 
-	Long count(Specification<T> spec);
+	Long count(BoSpecification<T> spec) throws BusinessException;
 
-	Page<T> query(Specification<T> spec, Pageable pageable);
+	Page<T> query(BoSpecification<T> spec, Pageable pageable) throws BusinessException;
 	
 	TypedQuery<T> newQuery(String sql);
 }

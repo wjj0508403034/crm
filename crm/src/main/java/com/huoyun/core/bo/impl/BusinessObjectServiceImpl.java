@@ -14,7 +14,7 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.BusinessObjectService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
-import com.huoyun.core.bo.query.BoSpecification;
+import com.huoyun.core.bo.query.BoSpecificationImpl;
 import com.huoyun.core.bo.query.QueryParam;
 import com.huoyun.exception.BusinessException;
 
@@ -102,7 +102,7 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	public Page<BusinessObject> query(String namespace, String name,
 			Pageable pageable, QueryParam queryParam) throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecification spec = BoSpecification.newInstance(boMeta.getBoType(),
+		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(boMeta.getBoType(),
 				boMeta, queryParam);
 		return this.boFacade.getBoRepository(namespace, name).query(spec,
 				pageable);
@@ -113,7 +113,7 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	public Long count(String namespace, String name, QueryParam queryParam)
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecification spec = BoSpecification.newInstance(boMeta.getBoType(),
+		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(boMeta.getBoType(),
 				boMeta, queryParam);
 		return this.boFacade.getBoRepository(namespace, name).count(spec);
 	}

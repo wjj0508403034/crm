@@ -5,9 +5,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public interface QueryCriteria {
+import com.huoyun.exception.BusinessException;
+
+public interface Criteria {
 
 	Category getCategory();
 	
-	Predicate parse(Root<?> root, CriteriaQuery query, CriteriaBuilder cb);
+	Predicate parse(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException;
 }

@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huoyun.core.bo.metadata.PropertyMeta;
+import com.huoyun.core.bo.query.QueryExpressUtils;
 import com.huoyun.exception.BusinessException;
 
 public abstract class AbstractCriteria implements Criteria {

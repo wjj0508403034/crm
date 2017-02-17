@@ -1,4 +1,4 @@
-package com.huoyun.core.bo.query.criteria;
+package com.huoyun.core.bo.query;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -20,9 +20,18 @@ public class QueryExpressUtils {
 
 		if (value.getClass() == String.class) {
 			String expr = ((String) value).trim();
-			if (StringUtils.equals(expr, "now()")) {
+			if (StringUtils.equals(expr, DateTimeExpress.Now)) {
 				return DateTime.now();
 			}
+
+			if (StringUtils.equals(expr, DateTimeExpress.LastDay)) {
+				return DateTime.now().minusDays(1);
+			}
+
+			if (StringUtils.equals(expr, DateTimeExpress.NextDay)) {
+				return DateTime.now().plusDays(1);
+			}
+
 		}
 
 		throw new BusinessException(BoErrorCode.Bo_Query_Express_Parse_Failed);

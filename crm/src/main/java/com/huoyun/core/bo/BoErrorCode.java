@@ -9,4 +9,5 @@ public class BoErrorCode {
 	public static final String Bo_Property_Set_Value_Failed = "00000";
 	public static final String Bo_Record_Not_Found = "00000";
 	public static final String Bo_Query_Express_Parse_Failed = "00000";
+	public static final String Bo_Property_Validator_Failed = "00000";
 }

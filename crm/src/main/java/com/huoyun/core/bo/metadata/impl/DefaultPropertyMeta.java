@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.PropertyMeta;
+import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.locale.LocaleService;
 
@@ -19,6 +20,11 @@ public class DefaultPropertyMeta implements PropertyMeta {
 			throw new RuntimeException("No BoProperty annotation");
 		}
 
+		this.type = boProp.type();
+		if (this.type == PropertyType.None) {
+			this.type = PropertyType.parse(this.field.getType());
+		}
+
 		this.name = field.getName();
 		if (StringUtils.isEmpty(boProp.label())) {
 			this.labelI18nKey = "bo.label.prop." + this.name;
@@ -26,6 +32,7 @@ public class DefaultPropertyMeta implements PropertyMeta {
 			this.labelI18nKey = boProp.label();
 		}
 		this.label = this.localeService.getMessage(this.labelI18nKey);
+		this.setValidationRule(boProp.validationRule());
 	}
 
 	private String name;
@@ -35,7 +42,10 @@ public class DefaultPropertyMeta implements PropertyMeta {
 	private LocaleService localeService;
 	private boolean mandatory;
 	private boolean readonly;
+	private boolean nullable;
 	private Field field;
+	private PropertyType type;
+	private String validationRule;
 
 	@Override
 	public String getName() {
@@ -89,5 +99,33 @@ public class DefaultPropertyMeta implements PropertyMeta {
 	@Override
 	public Class<?> getRuntimeType() {
 		return this.field.getType();
+	}
+
+	public boolean isNullable() {
+		return nullable;
+	}
+
+	public void setNullable(boolean nullable) {
+		this.nullable = nullable;
+	}
+
+	@Override
+	public PropertyType getType() {
+		return this.type;
+	}
+
+	@Override
+	public String getValidationRule() {
+		return validationRule;
+	}
+
+	public void setValidationRule(String validationRule) {
+		this.validationRule = validationRule;
+	}
+
+	@Override
+	public String getCustomErrorMessage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

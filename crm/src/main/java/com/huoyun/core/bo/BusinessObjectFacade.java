@@ -3,6 +3,7 @@ package com.huoyun.core.bo;
 import javax.persistence.EntityManager;
 
 import com.huoyun.core.bo.metadata.MetadataRepository;
+import com.huoyun.locale.LocaleService;
 
 public interface BusinessObjectFacade {
 
@@ -17,4 +18,6 @@ public interface BusinessObjectFacade {
 	 <T extends BusinessObject> BoRepository<T> getBoRepository(String namespace, String name);
 	 
 	 EntityManager getEntityManager();
+	 
+	 LocaleService getLocaleService();
 }

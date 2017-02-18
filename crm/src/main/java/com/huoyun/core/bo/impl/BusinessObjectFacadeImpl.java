@@ -13,6 +13,7 @@ import com.huoyun.core.bo.DefaultBusinessObject;
 import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
+import com.huoyun.locale.LocaleService;
 
 public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 
@@ -21,12 +22,14 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	private ApplicationContext context;
 	private MetadataRepository metadataRepository;
 	private EntityManager entityManager;
+	private LocaleService localeService;
 
 	public BusinessObjectFacadeImpl(ApplicationContext context) {
 		this.context = context;
 		this.metadataRepository = this.context
 				.getBean(MetadataRepository.class);
 		this.entityManager = this.context.getBean(EntityManager.class);
+		this.localeService = this.context.getBean(LocaleService.class);;
 	}
 
 	@Override
@@ -104,6 +107,11 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	@Override
 	public EntityManager getEntityManager() {
 		return this.entityManager;
+	}
+
+	@Override
+	public LocaleService getLocaleService() {
+		return this.localeService;
 	}
 
 }

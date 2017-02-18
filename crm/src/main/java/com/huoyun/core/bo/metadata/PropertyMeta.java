@@ -17,4 +17,10 @@ public interface PropertyMeta {
 	Field getField();
 	
 	Class<?> getRuntimeType();
+	
+	PropertyType getType();
+
+	String getValidationRule();
+	
+	String getCustomErrorMessage();
 }

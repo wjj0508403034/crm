@@ -9,6 +9,7 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.DefaultBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.metadata.PropertyType;
 
 @BoEntity
 @Entity
@@ -24,14 +25,17 @@ public class Contact extends DefaultBusinessObject {
 
 	@Id
 	@GeneratedValue
-	@BoProperty(label = "common.bo.id")
+	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 
 	@BoProperty
 	private String firstName;
 
-	@BoProperty
+	@BoProperty(validationRule = "sw=Jing")
 	private String lastName;
+
+	@BoProperty(type = PropertyType.Email, mandatory = true)
+	private String email;
 
 	@Override
 	public Long getId() {
@@ -58,5 +62,12 @@ public class Contact extends DefaultBusinessObject {
 		this.lastName = lastName;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 }

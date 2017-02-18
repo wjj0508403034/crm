@@ -27,6 +27,16 @@ public class LocaleServiceImpl implements LocaleService {
 		}
 		return null;
 	}
+	
+	@Override
+	public String getMessage(String key,Object[] objs) {
+		try {
+			return this.messageSource.getMessage(key, objs, Locale.CHINA);
+		} catch (Exception ex) {
+			LOGGER.warn("Not found {} string in localization file", key);
+		}
+		return null;
+	}
 
 	@Override
 	public String getErrorMessage(String errorCode) {

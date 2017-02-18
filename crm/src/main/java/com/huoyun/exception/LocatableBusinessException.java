@@ -10,6 +10,11 @@ public class LocatableBusinessException extends BusinessException {
 		this.path = path;
 	}
 
+	public LocatableBusinessException(String errorCode, String message, String path) {
+		this(errorCode, path);
+		this.setMessage(message);
+	}
+
 	public String getPath() {
 		return path;
 	}

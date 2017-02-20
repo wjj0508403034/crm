@@ -20,7 +20,8 @@ public class UpgradeAutoConfiguration {
 
 	@Bean
 	public SchemaUpdate schemaUpdate(JdbcTemplate jdbcTemplate,
-			CachedClassLoader classLoader, ScriptBuilder scriptBuilder) throws SQLException {
+			CachedClassLoader classLoader, ScriptBuilder scriptBuilder)
+			throws SQLException {
 		return new SchemaUpdate(jdbcTemplate, classLoader, scriptBuilder);
 	}
 

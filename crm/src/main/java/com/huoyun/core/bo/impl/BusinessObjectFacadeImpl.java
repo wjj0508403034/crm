@@ -1,6 +1,7 @@
 package com.huoyun.core.bo.impl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.DefaultBusinessObject;
 import com.huoyun.core.bo.LiteBusinessObject;
+import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.locale.LocaleService;
@@ -29,7 +31,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		this.metadataRepository = this.context
 				.getBean(MetadataRepository.class);
 		this.entityManager = this.context.getBean(EntityManager.class);
-		this.localeService = this.context.getBean(LocaleService.class);;
+		this.localeService = this.context.getBean(LocaleService.class);
 	}
 
 	@Override
@@ -112,6 +114,16 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	@Override
 	public LocaleService getLocaleService() {
 		return this.localeService;
+	}
+
+	@Override
+	public ExtensionService getExtensionService() {
+		return this.context.getBean(ExtensionService.class);
+	}
+
+	@Override
+	public EntityManagerFactory getEntityManagerFactory() {
+		return this.context.getBean(EntityManagerFactory.class);
 	}
 
 }

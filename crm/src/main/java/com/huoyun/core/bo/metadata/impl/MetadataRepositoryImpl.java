@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
@@ -31,8 +32,9 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 	private void initialize() {
 		LOGGER.info("========start to initialize BO metadata==========");
 		for (String key : this.classLoader.getBoClassCache().keySet()) {
-			this.boMetaCache.put(key, new DefaultBoMeta(this.classLoader
-					.getBoClassCache().get(key), this.localeService));
+			Class<? extends BusinessObject> boClass = this.classLoader
+					.getBoClassCache().get(key);
+			this.boMetaCache.put(key, new DefaultBoMeta(boClass, this.localeService));
 		}
 		LOGGER.info("========end to initialize BO metadata==========");
 	}

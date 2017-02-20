@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import org.springframework.util.StringUtils;
 
 import com.huoyun.core.bo.BusinessObject;
+import com.huoyun.core.bo.ExtensibleBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.BoMeta;
@@ -29,6 +30,7 @@ public class DefaultBoMeta implements BoMeta {
 	private String primaryKey;
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
+	private String extTableName;
 
 	@SuppressWarnings("unchecked")
 	public DefaultBoMeta(Class<?> boClass, LocaleService localeService) {
@@ -47,10 +49,15 @@ public class DefaultBoMeta implements BoMeta {
 			this.labelI18nKey = "bo.label." + this.name;
 		}
 		this.label = this.localeService.getMessage(this.labelI18nKey);
+		
+		if(ExtensibleBusinessObject.class.isAssignableFrom(boClass)){
+			this.setExtTableName(BusinessObjectUtils.getExtTableName(boClass));
+		}
 
 		this.setProps(boClass);
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -131,5 +138,14 @@ public class DefaultBoMeta implements BoMeta {
 			return this.propMap.get(propertyName);
 		}
 		return null;
+	}
+
+	@Override
+	public String getExtTableName() {
+		return extTableName;
+	}
+
+	public void setExtTableName(String extTableName) {
+		this.extTableName = extTableName;
 	}
 }

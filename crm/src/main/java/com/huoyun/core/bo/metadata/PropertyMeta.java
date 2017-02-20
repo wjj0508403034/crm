@@ -23,4 +23,6 @@ public interface PropertyMeta {
 	String getValidationRule();
 	
 	String getCustomErrorMessage();
+
+	String getColumnName();
 }

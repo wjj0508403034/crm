@@ -1,7 +1,9 @@
 package com.huoyun.core.bo;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
+import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.locale.LocaleService;
 
@@ -19,5 +21,9 @@ public interface BusinessObjectFacade {
 	 
 	 EntityManager getEntityManager();
 	 
+	 EntityManagerFactory getEntityManagerFactory();
+	 
 	 LocaleService getLocaleService();
+	 
+	 ExtensionService getExtensionService();
 }

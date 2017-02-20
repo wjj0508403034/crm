@@ -25,7 +25,8 @@ import com.huoyun.exception.LocatableBusinessException;
 @MappedSuperclass
 public abstract class AbstractBusinessObject implements BusinessObject {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBusinessObject.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(AbstractBusinessObject.class);
 
 	protected static final String I18n_Label_Id = "common.bo.id";
 	protected static final String I18n_Label_Create_Time = "common.bo.createTime";
@@ -36,6 +37,9 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 
 	@Transient
 	protected BusinessObjectFacade boFacade;
+
+	@Transient
+	protected BoMeta boMeta;
 
 	@Transient
 	protected BoRepository<BusinessObject> boRepository;
@@ -55,7 +59,10 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	public void setBoFacade(BusinessObjectFacade boFacade) {
 		if (null == this.boFacade) {
 			this.boFacade = boFacade;
-			this.boRepository = (BoRepository<BusinessObject>) this.boFacade.getBoRepository(this.getClass());
+			this.boRepository = (BoRepository<BusinessObject>) this.boFacade
+					.getBoRepository(this.getClass());
+			this.boMeta = this.boFacade.getMetadataRepository().getBoMeta(
+					this.getClass());
 		}
 	}
 
@@ -92,7 +99,8 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	}
 
 	protected void onValid() throws BusinessException {
-		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(this.getClass());
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
+				this.getClass());
 		if (boMeta == null) {
 			throw new BusinessException(BoErrorCode.Unkown_Bo_Entity);
 		}
@@ -104,10 +112,13 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 			}
 
 			if (propertyValue == null) {
-				throw new LocatableBusinessException(BoErrorCode.Bo_Property_Validator_Failed, propMeta.getName());
+				throw new LocatableBusinessException(
+						BoErrorCode.Bo_Property_Validator_Failed,
+						propMeta.getName());
 			}
 
-			Validator validator = ValidatorUtils.getValidator(this.boFacade, propMeta);
+			Validator validator = ValidatorUtils.getValidator(this.boFacade,
+					propMeta);
 			if (validator != null) {
 				validator.validator(propertyValue);
 			}
@@ -156,37 +167,47 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	}
 
 	@Override
-	public void setPropertyValue(String propertyName, Object propertyValue) throws LocatableBusinessException {
-		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(this.getClass(), propertyName);
+	public void setPropertyValue(String propertyName, Object propertyValue)
+			throws LocatableBusinessException {
+		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
+				this.getClass(), propertyName);
 		if (prop == null) {
-			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(
+					BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		Method setter = prop.getWriteMethod();
 		if (setter == null) {
-			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(
+					BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			setter.invoke(this, mapper.convertValue(propertyValue, prop.getPropertyType()));
+			setter.invoke(this,
+					mapper.convertValue(propertyValue, prop.getPropertyType()));
 		} catch (Exception e) {
-			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Set_Value_Failed, propertyName);
+			throw new LocatableBusinessException(
+					BoErrorCode.Bo_Property_Set_Value_Failed, propertyName);
 		}
 	}
 
 	@Override
-	public Object getPropertyValue(String propertyName) throws LocatableBusinessException {
-		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(this.getClass(), propertyName);
+	public Object getPropertyValue(String propertyName)
+			throws LocatableBusinessException {
+		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
+				this.getClass(), propertyName);
 		Method getter = prop.getReadMethod();
 		if (getter == null) {
-			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(
+					BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		try {
 			return getter.invoke(this);
 		} catch (Exception e) {
-			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(
+					BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 	}
 }

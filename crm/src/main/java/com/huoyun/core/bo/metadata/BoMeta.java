@@ -13,4 +13,8 @@ public interface BoMeta {
 	boolean hasProperty(String propertyName);
 	
 	PropertyMeta getPropertyMeta(String propertyName);
+
+	String getExtTableName();
+
+	String getName();
 }

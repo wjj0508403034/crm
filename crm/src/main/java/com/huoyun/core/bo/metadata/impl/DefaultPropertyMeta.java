@@ -125,7 +125,11 @@ public class DefaultPropertyMeta implements PropertyMeta {
 
 	@Override
 	public String getCustomErrorMessage() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getColumnName() {
+		return "STR1";
 	}
 }

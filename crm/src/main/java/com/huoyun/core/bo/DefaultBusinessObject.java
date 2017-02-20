@@ -4,7 +4,8 @@ import javax.persistence.MappedSuperclass;
 import com.huoyun.core.bo.annotation.BoProperty;
 
 @MappedSuperclass
-public abstract class DefaultBusinessObject extends AbstractBusinessObject {
+public abstract class DefaultBusinessObject extends AbstractBusinessObject
+		implements ExtensibleBusinessObject {
 
 	public DefaultBusinessObject() {
 	}

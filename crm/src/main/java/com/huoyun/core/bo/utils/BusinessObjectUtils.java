@@ -1,5 +1,7 @@
 package com.huoyun.core.bo.utils;
 
+import javax.persistence.Table;
+
 import org.springframework.util.StringUtils;
 
 import com.huoyun.core.bo.annotation.BoEntity;
@@ -7,6 +9,8 @@ import com.huoyun.core.bo.annotation.BoEntity;
 public class BusinessObjectUtils {
 
 	public final static String SYSTEM_BO_NAMESPACE = "com.huoyun.sbo";
+	public final static String EXTENSION_BO_NAMESPACE = "ext.default";
+	public static final String EXT_TABLE_NAME_SUFFIX = "_EXT";
 
 	public static String getBoFullName(Class<?> clazz) {
 		String name = getBoName(clazz);
@@ -37,5 +41,23 @@ public class BusinessObjectUtils {
 			return sb.toString();
 		}
 		return name;
+	}
+
+	public static String getExtTableName(Class<?> clazz) {
+		if (clazz == null) {
+			return null;
+		}
+		String tableName = null;
+		if (clazz.getAnnotation(Table.class) != null) {
+			tableName = clazz.getAnnotation(Table.class).name();
+		}
+		if (StringUtils.isEmpty(tableName)) {
+			tableName = clazz.getSimpleName();
+		}
+		if (tableName != null) {
+			return tableName.toUpperCase() + EXT_TABLE_NAME_SUFFIX;
+		} else {
+			return null;
+		}
 	}
 }

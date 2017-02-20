@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.huoyun.business.Contact;
 import com.huoyun.core.bo.BusinessObjectFacade;
 
 @Controller
@@ -24,7 +23,6 @@ public class MetadataController {
 	@ResponseBody
 	public BoMeta send(@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name) {
-		Contact contact = this.boFacade.newBo(Contact.class);
 		return this.metadataRepository.getBoMeta(namespace, name);
 	}
 }

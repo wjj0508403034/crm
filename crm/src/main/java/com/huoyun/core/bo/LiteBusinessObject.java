@@ -9,9 +9,7 @@ public abstract class LiteBusinessObject extends AbstractBusinessObject {
 	}
 
 	public LiteBusinessObject(BusinessObjectFacade boFacade) {
-		if (null == this.boFacade) {
-			this.boFacade = boFacade;
-		}
+		this.setBoFacade(boFacade);
 	}
 
 }

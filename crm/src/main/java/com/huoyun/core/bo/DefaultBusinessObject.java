@@ -18,7 +18,7 @@ public abstract class DefaultBusinessObject extends AbstractBusinessObject
 		this.setBoFacade(boFacade);
 		
 		if(this.boFacade != null){
-			this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
+			//this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
 		}
 	}
 

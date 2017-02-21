@@ -25,7 +25,7 @@ public class ExtensionServiceImpl implements ExtensionService {
 		}
 
 		DynamicHelper dynamicHelper = new JPADynamicHelper(
-				this.boFacade.getEntityManagerFactory());
+				this.boFacade.getEntityManager());
 		DynamicType type = dynamicHelper.getType(boMeta.getExtTableName());
 		DynamicEntity dynamicEntity = type.newDynamicEntity();
 		return new UserEntityImpl(dynamicEntity, boMeta);

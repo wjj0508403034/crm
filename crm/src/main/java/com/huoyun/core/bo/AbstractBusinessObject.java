@@ -8,6 +8,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +21,11 @@ import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.validate.Validator;
 import com.huoyun.core.bo.validate.ValidatorUtils;
+import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.exception.BusinessException;
 import com.huoyun.exception.LocatableBusinessException;
 
+@Converter(name = JodaDateConverter.Name, converterClass = JodaDateConverter.class)
 @MappedSuperclass
 public abstract class AbstractBusinessObject implements BusinessObject {
 
@@ -47,10 +51,12 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	@Version
 	private Long version;
 
+	@Convert(JodaDateConverter.Name)
 	@BoProperty(readonly = true, label = I18n_Label_Create_Time)
 	@Column
 	private DateTime createTime = DateTime.now();
 
+	@Convert(JodaDateConverter.Name)
 	@BoProperty(readonly = true, label = I18n_Label_Update_Time)
 	private DateTime updateTime;
 

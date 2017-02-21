@@ -11,7 +11,8 @@ import com.huoyun.core.bo.impl.BusinessObjectFacadeImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
 
-@AutoConfigureAfter(MetadataAutoConfiguration.class)
+@AutoConfigureAfter({ MetadataAutoConfiguration.class,
+		JpaAutoConfiguration.class })
 @Configuration
 public class BusinessObjectAutoConfiguration {
 

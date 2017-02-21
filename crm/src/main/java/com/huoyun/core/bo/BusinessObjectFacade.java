@@ -26,4 +26,6 @@ public interface BusinessObjectFacade {
 	 LocaleService getLocaleService();
 	 
 	 ExtensionService getExtensionService();
+
+	EntityManager getCurrentEntityManager();
 }

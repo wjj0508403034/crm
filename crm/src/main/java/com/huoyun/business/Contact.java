@@ -2,6 +2,7 @@ package com.huoyun.business;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,7 +25,7 @@ public class Contact extends DefaultBusinessObject {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

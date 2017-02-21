@@ -18,6 +18,10 @@ import com.huoyun.core.bo.utils.BusinessObjectUtils;
 @Table(indexes = { @Index(name = "UNIQUSERPROPETY", columnList = "boNamespace,boName,name", unique = true) })
 public class UserProperty extends LiteBusinessObject {
 
+	public UserProperty(){
+		
+	}
+	
 	public UserProperty(BusinessObjectFacade boFacade) {
 		super(boFacade);
 	}

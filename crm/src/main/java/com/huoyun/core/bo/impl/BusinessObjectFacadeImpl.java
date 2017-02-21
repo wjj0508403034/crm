@@ -1,5 +1,9 @@
 package com.huoyun.core.bo.impl;
 
+import java.sql.SQLInvalidAuthorizationSpecException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -25,6 +29,8 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	private MetadataRepository metadataRepository;
 	private EntityManager entityManager;
 	private LocaleService localeService;
+	private EntityManagerFactory emf;
+	private final ThreadLocal<EntityManager> threadLocal = new ThreadLocal<EntityManager>();
 
 	public BusinessObjectFacadeImpl(ApplicationContext context) {
 		this.context = context;
@@ -32,6 +38,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 				.getBean(MetadataRepository.class);
 		this.entityManager = this.context.getBean(EntityManager.class);
 		this.localeService = this.context.getBean(LocaleService.class);
+		this.emf = this.context.getBean(EntityManagerFactory.class);
 	}
 
 	@Override
@@ -109,6 +116,36 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	@Override
 	public EntityManager getEntityManager() {
 		return this.entityManager;
+	}
+
+	@Override
+	public EntityManager getCurrentEntityManager() {
+		EntityManager manager = threadLocal.get();
+		if (manager == null || !manager.isOpen()) {
+			try {
+				Map<String, Object> properties = new HashMap<String, Object>();
+				// emProperties.put(MultitenantProperties.MULTITENANT_CONTEXT_PROPERTY,
+				// this.tenantId);
+				manager = emf.createEntityManager(properties);
+			} catch (Exception e) {
+				Throwable cause = e.getCause();
+				if (cause instanceof SQLInvalidAuthorizationSpecException) {
+					LOGGER.error(cause.getMessage());
+					Object jdbcUrl = emf.getProperties().get(
+							"javax.persistence.jdbc.url");
+					LOGGER.error("javax.persistence.jdbc.url: {}", jdbcUrl);
+					Object databaseUser = emf.getProperties().get(
+							"javax.persistence.jdbc.user");
+					LOGGER.error("javax.persistence.jdbc.user: {}",
+							databaseUser);
+				}
+				throw e;
+			}
+
+			threadLocal.set(manager);
+
+		}
+		return manager;
 	}
 
 	@Override

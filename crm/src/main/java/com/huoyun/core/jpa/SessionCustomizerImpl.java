@@ -6,7 +6,9 @@ import java.util.List;
 import org.eclipse.persistence.config.SessionCustomizer;
 import org.eclipse.persistence.dynamic.DynamicClassLoader;
 import org.eclipse.persistence.dynamic.DynamicTypeBuilder;
+import org.eclipse.persistence.mappings.DirectToFieldMapping;
 import org.eclipse.persistence.sessions.Session;
+
 import com.huoyun.core.bo.ext.CustomField;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.core.classloader.CachedClassLoader;
@@ -18,10 +20,6 @@ public class SessionCustomizerImpl implements SessionCustomizer {
 
 	private CachedClassLoader cachedClassLoader = CachedClassLoaderImpl
 			.instance();
-
-	// public SessionCustomizerImpl(CachedClassLoader cachedClassLoader){
-	// this.cachedClassLoader = cachedClassLoader;
-	// }
 
 	@Override
 	public void customize(Session session) throws Exception {

@@ -103,6 +103,10 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	protected void postCreate() {
 
 	}
+	
+	protected void onCreate(){
+		
+	}
 
 	protected void onValid() throws BusinessException {
 		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
@@ -153,6 +157,7 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 		this.updateTime = this.createTime;
 		this.onValid();
 		this.boRepository.save(this);
+		this.onCreate();
 		this.boRepository.flush();
 		this.postCreate();
 		LOGGER.debug("End create bo.");
@@ -174,7 +179,7 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 
 	@Override
 	public void setPropertyValue(String propertyName, Object propertyValue)
-			throws LocatableBusinessException {
+			throws BusinessException {
 		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
 				this.getClass(), propertyName);
 		if (prop == null) {
@@ -200,7 +205,7 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 
 	@Override
 	public Object getPropertyValue(String propertyName)
-			throws LocatableBusinessException {
+			throws BusinessException {
 		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
 				this.getClass(), propertyName);
 		Method getter = prop.getReadMethod();

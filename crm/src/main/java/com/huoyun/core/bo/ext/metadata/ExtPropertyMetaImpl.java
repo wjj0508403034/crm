@@ -102,8 +102,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 
 	@Override
 	public String getColumnName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "STR1";
 	}
 
 	public Long getPropertyId() {
@@ -117,6 +116,11 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		this.namespace = userProperty.getNamespace();
 		this.type = userProperty.getType();
 		this.readonly = userProperty.isReadonly();
+	}
+
+	@Override
+	public boolean isCustomField() {
+		return this.propertyId != null;
 	}
 
 }

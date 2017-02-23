@@ -132,4 +132,9 @@ public class PropertyMetaImpl implements PropertyMeta {
 	public String getColumnName() {
 		return "STR1";
 	}
+
+	@Override
+	public boolean isCustomField() {
+		return false;
+	}
 }

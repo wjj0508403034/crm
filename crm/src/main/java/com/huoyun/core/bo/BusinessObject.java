@@ -1,7 +1,6 @@
 package com.huoyun.core.bo;
 
 import com.huoyun.exception.BusinessException;
-import com.huoyun.exception.LocatableBusinessException;
 
 public interface BusinessObject {
 
@@ -15,9 +14,9 @@ public interface BusinessObject {
 
 	void delete() throws BusinessException;
 
-	void setPropertyValue(String propertyName, Object propertyValue) throws LocatableBusinessException;
+	void setPropertyValue(String propertyName, Object propertyValue) throws BusinessException;
 
 	void setBoFacade(BusinessObjectFacade boFacade);
 
-	Object getPropertyValue(String propertyName) throws LocatableBusinessException;
+	Object getPropertyValue(String propertyName) throws BusinessException;
 }

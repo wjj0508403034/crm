@@ -22,7 +22,7 @@ public class JpaAutoConfiguration extends JpaBaseConfiguration{
 	protected Map<String, Object> getVendorProperties() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("eclipselink.weaving", "false");
-		//map.put("eclipselink.ddl-generation", "drop-and-create-tables");
+		map.put("eclipselink.ddl-generation", "drop-and-create-tables");
 		map.put(PersistenceUnitProperties.SESSION_CUSTOMIZER, "com.huoyun.core.jpa.SessionCustomizerImpl");
 		
 		return map;

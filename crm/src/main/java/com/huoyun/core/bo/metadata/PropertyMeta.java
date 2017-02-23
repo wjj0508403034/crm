@@ -2,8 +2,6 @@ package com.huoyun.core.bo.metadata;
 
 import java.lang.reflect.Field;
 
-import com.huoyun.core.bo.ext.UserProperty;
-
 public interface PropertyMeta {
 
 	String getName();
@@ -27,4 +25,6 @@ public interface PropertyMeta {
 	String getCustomErrorMessage();
 
 	String getColumnName();
+	
+	boolean isCustomField();
 }

@@ -2,6 +2,7 @@ package com.huoyun.core.bo.ext;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Index;
@@ -27,7 +28,7 @@ public class UserProperty extends LiteBusinessObject {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

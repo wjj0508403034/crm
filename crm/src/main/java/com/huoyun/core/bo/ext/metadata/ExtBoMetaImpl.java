@@ -35,12 +35,15 @@ public class ExtBoMetaImpl implements BoMeta {
 
 	@Override
 	public boolean hasProperty(String propertyName) {
-		return this.baseBoMeta.hasProperty(propertyName);
+		return this.extPropMap.containsKey(propertyName);
 	}
 
 	@Override
 	public PropertyMeta getPropertyMeta(String propertyName) {
-		return this.baseBoMeta.getPropertyMeta(propertyName);
+		if (this.extPropMap.containsKey(propertyName)) {
+			return this.extPropMap.get(propertyName);
+		}
+		return null;
 	}
 
 	@Override
@@ -56,7 +59,8 @@ public class ExtBoMetaImpl implements BoMeta {
 	public void mergeProperty(UserProperty userProperty) {
 		ExtPropertyMetaImpl propMeta = null;
 		if (this.extPropMap.containsKey(userProperty.getName())) {
-			propMeta = (ExtPropertyMetaImpl)this.extPropMap.get(userProperty.getName());
+			propMeta = (ExtPropertyMetaImpl) this.extPropMap.get(userProperty
+					.getName());
 		} else {
 			propMeta = new ExtPropertyMetaImpl();
 			this.extPropMap.put(userProperty.getName(), propMeta);

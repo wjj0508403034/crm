@@ -2,8 +2,13 @@ package com.huoyun.core.bo.ext.impl;
 
 import java.math.BigDecimal;
 
+import javax.persistence.EntityManager;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.dynamic.DynamicEntity;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +23,8 @@ public class UserEntityImpl implements UserEntity {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserEntityImpl.class);
+	public final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
+			.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z");
 
 	private DynamicEntity dynamicEntity;
 	private BoMeta boMeta;
@@ -52,24 +59,53 @@ public class UserEntityImpl implements UserEntity {
 			throws BusinessException {
 		if (StringUtils.equals(propertyName, BusinessObjectUtils.EXT_TABLE_ID)) {
 			return getId();
-		} else if (StringUtils.equals(propertyName,
-				BusinessObjectUtils.EXT_TABLE_PID)) {
-			return this.getParentId();
-		} else {
-			PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);
-			if (propMeta == null) {
-				LOGGER.error(String.format("%s does not exist on the bo %s",
-						propertyName, this.boMeta.getName()));
-				throw new BusinessException(BoErrorCode.Bo_Property_Not_Exist);
-			}
-
-			Object value = dynamicEntity.get(propMeta.getColumnName());
-			if (value == null)
-				return null;
-
-			return this.fromDbValue(propMeta, value);
-
 		}
+		if (StringUtils.equals(propertyName, BusinessObjectUtils.EXT_TABLE_PID)) {
+			return this.getParentId();
+		}
+		PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);
+		if (propMeta == null) {
+			LOGGER.error(String.format("%s does not exist on the bo %s",
+					propertyName, this.boMeta.getName()));
+			throw new BusinessException(BoErrorCode.Bo_Property_Not_Exist);
+		}
+
+		Object value = dynamicEntity.get(propMeta.getColumnName());
+		if (value == null)
+			return null;
+
+		return this.fromDbValue(propMeta, value);
+
+	}
+
+	@Override
+	public void setPropertyValue(String propertyName, Object propertyValue)
+			throws BusinessException {
+		if (StringUtils.equals(propertyName, BusinessObjectUtils.EXT_TABLE_ID)) {
+			this.setId((Long) propertyValue);
+			return;
+		}
+
+		if (StringUtils.equals(propertyName, BusinessObjectUtils.EXT_TABLE_PID)) {
+			this.setParentId((Long) propertyValue);
+			return;
+		}
+
+		PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);
+		if (propMeta == null) {
+			LOGGER.error(String.format("%s does not exist on the bo %s",
+					propertyName, this.boMeta.getName()));
+			throw new BusinessException(BoErrorCode.Bo_Property_Not_Exist);
+		}
+
+		Object dbValue = this.toDbValue(propertyValue);
+		this.dynamicEntity.set(propMeta.getColumnName(), dbValue);
+
+	}
+	
+	@Override
+	public void persist(EntityManager entityManager) {
+		entityManager.persist(this.dynamicEntity);
 	}
 
 	private Object fromDbValue(PropertyMeta propMeta, Object dbValue) {
@@ -91,4 +127,34 @@ public class UserEntityImpl implements UserEntity {
 
 		return dbValue;
 	}
+
+	private Object toDbValue(Object value) {
+		BigDecimal decimal = null;
+		if (value instanceof Integer) {
+			decimal = new BigDecimal((Integer) value);
+		} else if (value instanceof Long) {
+			decimal = new BigDecimal((Long) value);
+		} else if (value instanceof Boolean) {
+			decimal = ((Boolean) value) ? BigDecimal.ONE : BigDecimal.ZERO;
+		} else if (value instanceof Double) {
+			decimal = new BigDecimal(String.valueOf(value));
+		} else if (value instanceof BigDecimal) {
+			decimal = (BigDecimal) value;
+		}
+		if (decimal != null) {
+			return decimal;
+		}
+		Object obj = value;
+		if (value instanceof DateTime) {
+			obj = ((DateTime) value).toString(DATE_TIME_FORMATTER);
+		} else if (value instanceof String) {
+			obj = String.valueOf(value);
+		} else if (value instanceof Enum) {
+			obj = ((Enum) value).name();
+		}
+		return obj;
+	}
+
+
+
 }

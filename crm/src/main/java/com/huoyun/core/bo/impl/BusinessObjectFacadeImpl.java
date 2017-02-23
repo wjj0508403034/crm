@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationContext;
 import com.huoyun.core.bo.BoRepository;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
-import com.huoyun.core.bo.DefaultBusinessObject;
+import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.metadata.BoMeta;
@@ -84,12 +84,11 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 			throw new RuntimeException(String.format("Entity {0} not found",
 					boType));
 		}
-		if (DefaultBusinessObject.class.isAssignableFrom(boType)) {
+		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boType)) {
 			return new BoRepositoryImpl(boType, this, boMeta);
 			// this.repoCache.put(boType, repo);
 		} else if (LiteBusinessObject.class.isAssignableFrom(boType)) {
-			// repo = new LiteBusinessObjectRepository(boType, boMeta, this);
-			// this.repoCache.put(boType, repo);
+			return new BoRepositoryImpl(boType, this, boMeta);
 		}
 		return null;
 	}
@@ -102,7 +101,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 			throw new RuntimeException(String.format(
 					"Entity {0} {1} not found", namespace, name));
 		}
-		if (DefaultBusinessObject.class.isAssignableFrom(boMeta.getBoType())) {
+		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boMeta.getBoType())) {
 			return new BoRepositoryImpl(boMeta.getBoType(), this, boMeta);
 			// this.repoCache.put(boType, repo);
 		} else if (LiteBusinessObject.class

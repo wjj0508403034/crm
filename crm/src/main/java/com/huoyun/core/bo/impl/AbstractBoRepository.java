@@ -70,7 +70,20 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	}
 
 	@Override
-	public Page<T> query(BoSpecification<T> spec, Pageable pageable) throws BusinessException {
+	public List<T> queryForList() {
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
+		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
+		Root<T> root = criteriaQuery.from(this.boType);
+		criteriaQuery.select(root);
+		TypedQuery<T> query = this.boFacade.getEntityManager().createQuery(
+				criteriaQuery);
+		return query.getResultList();
+	}
+
+	@Override
+	public Page<T> query(BoSpecification<T> spec, Pageable pageable)
+			throws BusinessException {
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
 				.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
@@ -129,7 +142,8 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		return new PageImpl<T>(content, pageable, total);
 	}
 
-	private TypedQuery<Long> getCountQuery(BoSpecification<T> spec) throws BusinessException {
+	private TypedQuery<Long> getCountQuery(BoSpecification<T> spec)
+			throws BusinessException {
 
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
 				.getCriteriaBuilder();

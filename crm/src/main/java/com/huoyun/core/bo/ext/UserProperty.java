@@ -13,15 +13,15 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 
-@BoEntity
+@BoEntity(allowCustomized = false)
 @Entity
 @Table(indexes = { @Index(name = "UNIQUSERPROPETY", columnList = "boNamespace,boName,name", unique = true) })
 public class UserProperty extends LiteBusinessObject {
 
-	public UserProperty(){
-		
+	public UserProperty() {
+
 	}
-	
+
 	public UserProperty(BusinessObjectFacade boFacade) {
 		super(boFacade);
 	}

@@ -19,21 +19,22 @@ import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.locale.LocaleService;
 
-public class DefaultBoMeta implements BoMeta {
+public class BoMetaImpl implements BoMeta {
 
 	private String name;
 	private String namespace = BusinessObjectUtils.SYSTEM_BO_NAMESPACE;
 	private String label;
 	private String labelI18nKey;
 	private LocaleService localeService;
-	private List<PropertyMeta> properties = new ArrayList<>();
+	//private List<PropertyMeta> properties = new ArrayList<>();
 	private String primaryKey;
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
 	private String extTableName;
+	private boolean allowCustomized;
 
 	@SuppressWarnings("unchecked")
-	public DefaultBoMeta(Class<?> boClass, LocaleService localeService) {
+	public BoMetaImpl(Class<?> boClass, LocaleService localeService) {
 
 		this.localeService = localeService;
 		BoEntity annot = boClass.getAnnotation(BoEntity.class);
@@ -49,6 +50,7 @@ public class DefaultBoMeta implements BoMeta {
 			this.labelI18nKey = "bo.label." + this.name;
 		}
 		this.label = this.localeService.getMessage(this.labelI18nKey);
+		this.allowCustomized = annot.allowCustomized();
 		
 		if(ExtensibleBusinessObject.class.isAssignableFrom(boClass)){
 			this.setExtTableName(BusinessObjectUtils.getExtTableName(boClass));
@@ -84,7 +86,7 @@ public class DefaultBoMeta implements BoMeta {
 
 	@Override
 	public List<PropertyMeta> getProperties() {
-		return this.properties;
+		return new ArrayList<>(this.propMap.values());
 	}
 
 	private void setProps(Class<?> klass) {
@@ -93,12 +95,12 @@ public class DefaultBoMeta implements BoMeta {
 		}
 
 		for (Field field : klass.getDeclaredFields()) {
-			DefaultPropertyMeta propMeta = null;
+			PropertyMetaImpl propMeta = null;
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
-				propMeta = new DefaultPropertyMeta(field, localeService);
+				propMeta = new PropertyMetaImpl(field, localeService);
 				this.propMap.put(propMeta.getName(), propMeta);
-				this.properties.add(propMeta);
+				//this.properties.add(propMeta);
 
 				Id idAnnot = field.getAnnotation(Id.class);
 				if (idAnnot != null) {
@@ -147,5 +149,14 @@ public class DefaultBoMeta implements BoMeta {
 
 	public void setExtTableName(String extTableName) {
 		this.extTableName = extTableName;
+	}
+
+	@Override
+	public boolean isAllowCustomized() {
+		return allowCustomized;
+	}
+
+	public void setAllowCustomized(boolean allowCustomized) {
+		this.allowCustomized = allowCustomized;
 	}
 }

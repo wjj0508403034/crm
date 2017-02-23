@@ -7,18 +7,18 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.ext.UserEntity;
 
 @MappedSuperclass
-public abstract class DefaultBusinessObject extends AbstractBusinessObject
+public abstract class AbstractBusinessObjectImpl extends AbstractBusinessObject
 		implements ExtensibleBusinessObject {
 
 	
-	public DefaultBusinessObject() {
+	public AbstractBusinessObjectImpl() {
 	}
 
-	public DefaultBusinessObject(BusinessObjectFacade boFacade) {
+	public AbstractBusinessObjectImpl(BusinessObjectFacade boFacade) {
 		this.setBoFacade(boFacade);
 		
 		if(this.boFacade != null){
-			//this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
+			this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
 		}
 	}
 

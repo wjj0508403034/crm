@@ -24,4 +24,6 @@ public @interface BoEntity {
 	boolean updatable() default true;
 
 	boolean deletable() default true;
+	
+	boolean allowCustomized() default true;
 }

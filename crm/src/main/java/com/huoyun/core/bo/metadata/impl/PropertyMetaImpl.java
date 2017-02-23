@@ -10,9 +10,9 @@ import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.locale.LocaleService;
 
-public class DefaultPropertyMeta implements PropertyMeta {
+public class PropertyMetaImpl implements PropertyMeta {
 
-	public DefaultPropertyMeta(Field field, LocaleService localeService) {
+	public PropertyMetaImpl(Field field, LocaleService localeService) {
 		this.field = field;
 		this.localeService = localeService;
 		BoProperty boProp = field.getAnnotation(BoProperty.class);

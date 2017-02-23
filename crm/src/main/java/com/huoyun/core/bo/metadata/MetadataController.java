@@ -25,4 +25,11 @@ public class MetadataController {
 			@PathVariable(value = "name") String name) {
 		return this.metadataRepository.getBoMeta(namespace, name);
 	}
+	
+	
+	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
+	@ResponseBody
+	public void refresh() {
+		this.metadataRepository.refresh();
+	}
 }

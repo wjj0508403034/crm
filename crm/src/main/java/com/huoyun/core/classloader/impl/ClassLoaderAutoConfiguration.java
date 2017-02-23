@@ -10,6 +10,6 @@ public class ClassLoaderAutoConfiguration {
 
 	@Bean
 	public CachedClassLoader cachedClassLoader(){
-		return new CachedClassLoaderImpl();
+		return CachedClassLoaderImpl.instance();
 	}
 }

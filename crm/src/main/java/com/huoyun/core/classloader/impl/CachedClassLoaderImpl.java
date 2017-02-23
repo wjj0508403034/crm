@@ -28,6 +28,10 @@ public class CachedClassLoaderImpl implements CachedClassLoader {
 	private final Map<String, Class<? extends BusinessObject>> boClassCache = new HashMap<>();
 	private final Map<String, Class<? extends ExtensibleBusinessObject>> extBoClassCache = new HashMap<>();
 
+	public static CachedClassLoader instance(){
+		return new CachedClassLoaderImpl();
+	}
+	
 	public CachedClassLoaderImpl() {
 		this.initialize();
 	}

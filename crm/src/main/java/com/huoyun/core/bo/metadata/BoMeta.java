@@ -17,4 +17,6 @@ public interface BoMeta {
 	String getExtTableName();
 
 	String getName();
+
+	boolean isAllowCustomized();
 }

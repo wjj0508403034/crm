@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
-import com.huoyun.core.bo.DefaultBusinessObject;
+import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.PropertyType;
@@ -15,7 +15,7 @@ import com.huoyun.core.bo.metadata.PropertyType;
 @BoEntity
 @Entity
 @Table
-public class Contact extends DefaultBusinessObject {
+public class Contact extends AbstractBusinessObjectImpl {
 
 	public Contact() {
 	}

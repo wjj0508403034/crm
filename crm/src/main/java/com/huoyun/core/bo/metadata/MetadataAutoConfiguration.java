@@ -13,7 +13,7 @@ import com.huoyun.upgrade.UpgradeAutoConfiguration;
 @Configuration
 public class MetadataAutoConfiguration {
 
-	@Bean
+	@Bean(name = MetadataRepositoryImpl.Name)
 	public MetadataRepository metadataRepository(LocaleService localeService,
 			CachedClassLoader classLoader) {
 		return new MetadataRepositoryImpl(localeService, classLoader);

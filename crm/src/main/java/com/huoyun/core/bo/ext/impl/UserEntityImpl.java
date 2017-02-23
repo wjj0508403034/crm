@@ -11,15 +11,13 @@ import com.huoyun.core.bo.BoErrorCode;
 import com.huoyun.core.bo.ext.UserEntity;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
+import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.exception.BusinessException;
 
 public class UserEntityImpl implements UserEntity {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UserEntityImpl.class);
-
-	private final static String User_Defined_Entity_ID = "ID";
-	private final static String User_Defined_Entity_Parent_ID = "parent_id";
 
 	private DynamicEntity dynamicEntity;
 	private BoMeta boMeta;
@@ -31,31 +29,31 @@ public class UserEntityImpl implements UserEntity {
 
 	@Override
 	public Long getId() {
-		return (Long) dynamicEntity.get(User_Defined_Entity_ID);
+		return (Long) dynamicEntity.get(BusinessObjectUtils.EXT_TABLE_ID);
 	}
 
 	@Override
 	public void setId(Long id) {
-		dynamicEntity.set(User_Defined_Entity_ID, id);
+		dynamicEntity.set(BusinessObjectUtils.EXT_TABLE_ID, id);
 	}
 
 	@Override
 	public Long getParentId() {
-		return (Long) dynamicEntity.get(User_Defined_Entity_Parent_ID);
+		return (Long) dynamicEntity.get(BusinessObjectUtils.EXT_TABLE_PID);
 	}
 
 	@Override
 	public void setParentId(Long id) {
-		dynamicEntity.set(User_Defined_Entity_Parent_ID, id);
+		dynamicEntity.set(BusinessObjectUtils.EXT_TABLE_PID, id);
 	}
 
 	@Override
 	public Object getPropertyValue(String propertyName)
 			throws BusinessException {
-		if (StringUtils.equals(propertyName, User_Defined_Entity_ID)) {
+		if (StringUtils.equals(propertyName, BusinessObjectUtils.EXT_TABLE_ID)) {
 			return getId();
 		} else if (StringUtils.equals(propertyName,
-				User_Defined_Entity_Parent_ID)) {
+				BusinessObjectUtils.EXT_TABLE_PID)) {
 			return this.getParentId();
 		} else {
 			PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);

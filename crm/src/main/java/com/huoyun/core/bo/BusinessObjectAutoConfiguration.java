@@ -10,6 +10,7 @@ import com.huoyun.core.bo.ext.impl.ExtensionServiceImpl;
 import com.huoyun.core.bo.impl.BusinessObjectFacadeImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
+import com.huoyun.core.jpa.JpaAutoConfiguration;
 
 @AutoConfigureAfter({ MetadataAutoConfiguration.class,
 		JpaAutoConfiguration.class })

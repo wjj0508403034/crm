@@ -18,12 +18,12 @@ import com.huoyun.upgrade.core.builder.impl.MySqlScriptBuilder;
 @Configuration
 public class UpgradeAutoConfiguration {
 
-	@Bean
-	public SchemaUpdate schemaUpdate(JdbcTemplate jdbcTemplate,
-			CachedClassLoader classLoader, ScriptBuilder scriptBuilder)
-			throws SQLException {
-		return new SchemaUpdate(jdbcTemplate, classLoader, scriptBuilder);
-	}
+//	@Bean
+//	public SchemaUpdate schemaUpdate(JdbcTemplate jdbcTemplate,
+//			CachedClassLoader classLoader, ScriptBuilder scriptBuilder)
+//			throws SQLException {
+//		return new SchemaUpdate(jdbcTemplate, classLoader, scriptBuilder);
+//	}
 
 	@Bean
 	public ScriptBuilder scriptBuilder() {

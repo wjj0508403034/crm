@@ -54,7 +54,7 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	@Convert(JodaDateConverter.Name)
 	@BoProperty(readonly = true, label = I18n_Label_Create_Time)
 	@Column
-	private DateTime createTime = DateTime.now();
+	private DateTime createTime;
 
 	@Convert(JodaDateConverter.Name)
 	@BoProperty(readonly = true, label = I18n_Label_Update_Time)

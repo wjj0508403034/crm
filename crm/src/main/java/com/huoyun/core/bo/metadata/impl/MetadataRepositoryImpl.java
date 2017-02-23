@@ -15,6 +15,8 @@ import com.huoyun.locale.LocaleService;
 
 public class MetadataRepositoryImpl implements MetadataRepository {
 
+	public static final String Name = "SystemMetadataRepository";
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MetadataRepositoryImpl.class);
 
@@ -34,7 +36,7 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 		for (String key : this.classLoader.getBoClassCache().keySet()) {
 			Class<? extends BusinessObject> boClass = this.classLoader
 					.getBoClassCache().get(key);
-			this.boMetaCache.put(key, new DefaultBoMeta(boClass, this.localeService));
+			this.boMetaCache.put(key, new BoMetaImpl(boClass, this.localeService));
 		}
 		LOGGER.info("========end to initialize BO metadata==========");
 	}
@@ -49,6 +51,12 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 	public BoMeta getBoMeta(Class<?> clazz) {
 		String key = BusinessObjectUtils.getBoFullName(clazz);
 		return this.boMetaCache.get(key);
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

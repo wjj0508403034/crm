@@ -16,10 +16,14 @@ import org.springframework.util.CollectionUtils;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.ExtensibleBusinessObject;
+import com.huoyun.core.bo.ext.ExtErrorCode;
 import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.ext.UserEntity;
+import com.huoyun.core.bo.ext.UserProperty;
+import com.huoyun.core.bo.ext.controller.CustomFieldParam;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
+import com.huoyun.exception.BusinessException;
 
 public class ExtensionServiceImpl implements ExtensionService {
 
@@ -84,6 +88,20 @@ public class ExtensionServiceImpl implements ExtensionService {
 			}
 		}
 
+	}
+
+	@Override
+	public void createUDF(CustomFieldParam customFieldParam) throws BusinessException {
+		String sql = "select t from UserProperty t where t.boNamespace = :boNamespace and t.boName = :boName and t.name = :name";
+		TypedQuery<UserProperty> query = this.boFacade.getBoRepository(
+				UserProperty.class).newQuery(sql);
+		query.setParameter("boNamespace", customFieldParam.getBoNamespace());
+		query.setParameter("boName", customFieldParam.getBoName());
+		query.setParameter("name", customFieldParam.getName());
+		List<UserProperty> userProperties = query.getResultList();
+		if (userProperties.size() > 0) {
+			throw new BusinessException(ExtErrorCode.UDF_EXIST);
+		}
 	}
 
 }

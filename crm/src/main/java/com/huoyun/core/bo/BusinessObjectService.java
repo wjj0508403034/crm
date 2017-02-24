@@ -16,7 +16,7 @@ public interface BusinessObjectService {
 	BusinessObject createBo(String namespace, String name,
 			Map<String, Object> data) throws BusinessException;
 
-	BusinessObject load(String namespace, String name, Long id)
+	Map<String, Object> load(String namespace, String name, Long id)
 			throws BusinessException;
 
 	void delete(String namespace, String name, Long id)

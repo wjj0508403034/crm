@@ -74,7 +74,7 @@ public class BusinessObjectController {
 
 	@RequestMapping(value = "/bo({namespace},{name})/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public BusinessObject load(
+	public Map<String, Object> load(
 			@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
 			@PathVariable(value = "id") Long id) throws BusinessException {

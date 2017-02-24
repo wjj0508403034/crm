@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.ext.impl.ExtensionServiceImpl;
 import com.huoyun.core.bo.impl.BusinessObjectFacadeImpl;
+import com.huoyun.core.bo.impl.BusinessObjectMapperImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
 import com.huoyun.core.jpa.JpaAutoConfiguration;
@@ -24,12 +25,17 @@ public class BusinessObjectAutoConfiguration {
 
 	@Bean
 	public BusinessObjectService businessObjectService(
-			BusinessObjectFacade boFacade) {
-		return new BusinessObjectServiceImpl(boFacade);
+			BusinessObjectFacade boFacade,BusinessObjectMapper boMapper) {
+		return new BusinessObjectServiceImpl(boFacade,boMapper);
 	}
 
 	@Bean
 	public ExtensionService extensionService(BusinessObjectFacade boFacade) {
 		return new ExtensionServiceImpl(boFacade);
+	}
+
+	@Bean
+	public BusinessObjectMapper businessObjectMapper() {
+		return new BusinessObjectMapperImpl();
 	}
 }

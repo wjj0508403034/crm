@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import com.huoyun.core.bo.BoErrorCode;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.core.bo.BusinessObjectMapper;
 import com.huoyun.core.bo.BusinessObjectService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
@@ -21,9 +22,11 @@ import com.huoyun.exception.BusinessException;
 public class BusinessObjectServiceImpl implements BusinessObjectService {
 
 	private BusinessObjectFacade boFacade;
+	private BusinessObjectMapper boMapper;
 
-	public BusinessObjectServiceImpl(BusinessObjectFacade boFacade) {
+	public BusinessObjectServiceImpl(BusinessObjectFacade boFacade, BusinessObjectMapper boMapper) {
 		this.boFacade = boFacade;
+		this.boMapper = boMapper;
 	}
 
 	@Override
@@ -49,11 +52,13 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	}
 
 	@Override
-	public BusinessObject load(String namespace, String name, Long id)
+	public Map<String,Object> load(String namespace, String name, Long id)
 			throws BusinessException {
-		this.getBoMeta(namespace, name);
+		BoMeta boMeta = this.getBoMeta(namespace, name);
 
-		return this.boFacade.getBoRepository(namespace, name).load(id);
+		BusinessObject bo = this.boFacade.getBoRepository(namespace, name).load(id);
+		
+		return this.boMapper.converterTo(bo, boMeta);
 	}
 
 	@Modifying

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Index;
 
@@ -28,7 +29,8 @@ public class UserProperty extends LiteBusinessObject {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "UserProperty_SEQ", sequenceName = "USER_PROPERTY_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserProperty_SEQ")
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

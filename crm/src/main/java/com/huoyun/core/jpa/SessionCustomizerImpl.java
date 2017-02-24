@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.persistence.config.SessionCustomizer;
 import org.eclipse.persistence.dynamic.DynamicClassLoader;
 import org.eclipse.persistence.dynamic.DynamicTypeBuilder;
-import org.eclipse.persistence.mappings.DirectToFieldMapping;
 import org.eclipse.persistence.sessions.Session;
 
 import com.huoyun.core.bo.ext.CustomField;
@@ -51,15 +50,10 @@ public class SessionCustomizerImpl implements SessionCustomizer {
 			addUDEFieldMapping(tb, CustomField.STR);
 			addUDEFieldMapping(tb, CustomField.NUM);
 			addUDEFieldMapping(tb, CustomField.TXT);
-			// addUDEFieldMapping(tb, UDEField.FLAG);
-			// addUDEFieldMapping(tb, UDEField.TENANT_ID);
 			tb.setPrimaryKeyFields(CustomField.ID.getPrefix());
-			// addUDEPKSequence(tb);
+			tb.configureSequencing(tb.getType().getClassName() + "_SEQ",
+					CustomField.ID.getPrefix());
 		}
-		//
-		// /*
-		// * add user defined entity to session
-		// */
 		for (DynamicTypeBuilder builder : typeBuilders) {
 			session.getProject().addDescriptor(
 					builder.getType().getDescriptor());

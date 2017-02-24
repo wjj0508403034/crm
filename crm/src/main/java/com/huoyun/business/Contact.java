@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
@@ -25,7 +26,8 @@ public class Contact extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Contact_SEQ")
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

@@ -103,11 +103,9 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		}
 		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boMeta.getBoType())) {
 			return new BoRepositoryImpl(boMeta.getBoType(), this, boMeta);
-			// this.repoCache.put(boType, repo);
 		} else if (LiteBusinessObject.class
 				.isAssignableFrom(boMeta.getBoType())) {
-			// repo = new LiteBusinessObjectRepository(boType, boMeta, this);
-			// this.repoCache.put(boType, repo);
+			return new BoRepositoryImpl(boMeta.getBoType(), this, boMeta);
 		}
 		return null;
 	}

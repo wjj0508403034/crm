@@ -55,6 +55,10 @@ public class UserProperty extends LiteBusinessObject {
 	private boolean readonly;
 
 	private String validationRule;
+	
+	private String columnName;
+	
+	private String tableName;
 
 	@Override
 	public Long getId() {
@@ -151,6 +155,22 @@ public class UserProperty extends LiteBusinessObject {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getColumnName() {
+		return columnName;
+	}
+
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 }

@@ -28,5 +28,7 @@ public interface BoRepository<T extends BusinessObject> {
 	
 	List<T> queryForList();
 	
+	TypedQuery<Long> newCountQuery(String sql);
+	
 	TypedQuery<T> newQuery(String sql);
 }

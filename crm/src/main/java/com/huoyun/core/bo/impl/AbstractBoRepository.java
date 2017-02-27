@@ -68,7 +68,14 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	public TypedQuery<T> newQuery(String sql) {
 		return this.boFacade.getEntityManager().createQuery(sql, this.boType);
 	}
-
+	
+	
+	@Override
+	public TypedQuery<Long> newCountQuery(String sql) {
+		return this.boFacade.getEntityManager()
+				.createQuery(sql, Long.class);
+	}
+	
 	@Override
 	public List<T> queryForList() {
 		CriteriaBuilder builder = this.boFacade.getEntityManager()

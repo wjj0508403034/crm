@@ -17,6 +17,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	private String namespace;
 	private PropertyType type;
 	private boolean readonly;
+	private String columnName;
 
 	public ExtPropertyMetaImpl(PropertyMeta basePropertyMeta) {
 		this.basePropertyMeta = basePropertyMeta;
@@ -84,8 +85,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 
 	@Override
 	public PropertyType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.type;
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 
 	@Override
 	public String getColumnName() {
-		return "STR1";
+		return this.columnName;
 	}
 
 	public Long getPropertyId() {
@@ -116,6 +116,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		this.namespace = userProperty.getNamespace();
 		this.type = userProperty.getType();
 		this.readonly = userProperty.isReadonly();
+		this.columnName = userProperty.getColumnName();
 	}
 
 	@Override

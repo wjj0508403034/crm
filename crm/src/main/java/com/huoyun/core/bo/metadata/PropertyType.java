@@ -1,6 +1,10 @@
 package com.huoyun.core.bo.metadata;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+
+import com.huoyun.core.bo.BoErrorCode;
+import com.huoyun.exception.BusinessException;
 
 public enum PropertyType {
 	None, String, Text, Email, Phone, DateTime, Number;
@@ -20,5 +24,13 @@ public enum PropertyType {
 		}
 
 		return PropertyType.None;
+	}
+	
+	public static PropertyType parse(String type) throws BusinessException{
+		if(StringUtils.equalsIgnoreCase("string", type)){
+			return PropertyType.String;
+		}
+		
+		throw new BusinessException(BoErrorCode.Unkown_Bo_Property_Type);
 	}
 }

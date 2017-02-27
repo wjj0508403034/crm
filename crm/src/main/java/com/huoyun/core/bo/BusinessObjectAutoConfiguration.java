@@ -11,6 +11,7 @@ import com.huoyun.core.bo.impl.BusinessObjectFacadeImpl;
 import com.huoyun.core.bo.impl.BusinessObjectMapperImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
+import com.huoyun.core.bo.metadata.events.MetadataChangedPublisher;
 import com.huoyun.core.jpa.JpaAutoConfiguration;
 
 @AutoConfigureAfter({ MetadataAutoConfiguration.class,
@@ -30,8 +31,10 @@ public class BusinessObjectAutoConfiguration {
 	}
 
 	@Bean
-	public ExtensionService extensionService(BusinessObjectFacade boFacade) {
-		return new ExtensionServiceImpl(boFacade);
+	public ExtensionService extensionService(BusinessObjectFacade boFacade,MetadataChangedPublisher publisher) {
+		ExtensionService service =  new ExtensionServiceImpl(boFacade);
+		service.setMetadataChangedPublisher(publisher);
+		return service;
 	}
 
 	@Bean

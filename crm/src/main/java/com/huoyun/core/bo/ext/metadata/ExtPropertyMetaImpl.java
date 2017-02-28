@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.huoyun.core.bo.ext.UserProperty;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.bo.metadata.ValidationMeta;
 
 public class ExtPropertyMetaImpl implements PropertyMeta {
 
@@ -89,18 +90,6 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	}
 
 	@Override
-	public String getValidationRule() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getCustomErrorMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String getColumnName() {
 		return this.columnName;
 	}
@@ -122,6 +111,12 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	@Override
 	public boolean isCustomField() {
 		return this.propertyId != null;
+	}
+
+	@Override
+	public ValidationMeta getValidationMeta() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

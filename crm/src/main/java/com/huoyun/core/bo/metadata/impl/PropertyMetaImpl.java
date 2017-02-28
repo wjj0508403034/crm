@@ -1,12 +1,17 @@
 package com.huoyun.core.bo.metadata.impl;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.util.StringUtils;
 
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.BoPropertyRule;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.bo.metadata.ValidationMeta;
+import com.huoyun.core.bo.metadata.Value;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.locale.LocaleService;
 
@@ -32,7 +37,14 @@ public class PropertyMetaImpl implements PropertyMeta {
 			this.labelI18nKey = boProp.label();
 		}
 		this.label = this.localeService.getMessage(this.labelI18nKey);
-		this.setValidationRule(boProp.validationRule());
+
+		BoPropertyRule propRule = field.getAnnotation(BoPropertyRule.class);
+		if (propRule != null) {
+			this.validationMeta = new ValidationMetaImpl(propRule);
+		} else {
+
+		}
+
 	}
 
 	private String name;
@@ -45,7 +57,8 @@ public class PropertyMetaImpl implements PropertyMeta {
 	private boolean nullable;
 	private Field field;
 	private PropertyType type;
-	private String validationRule;
+	private ValidationMeta validationMeta;
+	private List<Value> validValues = new ArrayList<>();
 
 	@Override
 	public String getName() {
@@ -115,26 +128,26 @@ public class PropertyMetaImpl implements PropertyMeta {
 	}
 
 	@Override
-	public String getValidationRule() {
-		return validationRule;
-	}
-
-	public void setValidationRule(String validationRule) {
-		this.validationRule = validationRule;
-	}
-
-	@Override
-	public String getCustomErrorMessage() {
-		return null;
-	}
-
-	@Override
 	public String getColumnName() {
-		return "STR1";
+		return null;
 	}
 
 	@Override
 	public boolean isCustomField() {
 		return false;
+	}
+
+	@Override
+	public ValidationMeta getValidationMeta() {
+		return validationMeta;
+	}
+
+	public void setValidationMeta(ValidationMeta validationMeta) {
+		this.validationMeta = validationMeta;
+	}
+
+	@Override
+	public List<Value> getValidValues() {
+		return validValues;
 	}
 }

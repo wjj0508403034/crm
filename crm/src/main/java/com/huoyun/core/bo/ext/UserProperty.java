@@ -53,8 +53,8 @@ public class UserProperty extends LiteBusinessObject {
 	private boolean mandatory;
 
 	private boolean readonly;
-
-	private String validationRule;
+	
+	private ValidationRule rule;
 	
 	private String columnName;
 	
@@ -145,14 +145,6 @@ public class UserProperty extends LiteBusinessObject {
 		this.readonly = readonly;
 	}
 
-	public String getValidationRule() {
-		return validationRule;
-	}
-
-	public void setValidationRule(String validationRule) {
-		this.validationRule = validationRule;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -171,6 +163,14 @@ public class UserProperty extends LiteBusinessObject {
 
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+
+	public ValidationRule getRule() {
+		return rule;
+	}
+
+	public void setRule(ValidationRule rule) {
+		this.rule = rule;
 	}
 
 }

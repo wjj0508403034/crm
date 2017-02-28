@@ -21,6 +21,4 @@ public @interface BoProperty {
 	boolean readonly() default false;
 
 	PropertyType type() default PropertyType.None;
-	
-	String validationRule() default "";
 }

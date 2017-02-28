@@ -12,10 +12,11 @@ import com.huoyun.core.bo.impl.BusinessObjectMapperImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
 import com.huoyun.core.bo.metadata.events.MetadataChangedPublisher;
+import com.huoyun.core.bo.validator.ValidatorFactory;
+import com.huoyun.core.bo.validator.impl.ValidatorFactoryImpl;
 import com.huoyun.core.jpa.JpaAutoConfiguration;
 
-@AutoConfigureAfter({ MetadataAutoConfiguration.class,
-		JpaAutoConfiguration.class })
+@AutoConfigureAfter({ MetadataAutoConfiguration.class, JpaAutoConfiguration.class })
 @Configuration
 public class BusinessObjectAutoConfiguration {
 
@@ -25,14 +26,13 @@ public class BusinessObjectAutoConfiguration {
 	}
 
 	@Bean
-	public BusinessObjectService businessObjectService(
-			BusinessObjectFacade boFacade,BusinessObjectMapper boMapper) {
-		return new BusinessObjectServiceImpl(boFacade,boMapper);
+	public BusinessObjectService businessObjectService(BusinessObjectFacade boFacade, BusinessObjectMapper boMapper) {
+		return new BusinessObjectServiceImpl(boFacade, boMapper);
 	}
 
 	@Bean
-	public ExtensionService extensionService(BusinessObjectFacade boFacade,MetadataChangedPublisher publisher) {
-		ExtensionService service =  new ExtensionServiceImpl(boFacade);
+	public ExtensionService extensionService(BusinessObjectFacade boFacade, MetadataChangedPublisher publisher) {
+		ExtensionService service = new ExtensionServiceImpl(boFacade);
 		service.setMetadataChangedPublisher(publisher);
 		return service;
 	}
@@ -40,5 +40,10 @@ public class BusinessObjectAutoConfiguration {
 	@Bean
 	public BusinessObjectMapper businessObjectMapper() {
 		return new BusinessObjectMapperImpl();
+	}
+
+	@Bean
+	public ValidatorFactory validatorFactory(BusinessObjectFacade boFacade) {
+		return new ValidatorFactoryImpl(boFacade);
 	}
 }

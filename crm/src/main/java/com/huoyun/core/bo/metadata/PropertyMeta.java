@@ -1,6 +1,7 @@
 package com.huoyun.core.bo.metadata;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public interface PropertyMeta {
 
@@ -20,11 +21,11 @@ public interface PropertyMeta {
 	
 	PropertyType getType();
 
-	String getValidationRule();
-	
-	String getCustomErrorMessage();
-
 	String getColumnName();
 	
 	boolean isCustomField();
+
+	ValidationMeta getValidationMeta();
+	
+	List<Value> getValidValues();
 }

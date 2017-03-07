@@ -9,9 +9,9 @@ import javax.persistence.criteria.Root;
 
 import com.huoyun.exception.BusinessException;
 
-public class And extends LogicalCriteria {
+public class Or extends LogicalCriteria {
 
-	public And(List<Criteria> left, List<Criteria> right) {
+	public Or(List<Criteria> left, List<Criteria> right) {
 		super(left, right);
 		// TODO Auto-generated constructor stub
 	}

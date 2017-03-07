@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.huoyun.core.bo.query.criteria.And;
+import com.huoyun.core.bo.query.criteria.Criteria;
 import com.huoyun.core.bo.query.criteria.CriteriaExpr;
+import com.huoyun.core.bo.query.criteria.Or;
 import com.huoyun.core.bo.query.parser.ErrorCode;
 import com.huoyun.core.bo.query.parser.Token;
 import com.huoyun.core.bo.query.parser.impl.AbstractParser;
@@ -35,7 +37,7 @@ public class Filter extends AbstractParser {
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}
 
-		List<CriteriaExpr> criterias = new ArrayList<>();
+		List<Criteria> criterias = new ArrayList<>();
 		Cursor cursor = new Cursor();
 		while (cursor.getValue() < this.tokens.size()) {
 			Token token = this.tokens.get(cursor.getValue() + 1);
@@ -44,13 +46,13 @@ public class Filter extends AbstractParser {
 				switch (op) {
 				case "and":
 				case "or":
-					List<CriteriaExpr> left = this.parse(this.tokens.get(0));
-					List<CriteriaExpr> right = this.parse(this.tokens
-							.get(cursor.getValue() + 2));
+					List<Criteria> left = this.parse(this.tokens.get(0));
+					List<Criteria> right = this.parse(this.tokens.get(cursor
+							.getValue() + 2));
 					if (StringUtils.equals(op, "and")) {
 						criterias.add(new And(left, right));
-					}else{
-						
+					} else {
+						criterias.add(new Or(left, right));
 					}
 				case "eq":
 				case "ne":
@@ -68,7 +70,7 @@ public class Filter extends AbstractParser {
 		}
 	}
 
-	private List<CriteriaExpr> parse(Token token) {
+	private List<Criteria> parse(Token token) {
 		return null;
 	}
 

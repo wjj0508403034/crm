@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.huoyun.core.bo.query.QueryParam;
+import com.huoyun.core.bo.query.parser.ParserService;
+import com.huoyun.core.bo.query.parser.impl.filters.Filter;
 import com.huoyun.exception.BusinessException;
 
 @Controller
@@ -23,6 +25,9 @@ public class BusinessObjectController {
 
 	@Autowired
 	private BusinessObjectService businessObjectService;
+
+	@Autowired
+	private ParserService parserService;
 
 	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.POST)
 	@ResponseBody
@@ -35,6 +40,21 @@ public class BusinessObjectController {
 		Pageable pageable = new PageRequest(pageIndex, pageSize);
 		return this.businessObjectService.query(namespace, name, pageable,
 				queryParam);
+	}
+
+	@RequestMapping(value = "/bo({namespace},{name})/query", method = RequestMethod.GET)
+	@ResponseBody
+	public Page<BusinessObject> queryx(
+			@PathVariable(value = "namespace") String namespace,
+			@PathVariable(value = "name") String name,
+			@RequestParam(value = Filter.Name, required = false) String $filter,
+			@RequestParam(value = "$select", required = false) String select,
+			@RequestParam(value = "$pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value = "$pageSize", required = false, defaultValue = "10") int pageSize)
+			throws BusinessException {
+		Filter filter = this.parserService.parseFilter($filter);
+		filter.parser();
+		return null;
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/count", method = RequestMethod.GET)
@@ -55,7 +75,7 @@ public class BusinessObjectController {
 
 	@RequestMapping(value = "/bo({namespace},{name})/create", method = RequestMethod.POST)
 	@ResponseBody
-	public BusinessObject create(
+	public Map<String, Object> create(
 			@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
 			@RequestBody Map<String, Object> data) throws BusinessException {

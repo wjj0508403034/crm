@@ -24,20 +24,22 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	private BusinessObjectFacade boFacade;
 	private BusinessObjectMapper boMapper;
 
-	public BusinessObjectServiceImpl(BusinessObjectFacade boFacade, BusinessObjectMapper boMapper) {
+	public BusinessObjectServiceImpl(BusinessObjectFacade boFacade,
+			BusinessObjectMapper boMapper) {
 		this.boFacade = boFacade;
 		this.boMapper = boMapper;
 	}
 
 	@Override
-	public BusinessObject initBo(String namespace, String name) throws BusinessException {
+	public BusinessObject initBo(String namespace, String name)
+			throws BusinessException {
 		this.getBoMeta(namespace, name);
 		return this.boFacade.newBo(namespace, name);
 	}
 
 	@Transactional
 	@Override
-	public BusinessObject createBo(String namespace, String name,
+	public Map<String, Object> createBo(String namespace, String name,
 			Map<String, Object> data) throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 
@@ -48,16 +50,17 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		}
 		bo.create();
 
-		return bo;
+		return this.boMapper.converterTo(bo, boMeta);
 	}
 
 	@Override
-	public Map<String,Object> load(String namespace, String name, Long id)
+	public Map<String, Object> load(String namespace, String name, Long id)
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 
-		BusinessObject bo = this.boFacade.getBoRepository(namespace, name).load(id);
-		
+		BusinessObject bo = this.boFacade.getBoRepository(namespace, name)
+				.load(id);
+
 		return this.boMapper.converterTo(bo, boMeta);
 	}
 
@@ -107,8 +110,8 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	public Page<BusinessObject> query(String namespace, String name,
 			Pageable pageable, QueryParam queryParam) throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(boMeta.getBoType(),
-				boMeta, queryParam);
+		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(
+				boMeta.getBoType(), boMeta, queryParam);
 		return this.boFacade.getBoRepository(namespace, name).query(spec,
 				pageable);
 	}
@@ -118,8 +121,8 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	public Long count(String namespace, String name, QueryParam queryParam)
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(boMeta.getBoType(),
-				boMeta, queryParam);
+		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(
+				boMeta.getBoType(), boMeta, queryParam);
 		return this.boFacade.getBoRepository(namespace, name).count(spec);
 	}
 

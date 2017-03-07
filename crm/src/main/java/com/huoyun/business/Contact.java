@@ -28,8 +28,9 @@ public class Contact extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	@SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Contact_SEQ")
+	//@SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Contact_SEQ")
+	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

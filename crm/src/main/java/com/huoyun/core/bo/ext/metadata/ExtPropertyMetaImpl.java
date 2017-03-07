@@ -1,6 +1,8 @@
 package com.huoyun.core.bo.ext.metadata;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -8,6 +10,7 @@ import com.huoyun.core.bo.ext.UserProperty;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.ValidationMeta;
+import com.huoyun.core.bo.metadata.Value;
 
 public class ExtPropertyMetaImpl implements PropertyMeta {
 
@@ -19,6 +22,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	private PropertyType type;
 	private boolean readonly;
 	private String columnName;
+	private List<Value> validValues = new ArrayList<>();
 
 	public ExtPropertyMetaImpl(PropertyMeta basePropertyMeta) {
 		this.basePropertyMeta = basePropertyMeta;
@@ -117,6 +121,11 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	public ValidationMeta getValidationMeta() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Value> getValidValues() {
+		return this.validValues;
 	}
 
 }

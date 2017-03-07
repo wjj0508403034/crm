@@ -1,9 +1,12 @@
 package com.huoyun.core.bo.ext;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Index;
@@ -29,8 +32,11 @@ public class UserProperty extends LiteBusinessObject {
 	}
 
 	@Id
-	@SequenceGenerator(name = "UserProperty_SEQ", sequenceName = "USER_PROPERTY_SEQ")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserProperty_SEQ")
+	// @SequenceGenerator(name = "UserProperty_SEQ", sequenceName =
+	// "USER_PROPERTY_SEQ")
+	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
+	// "UserProperty_SEQ")
+	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 
@@ -53,11 +59,13 @@ public class UserProperty extends LiteBusinessObject {
 	private boolean mandatory;
 
 	private boolean readonly;
-	
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn
 	private ValidationRule rule;
-	
+
 	private String columnName;
-	
+
 	private String tableName;
 
 	@Override

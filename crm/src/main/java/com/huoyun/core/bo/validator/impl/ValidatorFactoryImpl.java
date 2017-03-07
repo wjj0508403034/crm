@@ -21,7 +21,8 @@ import com.huoyun.exception.BusinessException;
 
 public class ValidatorFactoryImpl implements ValidatorFactory {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ValidatorFactoryImpl.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ValidatorFactoryImpl.class);
 	private BusinessObjectFacade boFacade;
 
 	public ValidatorFactoryImpl(BusinessObjectFacade boFacade) {
@@ -29,10 +30,12 @@ public class ValidatorFactoryImpl implements ValidatorFactory {
 	}
 
 	@Override
-	public List<Validator> getValidators(PropertyMeta propMeta, Object propertyValue) throws BusinessException {
+	public List<Validator> getValidators(PropertyMeta propMeta,
+			Object propertyValue) throws BusinessException {
 		List<Validator> validators = new ArrayList<>();
 		if (propMeta.isMandatory()) {
-			validators.add(new Mandatory(this.boFacade, propMeta, propertyValue));
+			validators
+					.add(new Mandatory(this.boFacade, propMeta, propertyValue));
 		}
 
 		if (propertyValue == null) {
@@ -45,7 +48,8 @@ public class ValidatorFactoryImpl implements ValidatorFactory {
 		}
 
 		if (propMeta.getValidValues().size() > 0) {
-			validators.add(new ValidValues(this.boFacade, propMeta, propertyValue));
+			validators.add(new ValidValues(this.boFacade, propMeta,
+					propertyValue));
 			return validators;
 		}
 
@@ -53,12 +57,16 @@ public class ValidatorFactoryImpl implements ValidatorFactory {
 			RuleType ruleType = propMeta.getValidationMeta().getRuleType();
 			if (ruleType != null) {
 				try {
-					Constructor<Validator> constructor = ruleType.getValidatorClass()
-							.getConstructor(BusinessObjectFacade.class, PropertyMeta.class);
-					validators.add(constructor.newInstance(this.boFacade, propMeta, propertyValue));
+					Constructor<Validator> constructor = ruleType
+							.getValidatorClass().getConstructor(
+									BusinessObjectFacade.class,
+									PropertyMeta.class, Object.class);
+					validators.add(constructor.newInstance(this.boFacade,
+							propMeta, propertyValue));
 				} catch (Exception e) {
 					LOGGER.error("Get validation rule failed", e);
-					throw new BusinessException(BoErrorCode.Bo_Property_Validator_Failed);
+					throw new BusinessException(
+							BoErrorCode.Bo_Property_Validator_Failed);
 				}
 
 			}

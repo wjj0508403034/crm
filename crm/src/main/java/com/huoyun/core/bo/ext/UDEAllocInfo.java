@@ -31,8 +31,9 @@ public class UDEAllocInfo extends LiteBusinessObject {
 	}
 
 	@Id
-	@SequenceGenerator(name = "UDEAllocInfo_SEQ", sequenceName = "UDE_ALLOCINFO_SEQ")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UDEAllocInfo_SEQ")
+	//@SequenceGenerator(name = "UDEAllocInfo_SEQ", sequenceName = "UDE_ALLOCINFO_SEQ")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UDEAllocInfo_SEQ")
+	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 

@@ -12,6 +12,8 @@ import com.huoyun.core.bo.impl.BusinessObjectMapperImpl;
 import com.huoyun.core.bo.impl.BusinessObjectServiceImpl;
 import com.huoyun.core.bo.metadata.MetadataAutoConfiguration;
 import com.huoyun.core.bo.metadata.events.MetadataChangedPublisher;
+import com.huoyun.core.bo.query.parser.ParserService;
+import com.huoyun.core.bo.query.parser.impl.ParserServiceImpl;
 import com.huoyun.core.bo.validator.ValidatorFactory;
 import com.huoyun.core.bo.validator.impl.ValidatorFactoryImpl;
 import com.huoyun.core.jpa.JpaAutoConfiguration;
@@ -40,6 +42,11 @@ public class BusinessObjectAutoConfiguration {
 	@Bean
 	public BusinessObjectMapper businessObjectMapper() {
 		return new BusinessObjectMapperImpl();
+	}
+	
+	@Bean
+	public ParserService parserService(){
+		return new ParserServiceImpl();
 	}
 
 	@Bean

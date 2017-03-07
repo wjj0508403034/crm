@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 public class JodaDateConverter implements Converter {
 
 	public static final String Name = "JodaDateConverter";
+	public static final String ColumnDefinition="DATETIME";
 	private static final long serialVersionUID = 243508069049631830L;
 
 	@Override

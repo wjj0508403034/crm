@@ -13,7 +13,7 @@ public interface BusinessObjectService {
 	BusinessObject initBo(String namespace, String name)
 			throws BusinessException;
 
-	BusinessObject createBo(String namespace, String name,
+	Map<String, Object> createBo(String namespace, String name,
 			Map<String, Object> data) throws BusinessException;
 
 	Map<String, Object> load(String namespace, String name, Long id)

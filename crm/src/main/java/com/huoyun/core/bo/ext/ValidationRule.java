@@ -27,8 +27,9 @@ public class ValidationRule extends LiteBusinessObject {
 	}
 
 	@Id
-	@SequenceGenerator(name = "ValidationRule_SEQ", sequenceName = "VALIDATION_RULE_SEQ")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ValidationRule_SEQ")
+	//@SequenceGenerator(name = "ValidationRule_SEQ", sequenceName = "VALIDATION_RULE_SEQ")
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ValidationRule_SEQ")
+	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 	

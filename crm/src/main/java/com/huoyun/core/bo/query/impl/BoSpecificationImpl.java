@@ -17,20 +17,18 @@ public class BoSpecificationImpl<T> implements BoSpecification<T> {
 
 	private List<Criteria> criterias = new ArrayList<>();
 
-	public BoSpecificationImpl(BoMeta boMeta, List<Criteria> criterias)
-			throws BusinessException {
+	public BoSpecificationImpl(BoMeta boMeta, List<Criteria> criterias) throws BusinessException {
 		this.criterias = criterias;
 	}
 
-	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass,
-			BoMeta boMeta, List<Criteria> criterias) throws BusinessException {
+	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass, BoMeta boMeta, List<Criteria> criterias)
+			throws BusinessException {
 		return new BoSpecificationImpl<T>(boMeta, criterias);
 	}
 
 	@Override
-	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
-			CriteriaBuilder cb) throws BusinessException {
-		if (this.criterias.size() == 0) {
+	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException {
+		if (this.criterias == null || this.criterias.size() == 0) {
 			return null;
 		}
 

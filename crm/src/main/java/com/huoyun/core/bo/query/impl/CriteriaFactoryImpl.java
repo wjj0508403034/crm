@@ -12,6 +12,7 @@ import com.huoyun.core.bo.query.Token;
 import com.huoyun.core.bo.query.ValueConverter;
 import com.huoyun.core.bo.query.ValueConverterFactory;
 import com.huoyun.core.bo.query.criteria.And;
+import com.huoyun.core.bo.query.criteria.CollectionCriteria;
 import com.huoyun.core.bo.query.criteria.ComparableCriteria;
 import com.huoyun.core.bo.query.criteria.Criteria;
 import com.huoyun.core.bo.query.criteria.Equal;
@@ -19,6 +20,7 @@ import com.huoyun.core.bo.query.criteria.LogicalCriteria;
 import com.huoyun.core.bo.query.criteria.NotEqual;
 import com.huoyun.core.bo.query.criteria.Or;
 import com.huoyun.core.bo.query.criteria.Like;
+import com.huoyun.core.bo.query.criteria.In;
 import com.huoyun.exception.BusinessException;
 
 public class CriteriaFactoryImpl implements CriteriaFactory {
@@ -28,6 +30,7 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 	private final static String And = "and";
 	private final static String Or = "or";
 	private final static String Like = "like";
+	private final static String In = "in";
 
 	@Override
 	public Criteria parse(BoMeta boMeta, String query) throws BusinessException {
@@ -50,6 +53,8 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 			return (Class<T>) And.class;
 		case Or:
 			return (Class<T>) Or.class;
+		case In:
+			return (Class<T>) In.class;
 		}
 
 		throw new BusinessException(ErrorCode.Not_Sopport_Criteria_Query);
@@ -63,8 +68,7 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 
 		if (tokens.size() - cursor.getValue() == 1) {
 			if (tokens.get(cursor.getValue()) instanceof ListToken) {
-				return this.parse(boMeta, ((ListToken) tokens.get(cursor.getValue())).getTokens(),
-						new Cursor());
+				return this.parse(boMeta, ((ListToken) tokens.get(cursor.getValue())).getTokens(), new Cursor());
 			}
 
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
@@ -119,7 +123,13 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 	private Criteria newComparableCriteria(BoMeta boMeta, Class<Criteria> criteriaClass, Token propNameToken,
 			Token propValueToken) throws BusinessException {
 		PropertyMeta propMeta = this.getPropMeta(boMeta, propNameToken);
-		Object propValue = this.getValue(propMeta, propValueToken);
+		Object propValue = null;
+		if (!CollectionCriteria.class.isAssignableFrom(criteriaClass)) {
+			propValue = this.getValue(propMeta, propValueToken);
+		} else {
+			propValue = this.getMultiValues(propMeta, propValueToken);
+		}
+
 		try {
 			Constructor<Criteria> constructor = criteriaClass.getConstructor(PropertyMeta.class, Object.class);
 			return constructor.newInstance(propMeta, propValue);
@@ -155,6 +165,15 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 		ValueConverter valueConverter = ValueConverterFactory.getValueConverter(propMeta);
 		if (valueConverter != null && valueToken instanceof StringToken) {
 			return valueConverter.converter(valueToken.getExpr());
+		}
+
+		throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
+	}
+
+	private List<Object> getMultiValues(PropertyMeta propMeta, Token valueToken) throws BusinessException {
+		ValueConverter valueConverter = ValueConverterFactory.getValueConverter(propMeta);
+		if (valueConverter != null && valueToken instanceof StringToken) {
+			return valueConverter.converterToList(valueToken.getExpr());
 		}
 
 		throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);

@@ -1,5 +1,7 @@
 package com.huoyun.core.bo.query.converters;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -61,6 +63,12 @@ public class DateTimeValueConverter extends AbstractValueConverter {
 		}
 
 		throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
+	}
+
+	@Override
+	public List<Object> converterToList(String value) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

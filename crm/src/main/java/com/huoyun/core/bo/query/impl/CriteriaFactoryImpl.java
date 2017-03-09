@@ -19,9 +19,16 @@ import com.huoyun.core.bo.query.criteria.Equal;
 import com.huoyun.core.bo.query.criteria.LogicalCriteria;
 import com.huoyun.core.bo.query.criteria.NotEqual;
 import com.huoyun.core.bo.query.criteria.Or;
+import com.huoyun.core.bo.query.criteria.Like;
 import com.huoyun.exception.BusinessException;
 
 public class CriteriaFactoryImpl implements CriteriaFactory {
+
+	private final static String Equal = "eq";
+	private final static String NotEqual = "ne";
+	private final static String And = "and";
+	private final static String Or = "or";
+	private final static String Like = "like";
 
 	@Override
 	public List<Criteria> parse(BoMeta boMeta, String query)
@@ -36,13 +43,15 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 	private <T extends Criteria> Class<T> getCriteriaClass(String op)
 			throws BusinessException {
 		switch (op.toLowerCase()) {
-		case "eq":
+		case Equal:
 			return (Class<T>) Equal.class;
-		case "ne":
+		case NotEqual:
 			return (Class<T>) NotEqual.class;
-		case "and":
+		case Like:
+			return (Class<T>) Like.class;
+		case And:
 			return (Class<T>) And.class;
-		case "or":
+		case Or:
 			return (Class<T>) Or.class;
 		}
 

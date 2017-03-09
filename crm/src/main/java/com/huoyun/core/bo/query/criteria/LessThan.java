@@ -9,22 +9,20 @@ import javax.persistence.criteria.Root;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.exception.BusinessException;
 
-public class LessThan extends AbstractCriteria{
+public class LessThan extends ComparableCriteria {
 
-	public LessThan(PropertyMeta propMeta, CriteriaExpr expr) {
-		super(propMeta, expr);
-	}
+	public LessThan(PropertyMeta propMeta, Object value) {
+		super(propMeta, value);
 
-	@Override
-	public Category getCategory() {
-		return Category.LessThan;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Predicate parse(Root<?> root, CriteriaQuery<?> query,
 			CriteriaBuilder cb) throws BusinessException {
-		return cb.lessThan((Expression<Comparable>)this.getPathExpression(root), (Comparable)this.parseValue());
+		return cb.lessThan(
+				(Expression<Comparable>) this.getPathExpression(root),
+				(Comparable) this.getValue());
 	}
 
 }

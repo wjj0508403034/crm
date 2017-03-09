@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.huoyun.core.bo.query.QueryParam;
-import com.huoyun.core.bo.query.parser.ParserService;
-import com.huoyun.core.bo.query.parser.impl.filters.Filter;
 import com.huoyun.exception.BusinessException;
 
 @Controller
@@ -26,43 +23,28 @@ public class BusinessObjectController {
 	@Autowired
 	private BusinessObjectService businessObjectService;
 
-	@Autowired
-	private ParserService parserService;
-
-	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.POST)
+	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.GET)
 	@ResponseBody
-	public Page<BusinessObject> query(
+	public Page<Map<String, Object>> queryx(
 			@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
-			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
-			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-			@RequestBody QueryParam queryParam) throws BusinessException {
-		Pageable pageable = new PageRequest(pageIndex, pageSize);
-		return this.businessObjectService.query(namespace, name, pageable,
-				queryParam);
-	}
-
-	@RequestMapping(value = "/bo({namespace},{name})/query", method = RequestMethod.GET)
-	@ResponseBody
-	public Page<BusinessObject> queryx(
-			@PathVariable(value = "namespace") String namespace,
-			@PathVariable(value = "name") String name,
-			@RequestParam(value = Filter.Name, required = false) String $filter,
+			@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "$select", required = false) String select,
 			@RequestParam(value = "$pageIndex", required = false, defaultValue = "0") int pageIndex,
 			@RequestParam(value = "$pageSize", required = false, defaultValue = "10") int pageSize)
 			throws BusinessException {
-		Filter filter = this.parserService.parseFilter($filter);
-		filter.parser();
-		return null;
+		Pageable pageable = new PageRequest(pageIndex, pageSize);
+		return this.businessObjectService.query(namespace, name, pageable,
+				query);
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/count", method = RequestMethod.GET)
 	@ResponseBody
 	public Long count(@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
-			@RequestBody QueryParam queryParam) throws BusinessException {
-		return this.businessObjectService.count(namespace, name, queryParam);
+			@RequestParam(value = "query", required = false) String query)
+			throws BusinessException {
+		return this.businessObjectService.count(namespace, name, query);
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/init", method = RequestMethod.GET)

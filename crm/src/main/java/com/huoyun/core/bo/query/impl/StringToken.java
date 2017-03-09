@@ -1,4 +1,4 @@
-package com.huoyun.core.bo.query.parser.impl;
+package com.huoyun.core.bo.query.impl;
 
 public class StringToken extends AbstractToken {
 

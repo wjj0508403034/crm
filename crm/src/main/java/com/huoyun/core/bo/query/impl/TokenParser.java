@@ -1,77 +1,36 @@
-package com.huoyun.core.bo.query.parser.impl.filters;
+package com.huoyun.core.bo.query.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.huoyun.core.bo.query.criteria.And;
-import com.huoyun.core.bo.query.criteria.Criteria;
-import com.huoyun.core.bo.query.criteria.CriteriaExpr;
-import com.huoyun.core.bo.query.criteria.Or;
-import com.huoyun.core.bo.query.parser.ErrorCode;
-import com.huoyun.core.bo.query.parser.Token;
-import com.huoyun.core.bo.query.parser.impl.AbstractParser;
-import com.huoyun.core.bo.query.parser.impl.ListToken;
-import com.huoyun.core.bo.query.parser.impl.StringToken;
+import com.huoyun.core.bo.query.ErrorCode;
+import com.huoyun.core.bo.query.Token;
 import com.huoyun.exception.BusinessException;
 
-public class Filter extends AbstractParser {
-
-	public static final String Name = "$filter";
+public class TokenParser extends AbstractParser {
 	private static final char LeftBracket = '(';
 	private static final char RightBracket = ')';
 	private static final char SingleQuotes = '\'';
 	private static final char WhiteSpace = ' ';
 
 	private List<Token> tokens = new ArrayList<>();
+	private boolean isParsed = false;
 
-	public Filter(String expr) {
+	public TokenParser(String expr) {
 		super(expr);
 	}
 
 	@Override
-	public void parser() throws BusinessException {
+	public List<Token> getTokens() throws BusinessException {
+		if (this.isParsed) {
+			return this.tokens;
+		}
+
 		this.parseExpr(this.getExpr(), new Cursor(), this.tokens);
-		if (this.tokens.size() % 3 != 0) {
-			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
-		}
-
-		List<Criteria> criterias = new ArrayList<>();
-		Cursor cursor = new Cursor();
-		while (cursor.getValue() < this.tokens.size()) {
-			Token token = this.tokens.get(cursor.getValue() + 1);
-			if (token instanceof StringToken) {
-				String op = token.getExpr().toLowerCase();
-				switch (op) {
-				case "and":
-				case "or":
-					List<Criteria> left = this.parse(this.tokens.get(0));
-					List<Criteria> right = this.parse(this.tokens.get(cursor
-							.getValue() + 2));
-					if (StringUtils.equals(op, "and")) {
-						criterias.add(new And(left, right));
-					} else {
-						criterias.add(new Or(left, right));
-					}
-				case "eq":
-				case "ne":
-				case "le":
-				case "ge":
-				case "like":
-
-				}
-
-			} else {
-				throw new BusinessException(
-						ErrorCode.Query_Expression_Parse_Failed);
-			}
-			cursor.move(3);
-		}
-	}
-
-	private List<Criteria> parse(Token token) {
-		return null;
+		this.isParsed = true;
+		return this.tokens;
 	}
 
 	private void parseExpr(String expr, Cursor cursor, List<Token> tokens)

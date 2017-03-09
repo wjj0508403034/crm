@@ -1,8 +1,8 @@
-package com.huoyun.core.bo.query.parser.impl;
+package com.huoyun.core.bo.query.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.huoyun.core.bo.query.parser.Parser;
+import com.huoyun.core.bo.query.Parser;
 
 public abstract class AbstractParser implements Parser {
 

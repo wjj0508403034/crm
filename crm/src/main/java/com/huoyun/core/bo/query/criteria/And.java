@@ -13,20 +13,16 @@ public class And extends LogicalCriteria {
 
 	public And(List<Criteria> left, List<Criteria> right) {
 		super(left, right);
-		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public Category getCategory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Predicate parse(Root<?> root, CriteriaQuery<?> query,
 			CriteriaBuilder cb) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		Predicate leftPredicate = this.getPredicateOfList(this.left, root,
+				query, cb);
+		Predicate rightPredicate = this.getPredicateOfList(this.right, root,
+				query, cb);
+		return cb.and(leftPredicate, rightPredicate);
 	}
-
 }

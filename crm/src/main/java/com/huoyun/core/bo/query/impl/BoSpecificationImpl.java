@@ -1,4 +1,4 @@
-package com.huoyun.core.bo.query;
+package com.huoyun.core.bo.query.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +9,22 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.huoyun.core.bo.metadata.BoMeta;
+import com.huoyun.core.bo.query.BoSpecification;
 import com.huoyun.core.bo.query.criteria.Criteria;
 import com.huoyun.exception.BusinessException;
 
 public class BoSpecificationImpl<T> implements BoSpecification<T> {
 
-	private QueryParam queryParam;
 	private List<Criteria> criterias = new ArrayList<>();
 
-	public BoSpecificationImpl(BoMeta boMeta, QueryParam queryParam)
+	public BoSpecificationImpl(BoMeta boMeta, List<Criteria> criterias)
 			throws BusinessException {
-		this.queryParam = queryParam;
-		if (queryParam != null && queryParam.getCriterias().size() != 0) {
-			this.criterias = this.queryParam.parse(boMeta);
-		}
+		this.criterias = criterias;
 	}
 
 	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass,
-			BoMeta boMeta, QueryParam queryParam) throws BusinessException {
-		return new BoSpecificationImpl<T>(boMeta, queryParam);
+			BoMeta boMeta, List<Criteria> criterias) throws BusinessException {
+		return new BoSpecificationImpl<T>(boMeta, criterias);
 	}
 
 	@Override

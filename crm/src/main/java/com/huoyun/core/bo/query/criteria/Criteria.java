@@ -8,8 +8,6 @@ import javax.persistence.criteria.Root;
 import com.huoyun.exception.BusinessException;
 
 public interface Criteria {
-
-	Category getCategory();
 	
 	Predicate parse(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException;
 }

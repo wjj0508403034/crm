@@ -1,4 +1,4 @@
-package com.huoyun.core.bo.query.parser;
+package com.huoyun.core.bo.query;
 
 public interface Token {
 

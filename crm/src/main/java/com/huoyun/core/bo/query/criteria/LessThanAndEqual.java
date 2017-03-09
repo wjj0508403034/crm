@@ -9,15 +9,11 @@ import javax.persistence.criteria.Root;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.exception.BusinessException;
 
-public class LessThanAndEqual extends AbstractCriteria{
+public class LessThanAndEqual extends ComparableCriteria {
 
-	public LessThanAndEqual(PropertyMeta propMeta, CriteriaExpr expr) {
-		super(propMeta, expr);
-	}
+	public LessThanAndEqual(PropertyMeta propMeta, Object value) {
+		super(propMeta, value);
 
-	@Override
-	public Category getCategory() {
-		return Category.LessThanAndEqual;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -26,7 +22,7 @@ public class LessThanAndEqual extends AbstractCriteria{
 			CriteriaBuilder cb) throws BusinessException {
 		return cb.lessThanOrEqualTo(
 				(Expression<Comparable>) this.getPathExpression(root),
-				(Comparable) this.parseValue());
+				(Comparable) this.getValue());
 	}
 
 }

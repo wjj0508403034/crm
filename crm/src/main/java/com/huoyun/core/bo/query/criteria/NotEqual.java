@@ -8,21 +8,17 @@ import javax.persistence.criteria.Root;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.exception.BusinessException;
 
-public class NotEqual extends AbstractCriteria {
+public class NotEqual extends ComparableCriteria {
 
-	public NotEqual(PropertyMeta propMeta, CriteriaExpr expr) {
-		super(propMeta, expr);
-	}
+	public NotEqual(PropertyMeta propMeta, Object value) {
+		super(propMeta, value);
 
-	@Override
-	public Category getCategory() {
-		return Category.NotEqual;
 	}
 
 	@Override
 	public Predicate parse(Root<?> root, CriteriaQuery<?> query,
 			CriteriaBuilder cb) throws BusinessException {
-		return cb.notEqual(this.getPathExpression(root), this.parseValue());
+		return cb.notEqual(this.getPathExpression(root), this.getValue());
 	}
 
 }

@@ -8,20 +8,15 @@ import javax.persistence.criteria.Root;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.exception.BusinessException;
 
-public class Equal extends AbstractCriteria {
+public class Equal extends ComparableCriteria {
 
-	public Equal(PropertyMeta propMeta, CriteriaExpr expr) {
-		super(propMeta, expr);
-	}
-
-	@Override
-	public Category getCategory() {
-		return Category.Equal;
+	public Equal(PropertyMeta propMeta, Object value) {
+		super(propMeta, value);
 	}
 
 	@Override
 	public Predicate parse(Root<?> root, CriteriaQuery<?> query,
 			CriteriaBuilder cb) throws BusinessException {
-		return cb.equal(this.getPathExpression(root), this.parseValue());
+		return cb.equal(this.getPathExpression(root), this.getValue());
 	}
 }

@@ -1,4 +1,4 @@
-package com.huoyun.core.bo.query.parser.impl.filters;
+package com.huoyun.core.bo.query.impl;
 
 public class Cursor {
 

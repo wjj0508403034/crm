@@ -1,10 +1,13 @@
 package com.huoyun.core.bo.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 
@@ -15,19 +18,23 @@ import com.huoyun.core.bo.BusinessObjectMapper;
 import com.huoyun.core.bo.BusinessObjectService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
-import com.huoyun.core.bo.query.BoSpecificationImpl;
-import com.huoyun.core.bo.query.QueryParam;
+import com.huoyun.core.bo.query.BoSpecification;
+import com.huoyun.core.bo.query.CriteriaFactory;
+import com.huoyun.core.bo.query.criteria.Criteria;
+import com.huoyun.core.bo.query.impl.BoSpecificationImpl;
 import com.huoyun.exception.BusinessException;
 
 public class BusinessObjectServiceImpl implements BusinessObjectService {
 
 	private BusinessObjectFacade boFacade;
 	private BusinessObjectMapper boMapper;
+	private CriteriaFactory criteriaFactory;
 
 	public BusinessObjectServiceImpl(BusinessObjectFacade boFacade,
-			BusinessObjectMapper boMapper) {
+			BusinessObjectMapper boMapper, CriteriaFactory criteriaFactory) {
 		this.boFacade = boFacade;
 		this.boMapper = boMapper;
+		this.criteriaFactory = criteriaFactory;
 	}
 
 	@Override
@@ -107,23 +114,37 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Page<BusinessObject> query(String namespace, String name,
-			Pageable pageable, QueryParam queryParam) throws BusinessException {
+	public Page<Map<String, Object>> query(String namespace, String name,
+			Pageable pageable, String query) throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(
-				boMeta.getBoType(), boMeta, queryParam);
-		return this.boFacade.getBoRepository(namespace, name).query(spec,
-				pageable);
+		BoSpecification spec = this.getBoSpec(boMeta, query);
+		Page<BusinessObject> pageData = this.boFacade.getBoRepository(
+				namespace, name).query(spec, pageable);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for (BusinessObject bo : pageData.getContent()) {
+			resultList.add(this.boMapper.converterTo(bo, boMeta));
+		}
+
+		return new PageImpl<Map<String, Object>>(resultList, pageable,
+				pageData.getTotalElements());
+
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Long count(String namespace, String name, QueryParam queryParam)
+	public Long count(String namespace, String name, String query)
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecificationImpl spec = BoSpecificationImpl.newInstance(
-				boMeta.getBoType(), boMeta, queryParam);
+		BoSpecification spec = this.getBoSpec(boMeta, query);
 		return this.boFacade.getBoRepository(namespace, name).count(spec);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private BoSpecification getBoSpec(BoMeta boMeta, String query)
+			throws BusinessException {
+		List<Criteria> criterias = this.criteriaFactory.parse(boMeta, query);
+		return BoSpecificationImpl.newInstance(boMeta.getBoType(), boMeta,
+				criterias);
 	}
 
 	private BoMeta getBoMeta(String namespace, String name)

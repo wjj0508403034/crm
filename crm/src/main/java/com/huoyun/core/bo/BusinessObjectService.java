@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.huoyun.core.bo.query.QueryParam;
 import com.huoyun.exception.BusinessException;
 
 public interface BusinessObjectService {
@@ -25,9 +24,9 @@ public interface BusinessObjectService {
 	BusinessObject updateBo(String namespace, String name, Long id,
 			Map<String, Object> data) throws BusinessException;
 
-	Long count(String namespace, String name, QueryParam queryParam)
-			throws BusinessException;
+	Page<Map<String, Object>> query(String namespace, String name,
+			Pageable pageable, String query) throws BusinessException;
 
-	Page<BusinessObject> query(String namespace, String name,
-			Pageable pageable, QueryParam queryParam) throws BusinessException;
+	Long count(String namespace, String name, String query)
+			throws BusinessException;
 }

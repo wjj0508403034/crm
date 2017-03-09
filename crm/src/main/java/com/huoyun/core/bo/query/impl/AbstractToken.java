@@ -1,6 +1,6 @@
-package com.huoyun.core.bo.query.parser.impl;
+package com.huoyun.core.bo.query.impl;
 
-import com.huoyun.core.bo.query.parser.Token;
+import com.huoyun.core.bo.query.Token;
 
 public class AbstractToken implements Token {
 

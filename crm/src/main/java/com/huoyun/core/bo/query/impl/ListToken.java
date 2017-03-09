@@ -1,9 +1,9 @@
-package com.huoyun.core.bo.query.parser.impl;
+package com.huoyun.core.bo.query.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.huoyun.core.bo.query.parser.Token;
+import com.huoyun.core.bo.query.Token;
 
 public class ListToken extends AbstractToken {
 

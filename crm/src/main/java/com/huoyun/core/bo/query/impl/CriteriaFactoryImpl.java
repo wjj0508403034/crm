@@ -1,7 +1,6 @@
 package com.huoyun.core.bo.query.impl;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.huoyun.core.bo.BoErrorCode;
@@ -31,11 +30,11 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 	private final static String Like = "like";
 
 	@Override
-	public List<Criteria> parse(BoMeta boMeta, String query) throws BusinessException {
+	public Criteria parse(BoMeta boMeta, String query) throws BusinessException {
 		TokenParser filter = new TokenParser(query);
 		List<Token> tokens = filter.getTokens();
 
-		return this.parseToCriteriaList(boMeta, tokens);
+		return parse(boMeta, tokens, new Cursor());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,45 +55,65 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 		throw new BusinessException(ErrorCode.Not_Sopport_Criteria_Query);
 	}
 
-	private List<Criteria> parseToCriteriaList(BoMeta boMeta, List<Token> tokens) throws BusinessException {
+	private Criteria parse(BoMeta boMeta, List<Token> tokens, Cursor cursor) throws BusinessException {
 
-		if (tokens == null || tokens.size() == 0) {
-			return null;
+		if (tokens.size() - cursor.getValue() <= 0) {
+			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}
 
-		if (tokens.size() == 1) {
-			if (tokens.get(0) instanceof ListToken) {
-				return this.parseToCriteriaList(boMeta, ((ListToken) tokens.get(0)).getTokens());
+		if (tokens.size() - cursor.getValue() == 1) {
+			if (tokens.get(cursor.getValue()) instanceof ListToken) {
+				return this.parse(boMeta, ((ListToken) tokens.get(cursor.getValue())).getTokens(),
+						new Cursor());
 			}
 
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}
 
-		if (tokens.size() == 2) {
+		if (tokens.size() - cursor.getValue() == 2) {
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}
 
-		List<Criteria> criterias = new ArrayList<Criteria>();
-		Cursor cursor = new Cursor();
-		while (cursor.getValue() < tokens.size()) {
-			Token opToken = tokens.get(cursor.getValue() + 1);
-			Class<Criteria> criteriaClass = this.getCriteriaClass(opToken.getExpr());
-			Token leftToken = tokens.get(cursor.getValue());
+		Token opToken = tokens.get(cursor.getValue() + 1);
+		Class<Criteria> criteriaClass = this.getCriteriaClass(opToken.getExpr());
+		Token leftToken = tokens.get(cursor.getValue());
+
+		if (ComparableCriteria.class.isAssignableFrom(criteriaClass)) {
 			Token rightToken = tokens.get(cursor.getValue() + 2);
-			if (ComparableCriteria.class.isAssignableFrom(criteriaClass)) {
-				Criteria criteria = this.newComparableCriteria(boMeta, criteriaClass, leftToken, rightToken);
-				criterias.add(criteria);
-			} else if (LogicalCriteria.class.isAssignableFrom(criteriaClass)) {
-				Criteria criteria = this.newLogicalCriteria(boMeta, criteriaClass, leftToken, rightToken);
-				criterias.add(criteria);
-			} else {
+			Criteria criteria = this.newComparableCriteria(boMeta, criteriaClass, leftToken, rightToken);
+			cursor.move(3);
+			if (cursor.getValue() >= tokens.size()) {
+				return criteria;
+			}
+
+			Token nextToken = tokens.get(cursor.getValue());
+			Class<Criteria> nextCriteriaClass = this.getCriteriaClass(nextToken.getExpr());
+			if (!LogicalCriteria.class.isAssignableFrom(nextCriteriaClass)) {
 				throw new BusinessException(ErrorCode.Not_Sopport_Criteria_Query);
 			}
 
-			cursor.move(3);
+			cursor.move(1);
+			Criteria rightCriteria = this.parse(boMeta, tokens, cursor);
+			Criteria nextCriteria = this.newLogicalCriteria(boMeta, nextCriteriaClass, criteria, rightCriteria);
+			return nextCriteria;
+
 		}
 
-		return criterias;
+		if (LogicalCriteria.class.isAssignableFrom(criteriaClass)) {
+			if (!(leftToken instanceof ListToken)) {
+				throw new BusinessException(ErrorCode.Not_Sopport_Criteria_Query);
+			}
+
+			Criteria leftCriteria = this.parse(boMeta, ((ListToken) leftToken).getTokens(), new Cursor());
+			cursor.move(2);
+
+			Criteria rightCriteria = this.parse(boMeta, tokens, cursor);
+			Criteria nextCriteria = this.newLogicalCriteria(boMeta, criteriaClass, leftCriteria, rightCriteria);
+			return nextCriteria;
+		}
+
+		throw new BusinessException(ErrorCode.Not_Sopport_Criteria_Query);
+
 	}
 
 	private Criteria newComparableCriteria(BoMeta boMeta, Class<Criteria> criteriaClass, Token propNameToken,
@@ -109,29 +128,15 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 		}
 	}
 
-	private Criteria newLogicalCriteria(BoMeta boMeta, Class<Criteria> criteriaClass, Token leftToken, Token rightToken)
-			throws BusinessException {
-		List<Criteria> leftCriterias = this.parseToCriteriaList(boMeta, this.toListTokens(leftToken));
-		List<Criteria> rightCriterias = this.parseToCriteriaList(boMeta, this.toListTokens(rightToken));
+	private Criteria newLogicalCriteria(BoMeta boMeta, Class<Criteria> criteriaClass, Criteria leftCriteria,
+			Criteria rightCriteria) throws BusinessException {
 
 		try {
-			Constructor<Criteria> constructor = criteriaClass.getConstructor(List.class, List.class);
-
-			return constructor.newInstance(leftCriterias, rightCriterias);
+			Constructor<Criteria> constructor = criteriaClass.getConstructor(Criteria.class, Criteria.class);
+			return constructor.newInstance(leftCriteria, rightCriteria);
 		} catch (Exception e) {
 			throw new BusinessException(BoErrorCode.Bo_Query_Express_Parse_Failed);
 		}
-	}
-
-	private List<Token> toListTokens(Token token) {
-
-		if (token instanceof StringToken) {
-			List<Token> tokens = new ArrayList<Token>();
-			tokens.add(token);
-			return tokens;
-		}
-		return ((ListToken) token).getTokens();
-
 	}
 
 	private PropertyMeta getPropMeta(BoMeta boMeta, Token propToken) throws BusinessException {

@@ -1,7 +1,5 @@
 package com.huoyun.core.bo.query.criteria;
 
-import java.util.List;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -11,18 +9,14 @@ import com.huoyun.exception.BusinessException;
 
 public class And extends LogicalCriteria {
 
-	public And(List<Criteria> left, List<Criteria> right) {
-		super(left, right);
+	public And(Criteria leftCriteria, Criteria rightCriteria) {
+		super(leftCriteria, rightCriteria);
 	}
 
-
 	@Override
-	public Predicate parse(Root<?> root, CriteriaQuery<?> query,
-			CriteriaBuilder cb) throws BusinessException {
-		Predicate leftPredicate = this.getPredicateOfList(this.left, root,
-				query, cb);
-		Predicate rightPredicate = this.getPredicateOfList(this.right, root,
-				query, cb);
+	public Predicate parse(Root<?> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException {
+		Predicate leftPredicate = this.left.parse(root, query, cb);
+		Predicate rightPredicate = this.right.parse(root, query, cb);
 		return cb.and(leftPredicate, rightPredicate);
 	}
 }

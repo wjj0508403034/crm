@@ -142,7 +142,7 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	@SuppressWarnings("rawtypes")
 	private BoSpecification getBoSpec(BoMeta boMeta, String query)
 			throws BusinessException {
-		List<Criteria> criterias = this.criteriaFactory.parse(boMeta, query);
+		Criteria criterias = this.criteriaFactory.parse(boMeta, query);
 		return BoSpecificationImpl.newInstance(boMeta.getBoType(), boMeta,
 				criterias);
 	}

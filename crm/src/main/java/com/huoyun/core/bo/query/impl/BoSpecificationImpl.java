@@ -15,28 +15,28 @@ import com.huoyun.exception.BusinessException;
 
 public class BoSpecificationImpl<T> implements BoSpecification<T> {
 
-	private List<Criteria> criterias = new ArrayList<>();
+	private Criteria criteria = null;
 
-	public BoSpecificationImpl(BoMeta boMeta, List<Criteria> criterias) throws BusinessException {
-		this.criterias = criterias;
+	public BoSpecificationImpl(BoMeta boMeta, Criteria criteria) throws BusinessException {
+		this.criteria = criteria;
 	}
 
-	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass, BoMeta boMeta, List<Criteria> criterias)
+	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass, BoMeta boMeta, Criteria criteria)
 			throws BusinessException {
-		return new BoSpecificationImpl<T>(boMeta, criterias);
+		return new BoSpecificationImpl<T>(boMeta, criteria);
 	}
 
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException {
-		if (this.criterias == null || this.criterias.size() == 0) {
+		if (this.criteria == null) {
 			return null;
 		}
 
 		List<Predicate> predicateList = new ArrayList<>();
-
-		for (Criteria criteria : criterias) {
-			predicateList.add(criteria.parse(root, query, cb));
-		}
+		predicateList.add(criteria.parse(root, query, cb));
+//		for (Criteria criteria : criterias) {
+//			
+//		}
 
 		if (predicateList.size() == 0) {
 			return null;

@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
@@ -43,6 +44,9 @@ public class Contact extends AbstractBusinessObjectImpl {
 
 	@BoProperty(type = PropertyType.Email, mandatory = true)
 	private String email;
+	
+	@Transient
+	private String fullName;
 
 	@Override
 	public Long getId() {
@@ -75,6 +79,14 @@ public class Contact extends AbstractBusinessObjectImpl {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Contact">
+	<header>
+		<title ref="fullName"></title>
+		<subtitle ref="status"></subtitle>
+	</header>
+	<sections>
+		<section label="basic">
+			<properties>
+				<property ref="firstName"></property>
+				<property ref="lastName"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,firstName,lastName" orderby="id">
+		<columns>
+			<column ref="firstName"></column>
+			<column ref="lastName"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+		<filter label="ALL" expression="createTime eq now()"></filter>
+	</filters>
+	<properties>
+		<property name="firstName"></property>
+		<property name="lastName"></property>
+	</properties>
+</root>

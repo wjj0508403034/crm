@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.query.BoSpecification;
 import com.huoyun.core.bo.query.CriteriaFactory;
 import com.huoyun.core.bo.query.criteria.Criteria;
+import com.huoyun.core.bo.query.criteria.OrderBy;
 import com.huoyun.core.bo.query.impl.BoSpecificationImpl;
 import com.huoyun.exception.BusinessException;
 
@@ -115,9 +117,10 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Page<Map<String, Object>> query(String namespace, String name,
-			Pageable pageable, String query) throws BusinessException {
+			Pageable pageable, String query, String orderby)
+			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecification spec = this.getBoSpec(boMeta, query);
+		BoSpecification spec = this.getBoSpec(boMeta, query, orderby);
 		Page<BusinessObject> pageData = this.boFacade.getBoRepository(
 				namespace, name).query(spec, pageable);
 		List<Map<String, Object>> resultList = new ArrayList<>();
@@ -135,16 +138,25 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	public Long count(String namespace, String name, String query)
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
-		BoSpecification spec = this.getBoSpec(boMeta, query);
+		BoSpecification spec = this.getBoSpec(boMeta, query, null);
 		return this.boFacade.getBoRepository(namespace, name).count(spec);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private BoSpecification getBoSpec(BoMeta boMeta, String query)
-			throws BusinessException {
-		Criteria criterias = this.criteriaFactory.parse(boMeta, query);
+	private BoSpecification getBoSpec(BoMeta boMeta, String query,
+			String orderby) throws BusinessException {
+		Criteria criteria = null;
+		if (!StringUtils.isEmpty(query)) {
+			criteria = this.criteriaFactory.parse(boMeta, query);
+		}
+
+		List<OrderBy> orderbyList = null;
+		if (!StringUtils.isEmpty(orderby)) {
+			orderbyList = this.criteriaFactory.parseOrderBy(boMeta, orderby);
+		}
+
 		return BoSpecificationImpl.newInstance(boMeta.getBoType(), boMeta,
-				criterias);
+				criteria, orderbyList);
 	}
 
 	private BoMeta getBoMeta(String namespace, String name)

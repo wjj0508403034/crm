@@ -5,49 +5,51 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.query.BoSpecification;
 import com.huoyun.core.bo.query.criteria.Criteria;
+import com.huoyun.core.bo.query.criteria.OrderBy;
 import com.huoyun.exception.BusinessException;
 
 public class BoSpecificationImpl<T> implements BoSpecification<T> {
 
 	private Criteria criteria = null;
+	private List<OrderBy> orderbyList = null;
 
-	public BoSpecificationImpl(BoMeta boMeta, Criteria criteria) throws BusinessException {
+	public BoSpecificationImpl(BoMeta boMeta, Criteria criteria,
+			List<OrderBy> orderbyList) throws BusinessException {
 		this.criteria = criteria;
+		this.orderbyList = orderbyList;
 	}
 
-	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass, BoMeta boMeta, Criteria criteria)
+	public static <T> BoSpecificationImpl<T> newInstance(Class<T> klass,
+			BoMeta boMeta, Criteria criteria, List<OrderBy> orderbyList)
 			throws BusinessException {
-		return new BoSpecificationImpl<T>(boMeta, criteria);
+		return new BoSpecificationImpl<T>(boMeta, criteria, orderbyList);
 	}
 
 	@Override
-	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) throws BusinessException {
-		if (this.criteria == null) {
-			return null;
+	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
+			CriteriaBuilder cb) throws BusinessException {
+		if (this.criteria != null) {
+			Predicate predicate = criteria.parse(root, query, cb);
+			if (predicate != null) {
+				query = query.where(predicate);
+			}
 		}
 
-		List<Predicate> predicateList = new ArrayList<>();
-		predicateList.add(criteria.parse(root, query, cb));
-//		for (Criteria criteria : criterias) {
-//			
-//		}
-
-		if (predicateList.size() == 0) {
-			return null;
+		if (this.orderbyList != null && this.orderbyList.size() > 0) {
+			List<Order> orders = new ArrayList<>();
+			for (OrderBy orderby : this.orderbyList) {
+				orders.add(orderby.parse(root, query, cb));
+			}
+			query = query.orderBy(orders);
 		}
 
-		return query.where(this.toArray(predicateList)).getRestriction();
-	}
-
-	private Predicate[] toArray(List<Predicate> predicateList) {
-		Predicate[] array = new Predicate[predicateList.size()];
-		predicateList.toArray(array);
-		return array;
+		return query.getRestriction();
 	}
 }

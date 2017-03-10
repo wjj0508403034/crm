@@ -25,17 +25,18 @@ public class BusinessObjectController {
 
 	@RequestMapping(value = "/bo({namespace},{name})", method = RequestMethod.GET)
 	@ResponseBody
-	public Page<Map<String, Object>> queryx(
+	public Page<Map<String, Object>> query(
 			@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name,
 			@RequestParam(value = "query", required = false) String query,
-			@RequestParam(value = "$select", required = false) String select,
-			@RequestParam(value = "$pageIndex", required = false, defaultValue = "0") int pageIndex,
-			@RequestParam(value = "$pageSize", required = false, defaultValue = "10") int pageSize)
+			@RequestParam(value = "select", required = false) String select,
+			@RequestParam(value = "orderby", required = false) String orderby,
+			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize)
 			throws BusinessException {
 		Pageable pageable = new PageRequest(pageIndex, pageSize);
 		return this.businessObjectService.query(namespace, name, pageable,
-				query);
+				query, orderby);
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/count", method = RequestMethod.GET)

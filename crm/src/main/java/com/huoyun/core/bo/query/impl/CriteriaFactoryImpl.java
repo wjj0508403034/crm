@@ -1,9 +1,12 @@
 package com.huoyun.core.bo.query.impl;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.huoyun.core.bo.BoErrorCode;
 import com.huoyun.core.bo.metadata.BoMeta;
@@ -55,6 +58,33 @@ public class CriteriaFactoryImpl implements CriteriaFactory {
 		List<Token> tokens = filter.getTokens();
 
 		return parse(boMeta, tokens, new Cursor());
+	}
+
+	@Override
+	public List<OrderBy> parseOrderBy(BoMeta boMeta, String orderby)
+			throws BusinessException {
+		if (StringUtils.isEmpty(orderby)) {
+			return null;
+		}
+
+		List<OrderByToken> tokens = new ArrayList<>();
+		for (String token : orderby.split(",")) {
+			tokens.add(new OrderByToken(token));
+		}
+
+		List<OrderBy> results = new ArrayList<>();
+		for (OrderByToken token : tokens) {
+			PropertyMeta propMeta = boMeta.getPropertyMeta(token
+					.getPropertyName());
+			if (propMeta == null) {
+				throw new BusinessException(
+						ErrorCode.Query_Expression_Parse_Failed);
+			}
+
+			results.add(new OrderBy(propMeta, token.isAsc()));
+		}
+
+		return results;
 	}
 
 	@SuppressWarnings("unchecked")

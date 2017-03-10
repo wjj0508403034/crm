@@ -19,4 +19,9 @@ public class AbstractToken implements Token {
 	public String getExpr() {
 		return this.expr;
 	}
+
+	@Override
+	public void setExpr(String expr) {
+		this.expr = expr;
+	}
 }

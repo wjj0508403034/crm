@@ -7,7 +7,7 @@ import com.huoyun.core.bo.query.Parser;
 public abstract class AbstractParser implements Parser {
 
 	private String expr;
-
+	
 	public AbstractParser(String expr) {
 		if (!StringUtils.isEmpty(expr)) {
 			this.expr = expr.trim();

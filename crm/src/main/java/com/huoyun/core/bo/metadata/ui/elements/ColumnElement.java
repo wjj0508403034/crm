@@ -10,21 +10,20 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "property")
-public class PropertyElement implements Serializable {
+@XmlRootElement(name = "column")
+public class ColumnElement implements Serializable {
 
-	private static final long serialVersionUID = -347117785672627569L;
-
-	@XmlAttribute(name = "name", required = true)
+	private static final long serialVersionUID = 3576131079830154565L;
+	
+	@XmlAttribute(name = "ref", required = true)
 	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-	private String name;
+	private String ref;
 
-	public String getName() {
-		return name;
+	public String getRef() {
+		return ref;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
-
 }

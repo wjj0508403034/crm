@@ -11,20 +11,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "property")
-public class PropertyElement implements Serializable {
+public class SectionPropertyElement implements Serializable {
 
-	private static final long serialVersionUID = -347117785672627569L;
-
-	@XmlAttribute(name = "name", required = true)
+	private static final long serialVersionUID = -3861399930023413692L;
+	
+	@XmlAttribute(name = "ref", required = true)
 	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-	private String name;
+	private String ref;
 
-	public String getName() {
-		return name;
+	public String getRef() {
+		return ref;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
-
 }

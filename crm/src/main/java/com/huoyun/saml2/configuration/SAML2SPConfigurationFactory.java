@@ -2,31 +2,33 @@ package com.huoyun.saml2.configuration;
 
 import java.util.Date;
 
+import com.huoyun.saml2.SAMLProperties;
 import com.sap.security.saml2.cfg.custom.SAML2LocalSPCustomImpl;
 import com.sap.security.saml2.cfg.enums.SAML2Binding;
 import com.sap.security.saml2.cfg.exceptions.SAML2ConfigurationException;
 
 public class SAML2SPConfigurationFactory {
-	private SAML2SPConfigurationLoader configurationLoader = new SAML2SPConfigurationLoader();
+	private SAML2SPConfigurationLoader configurationLoader ;
     private volatile SAML2Configuration saml2Configuration = new SAML2Configuration();
     private volatile long lastCachedTimepstamp = 0;
     private volatile long cachedTimeInmilliseconds = 600000;
 
     private volatile static SAML2SPConfigurationFactory INSTANCE = null;
 
-    public static SAML2SPConfigurationFactory getInstance() throws SAML2ConfigurationException {
-        if (null == INSTANCE) {
-            synchronized (SAML2SPConfigurationFactory.class) {
-                if (null == INSTANCE) {
-                    SAML2SPConfigurationFactory temp = new SAML2SPConfigurationFactory();
-                    INSTANCE = temp;
-                }
-            }
-        }
-        return INSTANCE;
-    }
+//    public static SAML2SPConfigurationFactory getInstance() throws SAML2ConfigurationException {
+//        if (null == INSTANCE) {
+//            synchronized (SAML2SPConfigurationFactory.class) {
+//                if (null == INSTANCE) {
+//                    SAML2SPConfigurationFactory temp = new SAML2SPConfigurationFactory();
+//                    INSTANCE = temp;
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
-    private SAML2SPConfigurationFactory() throws SAML2ConfigurationException {
+    public SAML2SPConfigurationFactory(SAMLProperties samlProperties) throws SAML2ConfigurationException {
+    	this.configurationLoader = new SAML2SPConfigurationLoader(samlProperties);
         configurationLoader.loadSPConfigurationFromFile(saml2Configuration);
     }
 

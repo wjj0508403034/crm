@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.util.HttpSessionMutexListener;
 
 import com.huoyun.login.LoginRequiredFilter;
+import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.saml2.filters.ACSServlet;
 import com.huoyun.saml2.filters.LogoutTriggerServlet;
 import com.huoyun.saml2.filters.SLOServlet;
@@ -31,8 +32,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public FilterRegistrationBean loginRequiredFilter() {
+	public FilterRegistrationBean loginRequiredFilter(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		LoginRequiredFilter loginRequiredFilter = new LoginRequiredFilter();
+		loginRequiredFilter.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(loginRequiredFilter);
 		Map<String,String> params = new HashMap<>();
@@ -48,8 +50,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean acsServlet() {
+	public ServletRegistrationBean acsServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		ACSServlet acsServlet = new ACSServlet();
+		acsServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(acsServlet);
 		List<String> urlMappings = new ArrayList<String>();
@@ -61,8 +64,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean logoutTriggerServlet() {
+	public ServletRegistrationBean logoutTriggerServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		LogoutTriggerServlet logoutTriggerServlet = new LogoutTriggerServlet();
+		logoutTriggerServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(logoutTriggerServlet);
 		List<String> urlMappings = new ArrayList<String>();
@@ -74,8 +78,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean sloServlet() {
+	public ServletRegistrationBean sloServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		SLOServlet sloServlet = new SLOServlet();
+		sloServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(sloServlet);
 		List<String> urlMappings = new ArrayList<String>();

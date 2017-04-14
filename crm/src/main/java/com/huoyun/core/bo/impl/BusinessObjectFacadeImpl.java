@@ -3,10 +3,8 @@ package com.huoyun.core.bo.impl;
 import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

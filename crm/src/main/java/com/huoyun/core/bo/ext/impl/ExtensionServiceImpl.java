@@ -25,9 +25,11 @@ import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.ext.UDEAllocInfo;
 import com.huoyun.core.bo.ext.UserEntity;
 import com.huoyun.core.bo.ext.UserProperty;
+import com.huoyun.core.bo.ext.UserPropertyValidValue;
 import com.huoyun.core.bo.ext.controller.CustomFieldParam;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.bo.metadata.Value;
 import com.huoyun.core.bo.metadata.events.MetadataChangedPublisher;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.exception.BusinessException;
@@ -139,6 +141,14 @@ public class ExtensionServiceImpl implements ExtensionService {
 		userProperty.setColumnName(columnName);
 		userProperty.setType(propType);
 		userProperty.create();
+		
+		for(Value value: customFieldParam.getValidValues()){
+			UserPropertyValidValue validValue = this.boFacade.newBo(UserPropertyValidValue.class);
+			validValue.setLabel(value.getLabel());
+			validValue.setValue(value.getName());
+			validValue.setUserProperty(userProperty);
+			validValue.create();
+		}
 
 		if (this.metaChangedPublisher != null) {
 			this.metaChangedPublisher.publish();

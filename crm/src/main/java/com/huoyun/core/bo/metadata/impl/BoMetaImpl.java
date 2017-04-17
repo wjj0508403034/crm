@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.ExtensibleBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
@@ -26,7 +27,7 @@ public class BoMetaImpl implements BoMeta {
 	private String label;
 	private String labelI18nKey;
 	private LocaleService localeService;
-	//private List<PropertyMeta> properties = new ArrayList<>();
+	// private List<PropertyMeta> properties = new ArrayList<>();
 	private String primaryKey;
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
@@ -51,12 +52,12 @@ public class BoMetaImpl implements BoMeta {
 		}
 		this.label = this.localeService.getMessage(this.labelI18nKey);
 		this.allowCustomized = annot.allowCustomized();
-		
-		if(ExtensibleBusinessObject.class.isAssignableFrom(boClass)){
+
+		if (ExtensibleBusinessObject.class.isAssignableFrom(boClass)) {
 			this.setExtTableName(BusinessObjectUtils.getExtTableName(boClass));
 		}
 
-		this.setProps(boClass);
+		this.setProps(this.name, boClass);
 	}
 
 	@Override
@@ -89,18 +90,18 @@ public class BoMetaImpl implements BoMeta {
 		return new ArrayList<>(this.propMap.values());
 	}
 
-	private void setProps(Class<?> klass) {
+	private void setProps(String boName, Class<?> klass) {
 		if (klass.getSuperclass() != null) {
-			this.setProps(klass.getSuperclass());
+			this.setProps(boName, klass.getSuperclass());
 		}
 
 		for (Field field : klass.getDeclaredFields()) {
 			PropertyMetaImpl propMeta = null;
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
-				propMeta = new PropertyMetaImpl(field, localeService);
+				propMeta = new PropertyMetaImpl(boName, field, localeService);
 				this.propMap.put(propMeta.getName(), propMeta);
-				//this.properties.add(propMeta);
+				// this.properties.add(propMeta);
 
 				Id idAnnot = field.getAnnotation(Id.class);
 				if (idAnnot != null) {
@@ -120,6 +121,7 @@ public class BoMetaImpl implements BoMeta {
 		this.primaryKey = primaryKey;
 	}
 
+	@JsonIgnore
 	@Override
 	public Class<BusinessObject> getBoType() {
 		return boType;
@@ -142,6 +144,7 @@ public class BoMetaImpl implements BoMeta {
 		return null;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getExtTableName() {
 		return extTableName;

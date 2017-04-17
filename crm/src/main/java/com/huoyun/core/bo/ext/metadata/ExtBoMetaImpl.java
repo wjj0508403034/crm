@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.ext.UserProperty;
 import com.huoyun.core.bo.metadata.BoMeta;

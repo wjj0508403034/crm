@@ -9,13 +9,17 @@ import java.util.Map;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletListenerRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.util.HttpSessionMutexListener;
 
+import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.login.LoginProcessor;
 import com.huoyun.login.LoginRequiredFilter;
+import com.huoyun.login.LoginRequiredInterceptor;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.saml2.filters.ACSServlet;
 import com.huoyun.saml2.filters.LogoutTriggerServlet;
@@ -25,6 +29,11 @@ import com.huoyun.saml2.filters.SLOServlet;
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
+	public LoginProcessor loginProcessor(BusinessObjectFacade boFacade){
+		return new LoginProcessor(boFacade);
+	}
+	
+	@Bean
 	public ServletListenerRegistrationBean<EventListener> getDemoListener() {
 		ServletListenerRegistrationBean<EventListener> registrationBean = new ServletListenerRegistrationBean<>();
 		registrationBean.setListener(new HttpSessionMutexListener());
@@ -32,14 +41,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public FilterRegistrationBean loginRequiredFilter(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
+	public FilterRegistrationBean loginRequiredFilter(
+			SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		LoginRequiredFilter loginRequiredFilter = new LoginRequiredFilter();
-		loginRequiredFilter.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
+		loginRequiredFilter
+				.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(loginRequiredFilter);
-		Map<String,String> params = new HashMap<>();
+		Map<String, String> params = new HashMap<>();
 		params.put("LOCALE_SESSION_ATTRIBUTE_NAME", "sbo.locale");
-		params.put("EXCLUDES","/oauth2/token;/libs;/image;/resources/js;/fonts;/js;cache.manifest;/sso;/templates;/resources;/css;/js");
+		params.put(
+				"EXCLUDES",
+				"/oauth2/token;/libs;/image;/resources/js;/fonts;/js;cache.manifest;/sso;/templates;/resources;/css;/js");
 		registrationBean.setInitParameters(params);
 		List<String> urlPatterns = new ArrayList<String>();
 		urlPatterns.add("/*");// 拦截路径，可以添加多个
@@ -50,8 +63,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean acsServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
-		ACSServlet acsServlet = new ACSServlet();
+	public ServletRegistrationBean acsServlet(
+			SAML2SPConfigurationFactory saml2SPConfigurationFactory,
+			ApplicationContext context) {
+		
+		ACSServlet acsServlet = new ACSServlet(context);
 		acsServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(acsServlet);
@@ -64,9 +80,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean logoutTriggerServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
+	public ServletRegistrationBean logoutTriggerServlet(
+			SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		LogoutTriggerServlet logoutTriggerServlet = new LogoutTriggerServlet();
-		logoutTriggerServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
+		logoutTriggerServlet
+				.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(logoutTriggerServlet);
 		List<String> urlMappings = new ArrayList<String>();
@@ -78,7 +96,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public ServletRegistrationBean sloServlet(SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
+	public ServletRegistrationBean sloServlet(
+			SAML2SPConfigurationFactory saml2SPConfigurationFactory) {
 		SLOServlet sloServlet = new SLOServlet();
 		sloServlet.setSAML2SPConfigurationFactory(saml2SPConfigurationFactory);
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
@@ -93,6 +112,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		//registry.addInterceptor(new LoginRequiredInterceptor());
+		// registry.addInterceptor(new LoginRequiredInterceptor());
 	}
 }

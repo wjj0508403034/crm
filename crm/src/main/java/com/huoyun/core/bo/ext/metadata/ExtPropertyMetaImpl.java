@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.ext.UserProperty;
+import com.huoyun.core.bo.ext.UserPropertyValidValue;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.ValidationMeta;
@@ -70,6 +72,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		return false;
 	}
 
+	@JsonIgnore
 	@Override
 	public Field getField() {
 		if (this.basePropertyMeta != null) {
@@ -79,6 +82,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		return null;
 	}
 
+	@JsonIgnore
 	@Override
 	public Class<?> getRuntimeType() {
 		if (this.basePropertyMeta != null) {
@@ -93,6 +97,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		return this.type;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getColumnName() {
 		return this.columnName;
@@ -110,6 +115,12 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		this.type = userProperty.getType();
 		this.readonly = userProperty.isReadonly();
 		this.columnName = userProperty.getColumnName();
+		for(UserPropertyValidValue validValue: userProperty.getValidValues()){
+			Value value = new Value();
+			value.setName(validValue.getValue());
+			value.setLabel(validValue.getLabel());
+			this.validValues.add(value);
+		}
 	}
 
 	@Override

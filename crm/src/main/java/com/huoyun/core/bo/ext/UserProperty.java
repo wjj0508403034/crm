@@ -1,13 +1,17 @@
 package com.huoyun.core.bo.ext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Index;
 
@@ -67,6 +71,10 @@ public class UserProperty extends LiteBusinessObject {
 	private String columnName;
 
 	private String tableName;
+	
+    @OneToMany(mappedBy = "userProperty", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OrderBy("id ASC")
+    private final List<UserPropertyValidValue> validValues = new ArrayList<>();
 
 	@Override
 	public Long getId() {
@@ -179,6 +187,10 @@ public class UserProperty extends LiteBusinessObject {
 
 	public void setRule(ValidationRule rule) {
 		this.rule = rule;
+	}
+
+	public List<UserPropertyValidValue> getValidValues() {
+		return validValues;
 	}
 
 }

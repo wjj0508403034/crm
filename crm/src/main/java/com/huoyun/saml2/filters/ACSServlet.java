@@ -16,8 +16,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 
+import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.login.LoginProcessor;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.saml2.configuration.SAML2Configuration;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationCustom;
@@ -41,6 +44,11 @@ public class ACSServlet extends HttpServlet implements
 			.getLogger(ACSServlet.class);
 
 	private SAML2SPConfigurationFactory saml2SPConfigurationFactory;
+	private ApplicationContext context;
+	
+	public ACSServlet(ApplicationContext context){
+		this.context = context;
+	}
 
 	@Override
 	public void setSAML2SPConfigurationFactory(
@@ -109,7 +117,7 @@ public class ACSServlet extends HttpServlet implements
 						EndpointsConstatns.SSO_SESSION_INDEX,
 						req.getParameter(EndpointsConstatns.SSO_SESSION_INDEX));
 				String url = req.getParameter(HTTPPostBinding.SAML_RELAY_STATE);
-
+				this.context.getBean(LoginProcessor.class).process(Long.getLong(saml2Principal.getName()));
 				resp.sendRedirect(saml2Configuration.getHomePage());
 			}
 		} catch (Exception e) {

@@ -1,5 +1,10 @@
 package com.huoyun.core.bo.ext.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.huoyun.core.bo.metadata.Value;
+
 public class CustomFieldParam {
 
 	private String boName;
@@ -7,6 +12,7 @@ public class CustomFieldParam {
 	private String name;
 	private String label;
 	private String type;
+	private List<Value> validValues = new ArrayList<>();
 
 	public String getBoName() {
 		return boName;
@@ -46,6 +52,14 @@ public class CustomFieldParam {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public List<Value> getValidValues() {
+		return validValues;
+	}
+
+	public void setValidValues(List<Value> validValues) {
+		this.validValues = validValues;
 	}
 
 }

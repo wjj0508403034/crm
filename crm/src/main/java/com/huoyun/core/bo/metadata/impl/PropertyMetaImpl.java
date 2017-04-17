@@ -2,10 +2,13 @@ package com.huoyun.core.bo.metadata.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BoPropertyRule;
 import com.huoyun.core.bo.metadata.PropertyMeta;
@@ -17,7 +20,8 @@ import com.huoyun.locale.LocaleService;
 
 public class PropertyMetaImpl implements PropertyMeta {
 
-	public PropertyMetaImpl(Field field, LocaleService localeService) {
+	public PropertyMetaImpl(String boName, Field field,
+			LocaleService localeService) {
 		this.field = field;
 		this.localeService = localeService;
 		BoProperty boProp = field.getAnnotation(BoProperty.class);
@@ -30,9 +34,16 @@ public class PropertyMetaImpl implements PropertyMeta {
 			this.type = PropertyType.parse(this.field.getType());
 		}
 
+		if (this.type == PropertyType.BoLabel) {
+			this.additionInfo.put("boNamespace",
+					BusinessObjectUtils.getBoNamespace(this.field.getType()));
+			this.additionInfo.put("boName",
+					BusinessObjectUtils.getBoName(this.field.getType()));
+		}
+
 		this.name = field.getName();
 		if (StringUtils.isEmpty(boProp.label())) {
-			this.labelI18nKey = "bo.label.prop." + this.name;
+			this.labelI18nKey = "bo.label.prop." + boName + "." + this.name;
 		} else {
 			this.labelI18nKey = boProp.label();
 		}
@@ -59,6 +70,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 	private PropertyType type;
 	private ValidationMeta validationMeta;
 	private List<Value> validValues = new ArrayList<>();
+	private Map<String, Object> additionInfo = new HashMap<>();
 
 	@Override
 	public String getName() {
@@ -104,11 +116,13 @@ public class PropertyMetaImpl implements PropertyMeta {
 		this.readonly = readonly;
 	}
 
+	@JsonIgnore
 	@Override
 	public Field getField() {
 		return field;
 	}
 
+	@JsonIgnore
 	@Override
 	public Class<?> getRuntimeType() {
 		return this.field.getType();
@@ -127,6 +141,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 		return this.type;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getColumnName() {
 		return null;
@@ -149,5 +164,13 @@ public class PropertyMetaImpl implements PropertyMeta {
 	@Override
 	public List<Value> getValidValues() {
 		return validValues;
+	}
+
+	public Map<String, Object> getAdditionInfo() {
+		return additionInfo;
+	}
+
+	public void setAdditionInfo(Map<String, Object> additionInfo) {
+		this.additionInfo = additionInfo;
 	}
 }

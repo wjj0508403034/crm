@@ -21,7 +21,12 @@ public class JpaAutoConfiguration extends JpaBaseConfiguration{
 	@Override
 	protected Map<String, Object> getVendorProperties() {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("eclipselink.weaving", "false");
+		map.put("eclipselink.weaving", "static");
+		map.put("eclipselink.logging.parameters", "true");
+		map.put("eclipselink.cache.shared.default", "false");
+		map.put("eclipselink.jdbc.cache-statements", "true");
+		map.put("org.hibernate.flushMode", "COMMIT");
+		
 		map.put("eclipselink.ddl-generation", "drop-and-create-tables");
 		map.put(PersistenceUnitProperties.SESSION_CUSTOMIZER, "com.huoyun.core.jpa.SessionCustomizerImpl");
 		

@@ -24,6 +24,7 @@ public class ExtBoMetaImpl implements BoMeta {
 		}
 	}
 
+	@JsonIgnore
 	@Override
 	public Class<BusinessObject> getBoType() {
 		return this.baseBoMeta.getBoType();
@@ -47,6 +48,7 @@ public class ExtBoMetaImpl implements BoMeta {
 		return null;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getExtTableName() {
 		return this.baseBoMeta.getExtTableName();

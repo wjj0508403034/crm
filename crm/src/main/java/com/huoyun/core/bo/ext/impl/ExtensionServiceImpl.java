@@ -140,15 +140,17 @@ public class ExtensionServiceImpl implements ExtensionService {
 		userProperty.setTableName(boMeta.getExtTableName());
 		userProperty.setColumnName(columnName);
 		userProperty.setType(propType);
-		userProperty.create();
+		
 		
 		for(Value value: customFieldParam.getValidValues()){
 			UserPropertyValidValue validValue = this.boFacade.newBo(UserPropertyValidValue.class);
 			validValue.setLabel(value.getLabel());
 			validValue.setValue(value.getName());
 			validValue.setUserProperty(userProperty);
-			validValue.create();
+			userProperty.getValidValues().add(validValue);
 		}
+		
+		userProperty.create();
 
 		if (this.metaChangedPublisher != null) {
 			this.metaChangedPublisher.publish();

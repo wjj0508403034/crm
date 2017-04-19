@@ -19,7 +19,7 @@ public class MetadataChangedEventListener implements
 
 	@Override
 	public void onApplicationEvent(MetadataChangedEvent event) {
-		LOGGER.info("Received the metadata changed event ...");
+		LOGGER.info("Received the metadata changed event, start refresh the metadata ...");
 		if (this.applicationContext != null) {
 			MetadataRepository metaRepo = this.applicationContext
 					.getBean(MetadataRepository.class);
@@ -27,6 +27,8 @@ public class MetadataChangedEventListener implements
 				metaRepo.refresh();
 			}
 		}
+		
+		LOGGER.info("Refresh the metadata successfully.");
 	}
 
 	@Override

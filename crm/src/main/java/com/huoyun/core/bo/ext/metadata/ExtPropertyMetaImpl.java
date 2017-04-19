@@ -115,6 +115,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		this.type = userProperty.getType();
 		this.readonly = userProperty.isReadonly();
 		this.columnName = userProperty.getColumnName();
+		this.validValues.clear();
 		for(UserPropertyValidValue validValue: userProperty.getValidValues()){
 			Value value = new Value();
 			value.setName(validValue.getValue());

@@ -36,10 +36,6 @@ public class UserProperty extends LiteBusinessObject {
 	}
 
 	@Id
-	// @SequenceGenerator(name = "UserProperty_SEQ", sequenceName =
-	// "USER_PROPERTY_SEQ")
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
-	// "UserProperty_SEQ")
 	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;

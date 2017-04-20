@@ -11,6 +11,8 @@ import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.employee.Employee;
 
 @BoEntity
@@ -52,6 +54,10 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private String status;
 
+	@ValidValues(validValues = {
+			@ValidValue( value = "recommend"),
+			@ValidValue( value = "roadShow") 
+			})
 	@BoProperty
 	private String salesSource;
 

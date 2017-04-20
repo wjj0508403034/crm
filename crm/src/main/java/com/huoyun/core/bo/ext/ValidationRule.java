@@ -2,9 +2,7 @@ package com.huoyun.core.bo.ext;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
@@ -27,8 +25,6 @@ public class ValidationRule extends LiteBusinessObject {
 	}
 
 	@Id
-	//@SequenceGenerator(name = "ValidationRule_SEQ", sequenceName = "VALIDATION_RULE_SEQ")
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ValidationRule_SEQ")
 	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;

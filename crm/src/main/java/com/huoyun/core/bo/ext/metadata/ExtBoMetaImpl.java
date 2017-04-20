@@ -76,4 +76,14 @@ public class ExtBoMetaImpl implements BoMeta {
 		return true;
 	}
 
+	@Override
+	public String getNamespace() {
+		return this.baseBoMeta.getNamespace();
+	}
+
+	@Override
+	public String getLabel() {
+		return this.baseBoMeta.getLabel();
+	}
+
 }

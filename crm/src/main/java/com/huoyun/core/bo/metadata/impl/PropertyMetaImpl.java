@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BoPropertyRule;
+import com.huoyun.core.bo.annotation.ValidValue;
+import com.huoyun.core.bo.annotation.ValidValues;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.ValidationMeta;
@@ -52,8 +54,20 @@ public class PropertyMetaImpl implements PropertyMeta {
 		BoPropertyRule propRule = field.getAnnotation(BoPropertyRule.class);
 		if (propRule != null) {
 			this.validationMeta = new ValidationMetaImpl(propRule);
-		} else {
-
+		} 
+		
+		ValidValues validValuesAnno = field.getAnnotation(ValidValues.class);
+		if(validValuesAnno != null){
+			if(validValuesAnno.validValues() != null && validValuesAnno.validValues().length > 0){
+				this.validationMeta = null;
+				for(ValidValue validValue: validValuesAnno.validValues()){
+					Value value = new Value();
+					value.setName(validValue.value());
+					String valueLabelKey = "bo.label.prop." + boName + "." + this.name + ".validvalues." + validValue.value();
+					value.setLabel(this.localeService.getMessage(valueLabelKey));
+					this.validValues.add(value);
+				}
+			}
 		}
 
 	}

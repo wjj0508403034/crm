@@ -68,7 +68,8 @@ public class BoMetaImpl implements BoMeta {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@Override
 	public String getNamespace() {
 		return namespace;
 	}
@@ -77,6 +78,7 @@ public class BoMetaImpl implements BoMeta {
 		this.namespace = namespace;
 	}
 
+	@Override
 	public String getLabel() {
 		return label;
 	}

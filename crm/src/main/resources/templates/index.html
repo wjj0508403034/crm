@@ -1,0 +1,119 @@
+﻿<html ng-app="huoyun" ng-controller="appController">
+
+<head>
+  <!-- inject:js -->
+  <script src="../libs/jquery.min.js"></script>
+  <script src="../libs/angular.js"></script>
+  <script src="../libs/angular-ui-router.min.js"></script>
+  <script src="../libs/huoyun.widget.js"></script>
+  <script src="../libs/jquery-ui.min.js"></script>
+  <script src="../libs/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+  <script src="../libs/datepicker/bootstrap-datepicker.js"></script>
+  <script src="../libs/daterangepicker/1moment.min.js"></script>
+  <script src="../libs/daterangepicker/daterangepicker.js"></script>
+  <script src="../libs/adminlte/js/app.min.js"></script>
+  <script src="../libs/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ar.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.az.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.bg.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ca.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.cs.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.cy.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.da.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.de.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.el.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.es.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.et.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.fa.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.fi.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.fr.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.gl.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.he.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.hr.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.hu.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.id.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.is.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.it.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ja.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ka.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.kk.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.kr.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.lt.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.lv.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.mk.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ms.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.nb.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.nl-BE.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.nl.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.no.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.pl.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.pt-BR.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.pt.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ro.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.rs-latin.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.rs.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ru.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.sk.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.sl.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.sq.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.sv.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.sw.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.th.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.tr.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.ua.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.vi.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+  <script src="../libs/datepicker/locales/bootstrap-datepicker.zh-TW.js"></script>
+  <script src="../libs/adminlte/js/pages/dashboard.js"></script>
+  <script src="../libs/adminlte/js/pages/dashboard2.js"></script>
+  <script src="../app.js"></script>
+  <!-- endinject -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../app.css">
+  <link rel="stylesheet" href="../huoyun.widget.css">
+  <link rel="stylesheet" href="../libs/font-awesome.min.css">
+  <link rel="stylesheet" href="../libs/ionicons.min.css">
+  <link rel="stylesheet" href="../libs/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+  <link rel="stylesheet" href="../libs/datepicker/datepicker3.css">
+  <link rel="stylesheet" href="../libs/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/alt/AdminLTE-bootstrap-social.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/alt/AdminLTE-fullcalendar.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/alt/AdminLTE-select2.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/alt/AdminLTE-without-plugins.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-black-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-black.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-blue-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-blue.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-green-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-green.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-purple-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-purple.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-red-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-red.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-yellow-light.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/skin-yellow.min.css">
+  <link rel="stylesheet" href="../libs/adminlte/css/skins/_all-skins.min.css">
+  <!-- endinject -->
+  <title ng-bind="title"></title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+    <!--widget-header-->
+    <div widget-header></div>
+    <!-- Left side column. contains the logo and sidebar -->
+    <div widget-sidebar></div>
+    <!-- Content Wrapper-->
+    <div class="content-wrapper">
+      <section widget-bread-crumb title="{{pageTitle}}" sub-title="{{pageSubTitle}}" navs="navs"></section>
+      <section ui-view class="content-wrapper-container">
+      </section>
+    </div>
+    <!-- footer-->
+    <div widget-footer></div>
+</body>
+
+</html>

@@ -42,7 +42,7 @@ public class UIMetadataRepositoryImpl implements UIMetadataRepository {
 		if (element == null) {
 			LOGGER.warn("BoNamespace: {}, BoName: {} hasn't xml file.",
 					namespace, name);
-			return UIBoMetaImpl.parse(boMeta, this.boFacade.getLocaleService());
+			return UIBoMetaImpl.parse(boMeta, this.boFacade);
 		}
 
 		return null;

@@ -4,11 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.BusinessKey;
 
 @BoEntity
 @Entity
@@ -23,16 +23,16 @@ public class Employee extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	// @SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =
-	// "Contact_SEQ")
 	@GeneratedValue
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
-	
-	@BoProperty
+
+	@BoProperty(readonly = true)
 	private Long userId;
-	
+
+	@BusinessKey
+	@BoProperty
+	private String userName;
 
 	@Override
 	public Long getId() {
@@ -49,6 +49,14 @@ public class Employee extends AbstractBusinessObjectImpl {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

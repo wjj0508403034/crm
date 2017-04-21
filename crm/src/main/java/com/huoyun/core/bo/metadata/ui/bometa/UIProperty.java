@@ -1,8 +1,14 @@
 package com.huoyun.core.bo.metadata.ui.bometa;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.Value;
@@ -17,6 +23,7 @@ public class UIProperty {
 	private boolean readonly;
 	private boolean searchable;
 	private List<Value> validvalues = new ArrayList<>();
+	private Map<String, Object> additionInfo = new HashMap<>();
 
 	public String getName() {
 		return name;
@@ -27,6 +34,9 @@ public class UIProperty {
 	}
 
 	public String getLabel() {
+		if(StringUtils.isEmpty(label)){
+			return name;
+		}
 		return label;
 	}
 
@@ -83,7 +93,15 @@ public class UIProperty {
 		this.searchable = searchable;
 	}
 
-	public static UIProperty parse(PropertyMeta propMeta) {
+	public Map<String, Object> getAdditionInfo() {
+		return additionInfo;
+	}
+
+	public void setAdditionInfo(Map<String, Object> additionInfo) {
+		this.additionInfo = additionInfo;
+	}
+
+	public static UIProperty parse(PropertyMeta propMeta,BusinessObjectFacade boFacade) {
 		UIProperty uiProp = new UIProperty();
 		uiProp.setName(propMeta.getName());
 		uiProp.setNamespace(propMeta.getNamespace());
@@ -93,6 +111,14 @@ public class UIProperty {
 		uiProp.setReadonly(propMeta.isReadonly());
 		uiProp.setSearchable(propMeta.isSearchable());
 		uiProp.setValidvalues(propMeta.getValidValues());
+		if(propMeta.getType() == PropertyType.BoLabel){
+			Class<?> targetBoType = propMeta.getRuntimeType();
+			BoMeta bometa = boFacade.getMetadataRepository().getBoMeta(targetBoType);
+			uiProp.additionInfo.put("boNamespace", bometa.getNamespace());
+			uiProp.additionInfo.put("boName", bometa.getName());
+			uiProp.additionInfo.put("idField", bometa.getPrimaryKey());
+			uiProp.additionInfo.put("labelField", bometa.getBusinessKey());
+		}
 		return uiProp;
 	}
 

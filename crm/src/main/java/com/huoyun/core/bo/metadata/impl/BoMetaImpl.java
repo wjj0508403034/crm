@@ -15,6 +15,7 @@ import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.ExtensibleBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
@@ -29,6 +30,7 @@ public class BoMetaImpl implements BoMeta {
 	private LocaleService localeService;
 	// private List<PropertyMeta> properties = new ArrayList<>();
 	private String primaryKey;
+	private String businessKey;
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
 	private String extTableName;
@@ -68,7 +70,7 @@ public class BoMetaImpl implements BoMeta {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String getNamespace() {
 		return namespace;
@@ -110,11 +112,17 @@ public class BoMetaImpl implements BoMeta {
 					this.primaryKey = propMeta.getName();
 					propMeta.setReadonly(true);
 				}
+
+				BusinessKey busKeyAnno = field.getAnnotation(BusinessKey.class);
+				if (busKeyAnno != null) {
+					this.businessKey = propMeta.getName();
+				}
 			}
 
 		}
 	}
 
+	@Override
 	public String getPrimaryKey() {
 		return primaryKey;
 	}
@@ -163,5 +171,13 @@ public class BoMetaImpl implements BoMeta {
 
 	public void setAllowCustomized(boolean allowCustomized) {
 		this.allowCustomized = allowCustomized;
+	}
+
+	@Override
+	public String getBusinessKey() {
+		if (StringUtils.isEmpty(this.businessKey)) {
+			return this.primaryKey;
+		}
+		return businessKey;
 	}
 }

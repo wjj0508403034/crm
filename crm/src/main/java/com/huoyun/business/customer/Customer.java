@@ -11,6 +11,7 @@ import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValues;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.employee.Employee;
@@ -32,6 +33,7 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty(label = I18n_Label_Id)
 	private Long id;
 
+	@BusinessKey
 	@BoProperty
 	private String name;
 

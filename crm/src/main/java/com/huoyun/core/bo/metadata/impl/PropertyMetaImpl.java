@@ -185,6 +185,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 		return validValues;
 	}
 
+	@Override
 	public Map<String, Object> getAdditionInfo() {
 		return additionInfo;
 	}

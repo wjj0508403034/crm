@@ -3,6 +3,7 @@ package com.huoyun.core.bo.metadata.ui.bometa;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.ui.UIBoMeta;
@@ -13,6 +14,8 @@ public class UIBoMetaImpl implements UIBoMeta {
 	private String boName;
 	private String boNamespace;
 	private String label;
+	private String primaryKey;
+	private String businessKey;
 	private List<UISection> sections = new ArrayList<>();
 	private UIListView listview;
 	private List<UIProperty> properties = new ArrayList<>();
@@ -71,23 +74,40 @@ public class UIBoMetaImpl implements UIBoMeta {
 		this.properties = properties;
 	}
 
-	public static UIBoMeta parse(BoMeta boMeta, LocaleService localeService) {
+	public String getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(String primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
+	public String getBusinessKey() {
+		return businessKey;
+	}
+
+	public void setBusinessKey(String businessKey) {
+		this.businessKey = businessKey;
+	}
+
+	public static UIBoMeta parse(BoMeta boMeta, BusinessObjectFacade boFacade) {
 		UIBoMetaImpl uiBoMeta = new UIBoMetaImpl();
 		uiBoMeta.setBoName(boMeta.getName());
 		uiBoMeta.setBoNamespace(boMeta.getNamespace());
 		uiBoMeta.setLabel(boMeta.getLabel());
-		
+		uiBoMeta.setBusinessKey(boMeta.getBusinessKey());
+		uiBoMeta.setPrimaryKey(boMeta.getPrimaryKey());
+
 		UISection section = new UISection();
 		uiBoMeta.getSections().add(section);
-		section.setLabel(localeService
-				.getMessage("uimeta.section.defaultLabel"));
-		
+		section.setLabel(boFacade.getLocaleService().getMessage("uimeta.section.defaultLabel"));
+
 		uiBoMeta.setListview(new UIListView());
-		
+
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			section.getProperties().add(propMeta.getName());
 			uiBoMeta.getListview().getProperties().add(propMeta.getName());
-			uiBoMeta.getProperties().add(UIProperty.parse(propMeta));
+			uiBoMeta.getProperties().add(UIProperty.parse(propMeta,boFacade));
 		}
 		return uiBoMeta;
 	}

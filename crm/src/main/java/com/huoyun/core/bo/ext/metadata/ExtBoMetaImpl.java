@@ -19,8 +19,7 @@ public class ExtBoMetaImpl implements BoMeta {
 	public ExtBoMetaImpl(BoMeta baseBoMeta) {
 		this.baseBoMeta = baseBoMeta;
 		for (PropertyMeta propMeta : this.baseBoMeta.getProperties()) {
-			this.extPropMap.put(propMeta.getName(), new ExtPropertyMetaImpl(
-					propMeta));
+			this.extPropMap.put(propMeta.getName(), new ExtPropertyMetaImpl(propMeta));
 		}
 	}
 
@@ -62,8 +61,7 @@ public class ExtBoMetaImpl implements BoMeta {
 	public void mergeProperty(UserProperty userProperty) {
 		ExtPropertyMetaImpl propMeta = null;
 		if (this.extPropMap.containsKey(userProperty.getName())) {
-			propMeta = (ExtPropertyMetaImpl) this.extPropMap.get(userProperty
-					.getName());
+			propMeta = (ExtPropertyMetaImpl) this.extPropMap.get(userProperty.getName());
 		} else {
 			propMeta = new ExtPropertyMetaImpl();
 			this.extPropMap.put(userProperty.getName(), propMeta);
@@ -84,6 +82,16 @@ public class ExtBoMetaImpl implements BoMeta {
 	@Override
 	public String getLabel() {
 		return this.baseBoMeta.getLabel();
+	}
+
+	@Override
+	public String getBusinessKey() {
+		return this.baseBoMeta.getBusinessKey();
+	}
+
+	@Override
+	public String getPrimaryKey() {
+		return this.baseBoMeta.getPrimaryKey();
 	}
 
 }

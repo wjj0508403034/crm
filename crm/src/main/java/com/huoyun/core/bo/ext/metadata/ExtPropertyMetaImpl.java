@@ -3,6 +3,7 @@ package com.huoyun.core.bo.ext.metadata;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -141,6 +142,11 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	@Override
 	public boolean isSearchable() {
 		return this.basePropertyMeta.isSearchable();
+	}
+
+	@Override
+	public Map<String, Object> getAdditionInfo() {
+		return this.basePropertyMeta.getAdditionInfo();
 	}
 
 }

@@ -2,6 +2,7 @@ package com.huoyun.core.bo.metadata;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 public interface PropertyMeta {
 
@@ -30,4 +31,6 @@ public interface PropertyMeta {
 	List<Value> getValidValues();
 
 	boolean isSearchable();
+
+	Map<String, Object> getAdditionInfo();
 }

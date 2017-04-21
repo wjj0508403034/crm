@@ -62,14 +62,12 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 
 	@Override
 	public boolean isMandatory() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.basePropertyMeta.isMandatory();
 	}
 
 	@Override
 	public boolean isReadonly() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.readonly || this.basePropertyMeta.isReadonly();
 	}
 
 	@JsonIgnore
@@ -116,7 +114,7 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		this.readonly = userProperty.isReadonly();
 		this.columnName = userProperty.getColumnName();
 		this.validValues.clear();
-		for(UserPropertyValidValue validValue: userProperty.getValidValues()){
+		for (UserPropertyValidValue validValue : userProperty.getValidValues()) {
 			Value value = new Value();
 			value.setName(validValue.getValue());
 			value.setLabel(validValue.getLabel());
@@ -138,6 +136,11 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	@Override
 	public List<Value> getValidValues() {
 		return this.validValues;
+	}
+
+	@Override
+	public boolean isSearchable() {
+		return this.basePropertyMeta.isSearchable();
 	}
 
 }

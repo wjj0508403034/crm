@@ -19,6 +19,8 @@ public @interface BoProperty {
 	boolean mandatory() default false;
 
 	boolean readonly() default false;
+	
+	boolean searchable() default true;
 
 	PropertyType type() default PropertyType.None;
 }

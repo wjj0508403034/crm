@@ -15,6 +15,7 @@ public class UIProperty {
 	private PropertyType type;
 	private boolean mandatory;
 	private boolean readonly;
+	private boolean searchable;
 	private List<Value> validvalues = new ArrayList<>();
 
 	public String getName() {
@@ -74,6 +75,14 @@ public class UIProperty {
 		this.readonly = readonly;
 	}
 
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
+	}
+
 	public static UIProperty parse(PropertyMeta propMeta) {
 		UIProperty uiProp = new UIProperty();
 		uiProp.setName(propMeta.getName());
@@ -82,6 +91,7 @@ public class UIProperty {
 		uiProp.setType(propMeta.getType());
 		uiProp.setMandatory(propMeta.isMandatory());
 		uiProp.setReadonly(propMeta.isReadonly());
+		uiProp.setSearchable(propMeta.isSearchable());
 		uiProp.setValidvalues(propMeta.getValidValues());
 		return uiProp;
 	}

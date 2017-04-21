@@ -30,6 +30,10 @@ public class PropertyMetaImpl implements PropertyMeta {
 		if (boProp == null) {
 			throw new RuntimeException("No BoProperty annotation");
 		}
+		
+		this.readonly = boProp.readonly();
+		this.searchable = boProp.searchable();
+		
 
 		this.type = boProp.type();
 		if (this.type == PropertyType.None) {
@@ -79,6 +83,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 	private LocaleService localeService;
 	private boolean mandatory;
 	private boolean readonly;
+	private boolean searchable;
 	private boolean nullable;
 	private Field field;
 	private PropertyType type;
@@ -186,5 +191,14 @@ public class PropertyMetaImpl implements PropertyMeta {
 
 	public void setAdditionInfo(Map<String, Object> additionInfo) {
 		this.additionInfo = additionInfo;
+	}
+
+	@Override
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
 	}
 }

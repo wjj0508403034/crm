@@ -28,4 +28,6 @@ public interface PropertyMeta {
 	ValidationMeta getValidationMeta();
 	
 	List<Value> getValidValues();
+
+	boolean isSearchable();
 }

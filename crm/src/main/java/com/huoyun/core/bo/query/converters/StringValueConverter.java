@@ -1,5 +1,6 @@
 package com.huoyun.core.bo.query.converters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ public class StringValueConverter extends AbstractValueConverter {
 		if (StringUtils.equals(value, "NULL")) {
 			return null;
 		}
-		
+
 		if (value.startsWith("'") && value.endsWith("'")) {
 			return StringUtils.substring(value, 1, value.length() - 1);
 		}
@@ -29,8 +30,11 @@ public class StringValueConverter extends AbstractValueConverter {
 
 	@Override
 	public List<Object> converterToList(String value) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Object> values = new ArrayList<>();
+		for (String item : value.split(",")) {
+			values.add(this.converter(item));
+		}
+		return values;
 	}
 
 }

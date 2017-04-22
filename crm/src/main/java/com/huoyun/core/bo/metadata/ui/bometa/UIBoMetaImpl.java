@@ -7,7 +7,6 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.ui.UIBoMeta;
-import com.huoyun.locale.LocaleService;
 
 public class UIBoMetaImpl implements UIBoMeta {
 
@@ -74,6 +73,7 @@ public class UIBoMetaImpl implements UIBoMeta {
 		this.properties = properties;
 	}
 
+	@Override
 	public String getPrimaryKey() {
 		return primaryKey;
 	}
@@ -82,6 +82,7 @@ public class UIBoMetaImpl implements UIBoMeta {
 		this.primaryKey = primaryKey;
 	}
 
+	@Override
 	public String getBusinessKey() {
 		return businessKey;
 	}

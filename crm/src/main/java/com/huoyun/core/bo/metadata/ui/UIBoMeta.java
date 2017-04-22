@@ -19,4 +19,8 @@ public interface UIBoMeta {
 	UIListView getListview();
 
 	List<UIProperty> getProperties();
+
+	String getPrimaryKey();
+
+	String getBusinessKey();
 }

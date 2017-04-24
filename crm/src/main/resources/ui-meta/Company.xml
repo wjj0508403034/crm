@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Company">
+	<header>
+		<title ref="companyName"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="companyName"></property>
+				<property ref="description"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,companyName,description" orderby="id">
+		<columns>
+			<column ref="companyName"></column>
+			<column ref="description"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="companyName"></property>
+		<property name="description"></property>
+	</properties>
+</root>

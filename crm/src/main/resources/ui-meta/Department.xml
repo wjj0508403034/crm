@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Department">
+	<header>
+		<title ref="departmentCode"></title>
+		<subtitle ref="departmentName"></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="departmentCode"></property>
+				<property ref="departmentName"></property>
+				<property ref="description"></property>
+				<property ref="category"></property>
+				<property ref="status"></property>
+				<property ref="createTime"></property>
+				<property ref="updateTime"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview
+		select="id,departmentCode,departmentName,description,category,status"
+		orderby="id">
+		<columns>
+			<column ref="departmentCode"></column>
+			<column ref="departmentName"></column>
+			<column ref="description"></column>
+			<column ref="category"></column>
+			<column ref="status"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="departmentCode"></property>
+		<property name="departmentName"></property>
+		<property name="description"></property>
+		<property name="category"></property>
+		<property name="status"></property>
+		<property name="createTime"></property>
+		<property name="updateTime"></property>
+	</properties>
+</root>

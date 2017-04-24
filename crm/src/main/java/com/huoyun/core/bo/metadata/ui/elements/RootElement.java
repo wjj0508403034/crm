@@ -42,7 +42,7 @@ public class RootElement implements Serializable {
 
 	@XmlElementWrapper(name = "properties", required = true)
 	@XmlElement(name = "property")
-	private List<FilterElement> properties;
+	private List<PropertyElement> properties;
 
 	public String getName() {
 		return name;
@@ -92,11 +92,11 @@ public class RootElement implements Serializable {
 		this.filters = filters;
 	}
 
-	public List<FilterElement> getProperties() {
+	public List<PropertyElement> getProperties() {
 		return properties;
 	}
 
-	public void setProperties(List<FilterElement> properties) {
+	public void setProperties(List<PropertyElement> properties) {
 		this.properties = properties;
 	}
 }

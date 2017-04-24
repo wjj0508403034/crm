@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Employee">
+	<header>
+		<title ref="userName"></title>
+		<subtitle ref="department"></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="userName"></property>
+				<property ref="title"></property>
+				<property ref="department"></property>
+				<property ref="status"></property>
+				<property ref="createTime"></property>
+				<property ref="updateTime"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Employee.section.contact">
+			<properties>
+				<property ref="phone"></property>
+				<property ref="email"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,userName,phone,email,title,status"
+		orderby="id">
+		<columns>
+			<column ref="userName"></column>
+			<column ref="phone"></column>
+			<column ref="email"></column>
+			<column ref="title"></column>
+			<column ref="status"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="userName"></property>
+		<property name="title"></property>
+		<property name="phone"></property>
+		<property name="email"></property>
+		<property name="title"></property>
+		<property name="status"></property>
+		<property name="department"></property>
+		<property name="createTime"></property>
+		<property name="updateTime"></property>
+	</properties>
+</root>

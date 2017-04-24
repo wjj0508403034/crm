@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Customer">
+	<header>
+		<title ref="name"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.Customer.section.customerInfo">
+			<properties>
+				<property ref="name"></property>
+				<property ref="status"></property>
+				<property ref="salesSource"></property>
+				<property ref="consultationDate"></property>
+				<property ref="visitDate"></property>
+				<property ref="salesman"></property>
+				<property ref="designer"></property>
+				<property ref="finishType"></property>
+				<property ref="measureDate"></property>
+				<property ref="payDepositDate"></property>
+				<property ref="depositAmount"></property>
+				<property ref="contractDate"></property>
+				<property ref="contractAmount"></property>
+				<property ref="materialman"></property>
+				<property ref="cadDrawer"></property>
+				<property ref="effectDrawer"></property>
+				<property ref="designVisitRemind"></property>
+				<property ref="businessVisitRemind"></property>
+				<property ref="memo"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Customer.section.contact">
+			<properties>
+				<property ref="contact"></property>
+				<property ref="telephone"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Customer.section.houseInfo">
+			<properties>
+				<property ref="houseArea"></property>
+				<property ref="houseType"></property>
+				<property ref="completionDate"></property>
+				<property ref="community"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Customer.section.chargeInfo">
+			<properties>
+				<property ref="designCharge"></property>
+				<property ref="serviceCharge"></property>
+				<property ref="auxiliaryMaterialCharge"></property>
+				<property ref="masterMaterialCharge"></property>
+				<property ref="firstLaborCharge"></property>
+				<property ref="secondLaborCharge"></property>
+				<property ref="thirdLaborCharge"></property>
+				<property ref="otherCharge"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Customer.section.constructionInfo">
+			<properties>
+				<property ref="contractNo"></property>
+				<property ref="supervisor"></property>
+				<property ref="projectLeader"></property>
+				<property ref="supervisorDateRemind"></property>
+				<property ref="startDate"></property>
+				<property ref="endDate"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,name,contact" orderby="order">
+		<columns>
+			<column ref="name"></column>
+			<column ref="contact"></column>
+			<column ref="community"></column>
+			<column ref="houseArea"></column>
+			<column ref="houseType"></column>
+			<column ref="salesSource"></column>
+			<column ref="status"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="name"></property>
+		<property name="contact"></property>
+		<property name="community"></property>
+		<property name="salesman"></property>
+		<property name="designer"></property>
+		<property name="telephone"></property>
+		<property name="houseArea"></property>
+		<property name="houseType"></property>
+		<property name="completionDate"></property>
+		<property name="measureDate"></property>
+		<property name="finishType"></property>
+		<property name="consultationDate"></property>
+		<property name="visitDate"></property>
+		<property name="payDepositDate"></property>
+		<property name="depositAmount"></property>
+		<property name="contractAmount"></property>
+		<property name="materialman"></property>
+		<property name="cadDrawer"></property>
+		<property name="effectDrawer"></property>
+		<property name="businessVisitRemind"></property>
+		<property name="designVisitRemind"></property>
+		<property name="memo"></property>
+		<property name="designCharge"></property>
+		<property name="serviceCharge"></property>
+		<property name="auxiliaryMaterialCharge"></property>
+		<property name="masterMaterialCharge"></property>
+		<property name="firstLaborCharge"></property>
+		<property name="secondLaborCharge"></property>
+		<property name="thirdLaborCharge"></property>
+		<property name="otherCharge"></property>
+		<property name="supervisorDateRemind"></property>
+		<property name="contractNo"></property>
+		<property name="supervisor"></property>
+		<property name="projectLeader"></property>
+		<property name="startDate"></property>
+		<property name="endDate"></property>
+		<property name="status"></property>
+		<property name="salesSource"></property>
+
+	</properties>
+</root>

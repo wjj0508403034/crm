@@ -3,6 +3,7 @@ package com.huoyun.core.bo.query;
 import org.joda.time.DateTime;
 
 import com.huoyun.core.bo.metadata.PropertyMeta;
+import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.query.converters.BooleanValueConverter;
 import com.huoyun.core.bo.query.converters.DateTimeValueConverter;
 import com.huoyun.core.bo.query.converters.LongValueConverter;
@@ -21,6 +22,11 @@ public class ValueConverterFactory {
 		} else if(propMeta.getRuntimeType() == Long.class){
 			return new LongValueConverter(propMeta);
 		}
+		
+		if(propMeta.getType() == PropertyType.BoLabel){
+			return new LongValueConverter(propMeta);
+		}
+		
 
 		throw new BusinessException(ErrorCode.Not_Sopport_Value_Converter);
 	}

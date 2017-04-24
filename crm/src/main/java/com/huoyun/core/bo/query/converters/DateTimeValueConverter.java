@@ -1,5 +1,6 @@
 package com.huoyun.core.bo.query.converters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -67,8 +68,11 @@ public class DateTimeValueConverter extends AbstractValueConverter {
 
 	@Override
 	public List<Object> converterToList(String value) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Object> values = new ArrayList<>();
+		for (String item : value.split(",")) {
+			values.add(this.converter(item));
+		}
+		return values;
 	}
 
 }

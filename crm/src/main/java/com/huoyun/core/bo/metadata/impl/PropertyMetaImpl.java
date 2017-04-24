@@ -22,18 +22,17 @@ import com.huoyun.locale.LocaleService;
 
 public class PropertyMetaImpl implements PropertyMeta {
 
-	public PropertyMetaImpl(String boName, Field field,
-			LocaleService localeService) {
+	public PropertyMetaImpl(String boName, Field field, LocaleService localeService) {
 		this.field = field;
 		this.localeService = localeService;
 		BoProperty boProp = field.getAnnotation(BoProperty.class);
 		if (boProp == null) {
 			throw new RuntimeException("No BoProperty annotation");
 		}
-		
+
 		this.readonly = boProp.readonly();
 		this.searchable = boProp.searchable();
-		
+		this.mandatory = boProp.mandatory();
 
 		this.type = boProp.type();
 		if (this.type == PropertyType.None) {
@@ -41,10 +40,8 @@ public class PropertyMetaImpl implements PropertyMeta {
 		}
 
 		if (this.type == PropertyType.BoLabel) {
-			this.additionInfo.put("boNamespace",
-					BusinessObjectUtils.getBoNamespace(this.field.getType()));
-			this.additionInfo.put("boName",
-					BusinessObjectUtils.getBoName(this.field.getType()));
+			this.additionInfo.put("boNamespace", BusinessObjectUtils.getBoNamespace(this.field.getType()));
+			this.additionInfo.put("boName", BusinessObjectUtils.getBoName(this.field.getType()));
 		}
 
 		this.name = field.getName();
@@ -58,16 +55,17 @@ public class PropertyMetaImpl implements PropertyMeta {
 		BoPropertyRule propRule = field.getAnnotation(BoPropertyRule.class);
 		if (propRule != null) {
 			this.validationMeta = new ValidationMetaImpl(propRule);
-		} 
-		
+		}
+
 		ValidValues validValuesAnno = field.getAnnotation(ValidValues.class);
-		if(validValuesAnno != null){
-			if(validValuesAnno.validValues() != null && validValuesAnno.validValues().length > 0){
+		if (validValuesAnno != null) {
+			if (validValuesAnno.validValues() != null && validValuesAnno.validValues().length > 0) {
 				this.validationMeta = null;
-				for(ValidValue validValue: validValuesAnno.validValues()){
+				for (ValidValue validValue : validValuesAnno.validValues()) {
 					Value value = new Value();
 					value.setName(validValue.value());
-					String valueLabelKey = "bo.label.prop." + boName + "." + this.name + ".validvalues." + validValue.value();
+					String valueLabelKey = "bo.label.prop." + boName + "." + this.name + ".validvalues."
+							+ validValue.value();
 					value.setLabel(this.localeService.getMessage(valueLabelKey));
 					this.validValues.add(value);
 				}

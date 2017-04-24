@@ -15,37 +15,31 @@ import com.huoyun.exception.BusinessException;
 
 public class UIMetadataRepositoryImpl implements UIMetadataRepository {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(UIMetadataRepositoryImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UIMetadataRepositoryImpl.class);
 
 	private UIMetaLoader uiMetaLoader;
 
 	private BusinessObjectFacade boFacade;
 
-	public UIMetadataRepositoryImpl(BusinessObjectFacade boFacade,
-			UIMetaLoader uiMetaLoader) {
+	public UIMetadataRepositoryImpl(BusinessObjectFacade boFacade, UIMetaLoader uiMetaLoader) {
 		this.boFacade = boFacade;
 		this.uiMetaLoader = uiMetaLoader;
 	}
 
 	@Override
-	public UIBoMeta getUIMeta(String namespace, String name)
-			throws BusinessException {
-		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
-				namespace, name);
+	public UIBoMeta getUIMeta(String namespace, String name) throws BusinessException {
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(namespace, name);
 		if (boMeta == null) {
 			throw new BusinessException(BoErrorCode.Unkown_Bo_Entity);
 		}
 
-		RootElement element = this.uiMetaLoader.getUIMetaElement(namespace,
-				name);
+		RootElement element = this.uiMetaLoader.getUIMetaElement(namespace, name);
 		if (element == null) {
-			LOGGER.warn("BoNamespace: {}, BoName: {} hasn't xml file.",
-					namespace, name);
+			LOGGER.warn("BoNamespace: {}, BoName: {} hasn't xml file.", namespace, name);
 			return UIBoMetaImpl.parse(boMeta, this.boFacade);
 		}
 
-		return null;
+		return UIBoMetaImpl.parse(boMeta, boFacade, element);
 	}
 
 }

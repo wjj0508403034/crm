@@ -14,8 +14,8 @@ public abstract class ComparableCriteria implements Criteria {
 		this.propMeta = propMeta;
 		this.value = value;
 	}
-	
-	protected Object getValue(){
+
+	protected Object getValue() {
 		return this.value;
 	}
 

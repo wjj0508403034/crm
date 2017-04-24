@@ -83,13 +83,13 @@ public class Customer extends AbstractBusinessObjectImpl {
 	private DateTime payDepositDate;
 
 	@BoProperty
-	private double depositAmount;
+	private Double depositAmount;
 
 	@BoProperty
 	private DateTime contractDate;
 
 	@BoProperty
-	private DateTime contractAmount;
+	private Double contractAmount;
 
 	@ManyToOne
 	@JoinColumn
@@ -116,28 +116,28 @@ public class Customer extends AbstractBusinessObjectImpl {
 	private String memo;
 
 	@BoProperty
-	private double designCharge;
+	private Double designCharge;
 
 	@BoProperty
-	private double serviceCharge;
+	private Double serviceCharge;
 
 	@BoProperty
-	private double auxiliaryMaterialCharge;
+	private Double auxiliaryMaterialCharge;
 
 	@BoProperty
-	private double masterMaterialCharge;
+	private Double masterMaterialCharge;
 
 	@BoProperty
-	private double firstLaborCharge;
+	private Double firstLaborCharge;
 
 	@BoProperty
-	private double secondLaborCharge;
+	private Double secondLaborCharge;
 
 	@BoProperty
-	private double thirdLaborCharge;
+	private Double thirdLaborCharge;
 
 	@BoProperty
-	private double otherCharge;
+	private Double otherCharge;
 
 	@BoProperty
 	private DateTime supervisorDateRemind;
@@ -308,11 +308,11 @@ public class Customer extends AbstractBusinessObjectImpl {
 		this.payDepositDate = payDepositDate;
 	}
 
-	public double getDepositAmount() {
+	public Double getDepositAmount() {
 		return depositAmount;
 	}
 
-	public void setDepositAmount(double depositAmount) {
+	public void setDepositAmount(Double depositAmount) {
 		this.depositAmount = depositAmount;
 	}
 
@@ -324,11 +324,11 @@ public class Customer extends AbstractBusinessObjectImpl {
 		this.contractDate = contractDate;
 	}
 
-	public DateTime getContractAmount() {
+	public Double getContractAmount() {
 		return contractAmount;
 	}
 
-	public void setContractAmount(DateTime contractAmount) {
+	public void setContractAmount(Double contractAmount) {
 		this.contractAmount = contractAmount;
 	}
 
@@ -380,59 +380,59 @@ public class Customer extends AbstractBusinessObjectImpl {
 		this.memo = memo;
 	}
 
-	public double getDesignCharge() {
+	public Double getDesignCharge() {
 		return designCharge;
 	}
 
-	public void setDesignCharge(double designCharge) {
+	public void setDesignCharge(Double designCharge) {
 		this.designCharge = designCharge;
 	}
 
-	public double getServiceCharge() {
+	public Double getServiceCharge() {
 		return serviceCharge;
 	}
 
-	public void setServiceCharge(double serviceCharge) {
+	public void setServiceCharge(Double serviceCharge) {
 		this.serviceCharge = serviceCharge;
 	}
 
-	public double getAuxiliaryMaterialCharge() {
+	public Double getAuxiliaryMaterialCharge() {
 		return auxiliaryMaterialCharge;
 	}
 
-	public void setAuxiliaryMaterialCharge(double auxiliaryMaterialCharge) {
+	public void setAuxiliaryMaterialCharge(Double auxiliaryMaterialCharge) {
 		this.auxiliaryMaterialCharge = auxiliaryMaterialCharge;
 	}
 
-	public double getMasterMaterialCharge() {
+	public Double getMasterMaterialCharge() {
 		return masterMaterialCharge;
 	}
 
-	public void setMasterMaterialCharge(double masterMaterialCharge) {
+	public void setMasterMaterialCharge(Double masterMaterialCharge) {
 		this.masterMaterialCharge = masterMaterialCharge;
 	}
 
-	public double getFirstLaborCharge() {
+	public Double getFirstLaborCharge() {
 		return firstLaborCharge;
 	}
 
-	public void setFirstLaborCharge(double firstLaborCharge) {
+	public void setFirstLaborCharge(Double firstLaborCharge) {
 		this.firstLaborCharge = firstLaborCharge;
 	}
 
-	public double getSecondLaborCharge() {
+	public Double getSecondLaborCharge() {
 		return secondLaborCharge;
 	}
 
-	public void setSecondLaborCharge(double secondLaborCharge) {
+	public void setSecondLaborCharge(Double secondLaborCharge) {
 		this.secondLaborCharge = secondLaborCharge;
 	}
 
-	public double getThirdLaborCharge() {
+	public Double getThirdLaborCharge() {
 		return thirdLaborCharge;
 	}
 
-	public void setThirdLaborCharge(double thirdLaborCharge) {
+	public void setThirdLaborCharge(Double thirdLaborCharge) {
 		this.thirdLaborCharge = thirdLaborCharge;
 	}
 
@@ -484,11 +484,11 @@ public class Customer extends AbstractBusinessObjectImpl {
 		this.projectLeader = projectLeader;
 	}
 
-	public double getOtherCharge() {
+	public Double getOtherCharge() {
 		return otherCharge;
 	}
 
-	public void setOtherCharge(double otherCharge) {
+	public void setOtherCharge(Double otherCharge) {
 		this.otherCharge = otherCharge;
 	}
 

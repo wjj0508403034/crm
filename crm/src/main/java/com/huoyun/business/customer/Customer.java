@@ -170,6 +170,9 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@JoinColumn
 	@BoProperty
 	private SalesSource salesSource;
+	
+	@BoProperty
+	private Boolean deleted = false;
 
 	@Override
 	public Long getId() {
@@ -490,6 +493,14 @@ public class Customer extends AbstractBusinessObjectImpl {
 
 	public void setOtherCharge(Double otherCharge) {
 		this.otherCharge = otherCharge;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

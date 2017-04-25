@@ -22,7 +22,7 @@ public class ValueConverterFactory {
 			return new DateTimeValueConverter(propMeta);
 		}
 
-		if (propMeta.getRuntimeType() == Boolean.class) {
+		if (propMeta.getRuntimeType() == Boolean.class || propMeta.getRuntimeType() == boolean.class) {
 			return new BooleanValueConverter(propMeta);
 		}
 

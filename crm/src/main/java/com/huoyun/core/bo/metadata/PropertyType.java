@@ -8,7 +8,7 @@ import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.exception.BusinessException;
 
 public enum PropertyType {
-	None, String, Text, Email, Phone, DateTime, Number, BoLabel;
+	None, String, Text, Email, Phone, DateTime, Number, BoLabel, Image;
 
 	public static PropertyType parse(Class<?> klass) {
 
@@ -23,19 +23,19 @@ public enum PropertyType {
 		if (klass == int.class || klass == long.class || klass == Integer.class || klass == Long.class) {
 			return PropertyType.Number;
 		}
-		
-		if(BusinessObject.class.isAssignableFrom(klass)){
+
+		if (BusinessObject.class.isAssignableFrom(klass)) {
 			return PropertyType.BoLabel;
 		}
 
 		return PropertyType.None;
 	}
-	
-	public static PropertyType parse(String type) throws BusinessException{
-		if(StringUtils.equalsIgnoreCase("string", type)){
+
+	public static PropertyType parse(String type) throws BusinessException {
+		if (StringUtils.equalsIgnoreCase("string", type)) {
 			return PropertyType.String;
 		}
-		
+
 		throw new BusinessException(BoErrorCode.Unkown_Bo_Property_Type);
 	}
 }

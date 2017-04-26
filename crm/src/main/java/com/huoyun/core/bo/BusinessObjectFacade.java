@@ -31,4 +31,6 @@ public interface BusinessObjectFacade {
 	EntityManager getCurrentEntityManager();
 	
 	ValidatorFactory getValidatorFactory();
+	
+	<T> T getBean(Class<T> klass);
 }

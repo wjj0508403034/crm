@@ -152,4 +152,9 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		return this.context.getBean(ValidatorFactory.class);
 	}
 
+	@Override
+	public <T> T getBean(Class<T> klass) {
+		return this.context.getBean(klass);
+	}
+
 }

@@ -7,6 +7,7 @@
 	<sections>
 		<section label="uimeta.section.defaultLabel">
 			<properties>
+				<property ref="avatar"></property>
 				<property ref="userName"></property>
 				<property ref="title"></property>
 				<property ref="department"></property>
@@ -37,6 +38,7 @@
 	</filters>
 	<properties>
 		<property name="id"></property>
+		<property name="avatar"></property>
 		<property name="userName"></property>
 		<property name="title"></property>
 		<property name="phone"></property>

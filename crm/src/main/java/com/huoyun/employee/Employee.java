@@ -15,6 +15,8 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.upload.Attachment;
 
 @BoEntity
 @Entity
@@ -59,6 +61,11 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
 	@BoProperty
 	private String status;
+
+	@ManyToOne
+	@JoinColumn
+	@BoProperty(type = PropertyType.Image)
+	private Attachment avatar;
 
 	@Override
 	public Long getId() {
@@ -123,6 +130,14 @@ public class Employee extends AbstractBusinessObjectImpl {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Attachment getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(Attachment avatar) {
+		this.avatar = avatar;
 	}
 
 }

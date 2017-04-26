@@ -150,6 +150,19 @@ public class UIBoMetaImpl implements UIBoMeta {
 		}
 
 		UIListView listView = new UIListView();
+		listView.setOrderby(element.getListview().getOrderby());
+
+		if (StringUtils.isEmpty(listView.getOrderby())) {
+			listView.setOrderby(boMeta.getPrimaryKey());
+		}
+		listView.setSortProperty(element.getListview().getSortProperty());
+
+		if (StringUtils.isEmpty(listView.getSortProperty())) {
+			listView.setEnableSort(false);
+		} else {
+			listView.setEnableSort(Boolean.parseBoolean(element.getListview().getEnableSort()));
+		}
+
 		uiBoMeta.setListview(listView);
 		for (ColumnElement columnElement : element.getListview().getColumns()) {
 			if (boMeta.hasProperty(columnElement.getRef())) {

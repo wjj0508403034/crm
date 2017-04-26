@@ -26,6 +26,14 @@ public class ListViewElement implements Serializable {
 	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
 	private String orderby;
 
+	@XmlAttribute(name = "enableSort", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	private String enableSort;
+
+	@XmlAttribute(name = "sortProperty", required = true)
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	private String sortProperty;
+
 	@XmlElementWrapper(name = "columns", required = true)
 	@XmlElement(name = "column")
 	private List<ColumnElement> columns;
@@ -52,5 +60,21 @@ public class ListViewElement implements Serializable {
 
 	public void setColumns(List<ColumnElement> columns) {
 		this.columns = columns;
+	}
+
+	public String getEnableSort() {
+		return enableSort;
+	}
+
+	public void setEnableSort(String enableSort) {
+		this.enableSort = enableSort;
+	}
+
+	public String getSortProperty() {
+		return sortProperty;
+	}
+
+	public void setSortProperty(String sortProperty) {
+		this.sortProperty = sortProperty;
 	}
 }

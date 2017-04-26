@@ -8,13 +8,12 @@
 		<section label="uimeta.section.defaultLabel">
 			<properties>
 				<property ref="name"></property>
-				<property ref="orderNo"></property>
 			</properties>
 		</section>
 	</sections>
-	<listview select="id,name,orderNo" orderby="orderNo">
+	<listview select="id,name" orderby="orderNo" enableSort="true"
+		sortProperty="orderNo">
 		<columns>
-			<column ref="orderNo"></column>
 			<column ref="name"></column>
 		</columns>
 	</listview>
@@ -24,6 +23,5 @@
 	<properties>
 		<property name="id"></property>
 		<property name="name"></property>
-		<property name="orderNo"></property>
 	</properties>
 </root>

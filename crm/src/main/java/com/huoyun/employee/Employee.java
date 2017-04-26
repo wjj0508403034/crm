@@ -64,7 +64,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty(type = PropertyType.Image)
+	@BoProperty(type = PropertyType.Image, searchable = false)
 	private Attachment avatar;
 
 	@Override

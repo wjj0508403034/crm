@@ -27,6 +27,7 @@ public class DateTimeValueConverter extends AbstractValueConverter {
 	private static final String Now = "now()";
 	private static final String Yesterday = "yesterday()";
 	private static final String Tomorrow = "tomorrow()";
+	private static final String CurrentMonth = "currentMonth()";
 	public final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
 			.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z");
 	private static final ObjectMapper mapper = new ObjectMapper();
@@ -69,10 +70,24 @@ public class DateTimeValueConverter extends AbstractValueConverter {
 	@Override
 	public List<Object> converterToList(String value) throws BusinessException {
 		List<Object> values = new ArrayList<>();
+		if (StringUtils.equals(CurrentMonth, value)) {
+			values.add(this.getMonthStartDate());
+			values.add(this.getMonthEndDate());
+			return values;
+		}
+
 		for (String item : value.split(",")) {
 			values.add(this.converter(item));
 		}
 		return values;
+	}
+
+	private DateTime getMonthStartDate() {
+		return DateTime.now().withDayOfMonth(1).withMillisOfDay(0);
+	}
+
+	private DateTime getMonthEndDate() {
+		return DateTime.now().plusMonths(1).withDayOfMonth(1).withMillisOfDay(0);
 	}
 
 }

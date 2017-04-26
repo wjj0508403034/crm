@@ -65,7 +65,7 @@
 			</properties>
 		</section>
 	</sections>
-	<listview select="id,name,contact" orderby="order">
+	<listview select="id,name,contact" orderby="id">
 		<columns>
 			<column ref="name"></column>
 			<column ref="contact"></column>
@@ -119,6 +119,7 @@
 		<property name="endDate"></property>
 		<property name="status"></property>
 		<property name="salesSource"></property>
+		<property name="contractDate"></property>
 
 	</properties>
 </root>

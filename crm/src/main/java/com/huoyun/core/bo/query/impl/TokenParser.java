@@ -24,6 +24,7 @@ public class TokenParser extends AbstractParser {
 		FunctionList.add("now");
 		FunctionList.add("yesterday");
 		FunctionList.add("tomorrow");
+		FunctionList.add("currentMonth");
 
 		CollectionFunctionList.add("in");
 		CollectionFunctionList.add("between");

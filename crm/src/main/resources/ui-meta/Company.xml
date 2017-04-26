@@ -7,6 +7,7 @@
 	<sections>
 		<section label="uimeta.section.defaultLabel">
 			<properties>
+				<property ref="logo"></property>
 				<property ref="companyName"></property>
 				<property ref="description"></property>
 			</properties>
@@ -23,6 +24,7 @@
 	</filters>
 	<properties>
 		<property name="id"></property>
+		<property name="logo"></property>
 		<property name="companyName"></property>
 		<property name="description"></property>
 	</properties>

@@ -23,20 +23,20 @@ import com.sap.security.saml2.lib.interfaces.protocols.SAML2ProtocolToken;
 import com.sap.security.saml2.sp.sso.SLORequestInfo;
 import com.sap.tc.logging.Location;
 
-public class SAML2Authentication {
+public class SPSAML2Authentication {
 	private static final Location LOCATION = Location
-			.getLocation(SAML2Authentication.class);
-	private static final SAML2Authentication INSTANCE = new SAML2Authentication();
+			.getLocation(SPSAML2Authentication.class);
+	private static final SPSAML2Authentication INSTANCE = new SPSAML2Authentication();
 
-	private SAML2Authentication() {
+	private SPSAML2Authentication() {
 	}
 
 	/**
-	 * Provides singleton access to {@link SAML2Authentication}.
+	 * Provides singleton access to {@link SPSAML2Authentication}.
 	 * 
 	 * @return
 	 */
-	public static SAML2Authentication getInstance() {
+	public static SPSAML2Authentication getInstance() {
 		return INSTANCE;
 	}
 

@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 
-import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.login.LoginProcessor;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.saml2.configuration.SAML2Configuration;

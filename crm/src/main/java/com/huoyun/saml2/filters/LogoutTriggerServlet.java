@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.huoyun.cookie.CookieUtils;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.saml2.SAML2Authentication;
@@ -17,6 +18,7 @@ import com.huoyun.saml2.configuration.SAML2Configuration;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationCustom;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactoryAware;
+import com.huoyun.view.ViewConstants;
 import com.sap.security.saml2.commons.SAML2Principal;
 import com.sap.security.saml2.lib.bindings.HTTPPostBinding;
 import com.sap.security.saml2.lib.common.SAML2Utils;
@@ -77,7 +79,7 @@ public class LogoutTriggerServlet extends HttpServlet implements
 					req.setAttribute("destination",
 							logoutRequest.getDestination());
 					req.getServletContext()
-							.getRequestDispatcher("/waiting.jsp")
+							.getRequestDispatcher(ViewConstants.Page_Login_Processing)
 							.forward(req, resp);
 
 					logger.info("[Logout] Invalidate http session.");

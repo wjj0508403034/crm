@@ -20,12 +20,14 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.saml2.SAML2Authentication;
 import com.huoyun.saml2.configuration.SAML2Configuration;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationCustom;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactoryAware;
+import com.huoyun.view.ViewConstants;
 import com.sap.security.saml2.cfg.exceptions.SAML2ConfigurationException;
 import com.sap.security.saml2.lib.bindings.HTTPPostBinding;
 import com.sap.security.saml2.lib.bindings.PAOSDataFactory;
@@ -90,9 +92,13 @@ public class LoginRequiredFilter implements Filter,
 					break;
 				}
 			}
-			if (!isSkip && httpRequest.getRequestURI().contains("/saml2/sp/")) {
-				isSkip = true;
+			
+			if(!httpRequest.getRequestURI().contains("/saml2/sp/logout")){
+				if (!isSkip && httpRequest.getRequestURI().contains("/saml2/sp/")) {
+					isSkip = true;
+				}
 			}
+			
 
 			if (!saml2Configuration.isSsoEnabled()
 					|| httpRequest.getRequestURI().endsWith(
@@ -175,7 +181,7 @@ public class LoginRequiredFilter implements Filter,
 		httpRequest.setAttribute(HTTPPostBinding.SAML_RELAY_STATE, relayState);
 		httpRequest.setAttribute("destination", authnRequest.getDestination());
 		httpRequest.getServletContext()
-				.getRequestDispatcher("/sso/waiting.html")
+				.getRequestDispatcher(ViewConstants.Page_Login_Processing)
 				.forward(httpRequest, httpResponse);
 	}
 

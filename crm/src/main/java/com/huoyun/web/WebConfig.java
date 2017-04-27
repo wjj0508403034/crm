@@ -19,7 +19,6 @@ import org.springframework.web.util.HttpSessionMutexListener;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.login.LoginProcessor;
 import com.huoyun.login.LoginRequiredFilter;
-import com.huoyun.login.LoginRequiredInterceptor;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.saml2.filters.ACSServlet;
 import com.huoyun.saml2.filters.LogoutTriggerServlet;
@@ -55,7 +54,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 				"/oauth2/token;/libs;/image;/resources/js;/fonts;/js;cache.manifest;/sso;/templates;/resources;/css;/js");
 		registrationBean.setInitParameters(params);
 		List<String> urlPatterns = new ArrayList<String>();
-		urlPatterns.add("/*");// 拦截路径，可以添加多个
+		urlPatterns.add("/*");
 		registrationBean.setUrlPatterns(urlPatterns);
 		registrationBean.setName("LoginRequiredFilter");
 		registrationBean.setOrder(1);
@@ -72,7 +71,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
 		registrationBean.setServlet(acsServlet);
 		List<String> urlMappings = new ArrayList<String>();
-		urlMappings.add("/saml2/sp/acs");// //访问，可以添加多个
+		urlMappings.add("/saml2/sp/acs");
 		registrationBean.setUrlMappings(urlMappings);
 		registrationBean.setLoadOnStartup(1);
 		registrationBean.setName("ACSServlet");

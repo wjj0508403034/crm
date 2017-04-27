@@ -10,6 +10,6 @@ public class ViewController {
 
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public String waiting(Model model) {
-		return "index";
+		return ViewConstants.View_Index;
 	}
 }

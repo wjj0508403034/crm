@@ -44,21 +44,29 @@ import com.sap.security.saml2.sp.sso.SLOResponseInfo;
 @RequestMapping(value = "/saml2")
 public class LogoutController {
 
-	private static final Logger logger = LoggerFactory.getLogger(LogoutController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(LogoutController.class);
 
 	@Autowired
 	private SAML2SPConfigurationFactory saml2SPConfigurationFactory;
 
+	@Autowired
+	private SAML2Authentication saml2Authentication;
+
 	@RequestMapping(value = "/sp/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest req, HttpServletResponse res) {
 		logger.info("Start to logout...");
-		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH, CookieUtils.COOKIE_NAME);
-		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory.getSAML2Configuration();
-		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory.createSAML2SPConfiguration();
+		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH,
+				CookieUtils.COOKIE_NAME);
+		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory
+				.getSAML2Configuration();
+		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory
+				.createSAML2SPConfiguration();
 		HttpSession session = req.getSession(false);
 
 		if (session == null) {
-			logger.info("Logout Session not found, redirect to {}", saml2Configuration.getHomePage());
+			logger.info("Logout Session not found, redirect to {}",
+					saml2Configuration.getHomePage());
 			return "redirect:" + saml2Configuration.getHomePage();
 		}
 
@@ -69,13 +77,16 @@ public class LogoutController {
 		SAML2Principal sessionPrincipal = (SAML2Principal) session
 				.getAttribute(EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR);
 		if (sessionPrincipal != null) {
-			logger.info("User {} request to log out.", sessionPrincipal.getName());
+			logger.info("User {} request to log out.",
+					sessionPrincipal.getName());
 			try {
-				SAML2LogoutRequest logoutRequest = SPSAML2Authentication.getInstance().createSLORequest(spConfiguration,
-						sessionPrincipal);
-				req.setAttribute(HTTPPostBinding.SAML_REQUEST,
-						SAML2Utils.encodeBase64AsString(logoutRequest.generate()));
-				req.setAttribute(HTTPPostBinding.SAML_RELAY_STATE, saml2Configuration.getHomePage());
+				SAML2LogoutRequest logoutRequest = SPSAML2Authentication
+						.getInstance().createSLORequest(spConfiguration,
+								sessionPrincipal);
+				req.setAttribute(HTTPPostBinding.SAML_REQUEST, SAML2Utils
+						.encodeBase64AsString(logoutRequest.generate()));
+				req.setAttribute(HTTPPostBinding.SAML_RELAY_STATE,
+						saml2Configuration.getHomePage());
 				req.setAttribute("destination", logoutRequest.getDestination());
 
 				logger.info("Logout Invalidate http session.");
@@ -88,12 +99,18 @@ public class LogoutController {
 		}
 
 		String sloEndpoint = saml2Configuration.getSloEndpoint();
-		logger.info("Logout SAML2Principal in session not found, redirect to {}", sloEndpoint);
+		logger.info(
+				"Logout SAML2Principal in session not found, redirect to {}",
+				sloEndpoint);
 
-		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH, CookieUtils.JSESSION_COOKIE_NAME);
-		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SLD_PATH, CookieUtils.JSESSION_COOKIE_NAME);
-		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH, CookieUtils.RSESSION_COOKIE_NAME);
-		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SLD_PATH, CookieUtils.RSESSION_COOKIE_NAME);
+		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH,
+				CookieUtils.JSESSION_COOKIE_NAME);
+		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SLD_PATH,
+				CookieUtils.JSESSION_COOKIE_NAME);
+		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SBO_PATH,
+				CookieUtils.RSESSION_COOKIE_NAME);
+		CookieUtils.removeCookie(req, res, CookieUtils.DEFAULT_SLD_PATH,
+				CookieUtils.RSESSION_COOKIE_NAME);
 		return "redirect:" + sloEndpoint;
 	}
 
@@ -103,7 +120,8 @@ public class LogoutController {
 	}
 
 	@RequestMapping(value = "/sp/slo", method = RequestMethod.POST)
-	public String postSlo(@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
+	public String postSlo(
+			@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
 			@RequestParam(name = HTTPPostBinding.SAML_RELAY_STATE, required = false) String relayState,
 			HttpServletRequest req, HttpServletResponse res) {
 		logger.info("Enter slo controller ...");
@@ -114,13 +132,17 @@ public class LogoutController {
 		parameters.put(HTTPPostBinding.SAML_RESPONSE, samlResponse);
 		parameters.put(HTTPPostBinding.SAML_RELAY_STATE, relayState);
 
-		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory.getSAML2Configuration();
-		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory.createSAML2SPConfiguration();
+		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory
+				.getSAML2Configuration();
+		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory
+				.createSAML2SPConfiguration();
 
 		try {
-			SLOInfo sloInfo = SAML2Authentication.getInstance().validateSLOMessageHttpBody(spConfiguration, parameters);
+			SLOInfo sloInfo = saml2Authentication.validateSLOMessageHttpBody(
+					spConfiguration, parameters);
 			if (sloInfo instanceof SLORequestInfo) {
-				return handleSLORequest(req, res, saml2Configuration, spConfiguration, (SLORequestInfo) sloInfo);
+				return handleSLORequest(req, res, saml2Configuration,
+						spConfiguration, (SLORequestInfo) sloInfo);
 			} else if (sloInfo instanceof SLOResponseInfo) {
 				String sloStatus = getSLOStatusDetails((SLOResponseInfo) sloInfo);
 				logger.info("Logout status: {}", sloStatus);
@@ -134,26 +156,32 @@ public class LogoutController {
 		return null;
 	}
 
-	private String handleSLORequest(HttpServletRequest req, HttpServletResponse resp,
-			SAML2Configuration saml2Configuration, SAML2SPConfigurationCustom spConfiguration,
-			SLORequestInfo sloRequestInfo)
-			throws IOException, SAML2Exception, SAML2ConfigurationException, ServletException {
-		List<String> receivedSessionIndexes = sloRequestInfo.getSessionIndexes();
+	private String handleSLORequest(HttpServletRequest req,
+			HttpServletResponse resp, SAML2Configuration saml2Configuration,
+			SAML2SPConfigurationCustom spConfiguration,
+			SLORequestInfo sloRequestInfo) throws IOException, SAML2Exception,
+			SAML2ConfigurationException, ServletException {
+		List<String> receivedSessionIndexes = sloRequestInfo
+				.getSessionIndexes();
 
 		HttpSession httpSession = req.getSession(false);
 		if (httpSession == null) {
-			SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(sloRequestInfo.getId(),
-					sloRequestInfo.getIssuer(), SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
-					SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED, "Session invalid already");
+			SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(
+					sloRequestInfo.getId(), sloRequestInfo.getIssuer(),
+					SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
+					SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED,
+					"Session invalid already");
 			return sendErrorResponse(req, spConfiguration, details);
 		}
 
 		SAML2Principal principal = (SAML2Principal) httpSession
 				.getAttribute(EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR);
 		if (principal == null) {
-			SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(sloRequestInfo.getId(),
-					sloRequestInfo.getIssuer(), SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
-					SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED, "Principle doesn't exist");
+			SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(
+					sloRequestInfo.getId(), sloRequestInfo.getIssuer(),
+					SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
+					SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED,
+					"Principle doesn't exist");
 			return sendErrorResponse(req, spConfiguration, details);
 		}
 
@@ -161,39 +189,48 @@ public class LogoutController {
 		for (String sessionIndex : receivedSessionIndexes) {
 			if (userSessionIndexes.contains(sessionIndex)) {
 				httpSession.invalidate();
-				SAML2LogoutResponse logoutResponse = SPSAML2Authentication.getInstance()
-						.createSLOResponse(spConfiguration, sloRequestInfo);
-				req.setAttribute(HTTPPostBinding.SAML_RESPONSE,
-						SAML2Utils.encodeBase64AsString(logoutResponse.generate()));
+				SAML2LogoutResponse logoutResponse = SPSAML2Authentication
+						.getInstance().createSLOResponse(spConfiguration,
+								sloRequestInfo);
+				req.setAttribute(HTTPPostBinding.SAML_RESPONSE, SAML2Utils
+						.encodeBase64AsString(logoutResponse.generate()));
 				req.setAttribute("destination", logoutResponse.getDestination());
 				return ViewConstants.Page_Login_Processing;
 			}
 		}
 
-		SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(sloRequestInfo.getId(),
-				sloRequestInfo.getIssuer(), SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
-				SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED, "Invalid SessionIndexes received");
+		SAML2ErrorResponseDetails details = new SAML2ErrorResponseDetails(
+				sloRequestInfo.getId(), sloRequestInfo.getIssuer(),
+				SAML2Constants.STATUS_CODE_TOP_LEVEL_RESPONDER,
+				SAML2Constants.STATUS_CODE_SECOND_LEVEL_REQUEST_DENIED,
+				"Invalid SessionIndexes received");
 		return sendErrorResponse(req, spConfiguration, details);
 	}
 
-	private String sendErrorResponse(HttpServletRequest req, SAML2SPConfiguration spConfig,
-			SAML2ErrorResponseDetails details)
-			throws IOException, SAML2Exception, SAML2ConfigurationException, ServletException {
-		SAML2LogoutResponse logoutResponse = SPSAML2Authentication.getInstance().createSLOErrorResponse(spConfig,
-				details);
-		req.setAttribute(HTTPPostBinding.SAML_RESPONSE, SAML2Utils.encodeBase64AsString(logoutResponse.generate()));
+	private String sendErrorResponse(HttpServletRequest req,
+			SAML2SPConfiguration spConfig, SAML2ErrorResponseDetails details)
+			throws IOException, SAML2Exception, SAML2ConfigurationException,
+			ServletException {
+		SAML2LogoutResponse logoutResponse = SPSAML2Authentication
+				.getInstance().createSLOErrorResponse(spConfig, details);
+		req.setAttribute(HTTPPostBinding.SAML_RESPONSE,
+				SAML2Utils.encodeBase64AsString(logoutResponse.generate()));
 		req.setAttribute("destination", logoutResponse.getDestination());
 		return ViewConstants.View_Logout_Processing;
 	}
 
 	private String getSLOStatusDetails(SLOResponseInfo sloResponseInfo) {
 		StringBuilder builder = new StringBuilder();
-		if (SAML2Constants.STATUS_CODE_TOP_LEVEL_SUCCESS.equals(sloResponseInfo.getStatusCode())) {
+		if (SAML2Constants.STATUS_CODE_TOP_LEVEL_SUCCESS.equals(sloResponseInfo
+				.getStatusCode())) {
 			builder.append("Success");
 		} else {
-			builder.append("Error status code: ").append(sloResponseInfo.getStatusCode());
-			builder.append("; Second level status code: ").append(sloResponseInfo.getSecondaryStatusCode());
-			builder.append("; Status message: ").append(sloResponseInfo.getStatusMessage());
+			builder.append("Error status code: ").append(
+					sloResponseInfo.getStatusCode());
+			builder.append("; Second level status code: ").append(
+					sloResponseInfo.getSecondaryStatusCode());
+			builder.append("; Status message: ").append(
+					sloResponseInfo.getStatusMessage());
 		}
 		return builder.toString();
 	}

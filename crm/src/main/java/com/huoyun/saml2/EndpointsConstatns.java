@@ -6,7 +6,7 @@ public class EndpointsConstatns {
 	public static final String SSO_SAML2_ORIGINAL_REQUEST_ID = "_SSO_SAML2_ORIGINAL_REQUEST_ID_";
 	public static final String SSO_SESSION_INDEX = "session_index";
 
-	public static final String EDP_USER_SESSION = "_EDP_USER_SESSION_";
+	public static final String HuoYun_USER_SESSION = "_HuoYun_USER_SESSION_";
 
 	public static final String OAUTH_TOKEN_ATTR = "_OAUTH_TOKEN_KEY_ATTR_";
 

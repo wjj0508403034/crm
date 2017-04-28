@@ -3,6 +3,7 @@ package com.huoyun.core.bo;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import com.huoyun.business.employee.Employee;
 import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.validator.ValidatorFactory;
@@ -33,4 +34,8 @@ public interface BusinessObjectFacade {
 	ValidatorFactory getValidatorFactory();
 	
 	<T> T getBean(Class<T> klass);
+	
+	Employee getCurrentEmployee();
+
+	Long getUserId();
 }

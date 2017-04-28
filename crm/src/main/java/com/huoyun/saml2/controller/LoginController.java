@@ -13,17 +13,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.login.LoginProcessor;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.saml2.configuration.SAML2Configuration;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationCustom;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
+import com.huoyun.session.Session;
 import com.sap.security.saml2.commons.SAML2Principal;
 import com.sap.security.saml2.lib.bindings.HTTPPostBinding;
 import com.sap.security.saml2.lib.common.SAML2Utils;
@@ -33,39 +34,57 @@ import com.sap.security.saml2.sp.sso.SAML2Authentication;
 @RequestMapping(value = "/saml2")
 public class LoginController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(LoginController.class);
 
 	@Autowired
 	private SAML2SPConfigurationFactory saml2SPConfigurationFactory;
 
 	@Autowired
-	private ApplicationContext context;
+	private BusinessObjectFacade boFacade;
 
-	private SAML2Authentication saml2Authentication = SAML2Authentication.getInstance();
+	@Autowired
+	private SAML2Authentication saml2Authentication;
 
 	@RequestMapping(value = "/sp/acs", method = RequestMethod.POST)
-	public String acs(@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
+	public String acs(
+			@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
 			@RequestParam(HTTPPostBinding.SAML_RELAY_STATE) String relayState,
-			@RequestParam(EndpointsConstatns.SSO_SESSION_INDEX) String sessionIndex, HttpServletRequest req,
-			HttpServletResponse res) {
-		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory.getSAML2Configuration();
-		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory.createSAML2SPConfiguration();
+			@RequestParam(EndpointsConstatns.SSO_SESSION_INDEX) String sessionIndex,
+			HttpServletRequest req, HttpServletResponse res) {
+		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory
+				.getSAML2Configuration();
+		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory
+				.createSAML2SPConfiguration();
 		String acs = this.saml2SPConfigurationFactory.getAcsUrl(req);
 		try {
-			SAML2Principal saml2Principal = saml2Authentication.validateResponse(spConfiguration,
-					SAML2Utils.decodeBase64AsString(samlResponse), null, acs);
+			SAML2Principal saml2Principal = saml2Authentication
+					.validateResponse(spConfiguration,
+							SAML2Utils.decodeBase64AsString(samlResponse),
+							null, acs);
 			changeSessionId(req);
 
-			LOGGER.info("SSO authorization succeed for user {}.", saml2Principal.getName());
+			LOGGER.info("SSO authorization succeed for user {}.",
+					saml2Principal.getName());
 
-			req.getSession().setAttribute(EndpointsConstatns.SSO_USER_SESSION_ATTR, saml2Principal.getName());
-			req.getSession().setAttribute(EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR, saml2Principal);
-			req.getSession().setAttribute(EndpointsConstatns.SSO_SESSION_INDEX, sessionIndex);
+			req.getSession().setAttribute(
+					EndpointsConstatns.SSO_USER_SESSION_ATTR,
+					saml2Principal.getName());
+			req.getSession().setAttribute(
+					EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR,
+					saml2Principal);
+			req.getSession().setAttribute(EndpointsConstatns.SSO_SESSION_INDEX,
+					sessionIndex);
 
-			this.context.getBean(LoginProcessor.class).process(Long.getLong(saml2Principal.getName()));
+			Session session = this.boFacade.getBean(LoginProcessor.class)
+					.process(Long.parseLong(saml2Principal.getName()));
+			req.getSession().setAttribute(
+					EndpointsConstatns.HuoYun_USER_SESSION,
+					session);
 			if (!StringUtils.isEmpty(relayState)) {
 				if (!StringUtils.endsWithIgnoreCase(relayState, "/sp/logout")
-						&& !StringUtils.endsWithIgnoreCase(relayState, "/sp/slo")) {
+						&& !StringUtils.endsWithIgnoreCase(relayState,
+								"/sp/slo")) {
 					return "redirect:" + relayState;
 				}
 			}

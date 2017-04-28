@@ -1,4 +1,4 @@
-package com.huoyun.employee;
+package com.huoyun.business.employee;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.huoyun.business.department.Department;
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
@@ -66,6 +67,9 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@JoinColumn
 	@BoProperty(type = PropertyType.Image, searchable = false)
 	private Attachment avatar;
+	
+	@Transient
+	private Long tenantId;
 
 	@Override
 	public Long getId() {
@@ -138,6 +142,14 @@ public class Employee extends AbstractBusinessObjectImpl {
 
 	public void setAvatar(Attachment avatar) {
 		this.avatar = avatar;
+	}
+
+	public Long getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(Long tenantId) {
+		this.tenantId = tenantId;
 	}
 
 }

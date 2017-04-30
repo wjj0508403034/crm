@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Houses">
+	<header>
+		<title ref="name"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="name"></property>
+				<property ref="deliveryTime"></property>
+				<property ref="address"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,name,deliveryTime,address" orderby="id"
+		sortProperty="id">
+		<columns>
+			<column ref="name"></column>
+			<column ref="deliveryTime"></column>
+			<column ref="address"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="name"></property>
+		<property name="deliveryTime"></property>
+		<property name="address"></property>
+	</properties>
+</root>

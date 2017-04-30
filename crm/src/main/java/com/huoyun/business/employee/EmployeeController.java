@@ -2,6 +2,7 @@ package com.huoyun.business.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +23,12 @@ public class EmployeeController {
 		if (employee == null) {
 			throw new BusinessException(EmployeeErrorCodes.Employee_Not_Found);
 		}
-		return this.boFacade.getBean(EmployeeService.class).getEmployeeById(
-				employee.getId());
+		return this.boFacade.getBean(EmployeeService.class).getEmployeeById(employee.getId());
+	}
+
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	@ResponseBody
+	public void changePassword(@RequestBody ChangePasswordParam changePasswordParam) throws BusinessException {
+		this.boFacade.getBean(EmployeeService.class).changePasswordParam(changePasswordParam);
 	}
 }

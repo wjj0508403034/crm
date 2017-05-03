@@ -32,7 +32,7 @@ public class Contact extends AbstractBusinessObjectImpl {
 	//@SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Contact_SEQ")
 	@GeneratedValue
-	@BoProperty(label = I18n_Label_Id)
+	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
 	@BoProperty

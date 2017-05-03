@@ -37,7 +37,7 @@ public class UserProperty extends LiteBusinessObject {
 
 	@Id
 	@GeneratedValue
-	@BoProperty(label = I18n_Label_Id)
+	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
 	private String namespace = BusinessObjectUtils.EXTENSION_BO_NAMESPACE;

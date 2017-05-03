@@ -13,6 +13,7 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.bo.metadata.PropertyType;
 
 @BoEntity(allowCustomized = false)
 @Entity
@@ -29,7 +30,7 @@ public class Department extends LiteBusinessObject {
 
 	@Id
 	@GeneratedValue
-	@BoProperty(label = I18n_Label_Id)
+	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
 	@BoProperty(mandatory = true)
@@ -39,7 +40,7 @@ public class Department extends LiteBusinessObject {
 	@BoProperty(mandatory = true)
 	private String departmentName;
 
-	@BoProperty
+	@BoProperty(type = PropertyType.Text, searchable = false)
 	private String description;
 
 	@ValidValues(validValues = { @ValidValue(value = "business"), @ValidValue(value = "design"),

@@ -25,7 +25,7 @@ public class FinishType extends LiteBusinessObject {
 
 	@Id
 	@GeneratedValue
-	@BoProperty(label = I18n_Label_Id)
+	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
 	@BusinessKey

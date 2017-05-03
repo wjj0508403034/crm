@@ -1,6 +1,7 @@
 package com.huoyun.business.employee;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -54,7 +55,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private String title;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty
 	private Department department;
@@ -63,11 +64,11 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private String status;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty(type = PropertyType.Image, searchable = false)
 	private Attachment avatar;
-	
+
 	@Transient
 	private Long tenantId;
 

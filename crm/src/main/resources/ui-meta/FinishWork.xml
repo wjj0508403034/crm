@@ -14,6 +14,11 @@
 				<property ref="houses"></property>
 			</properties>
 		</section>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="designPhotos"></property>
+			</properties>
+		</section>
 	</sections>
 	<listview select="id,name,desginer,projectCost,houseType,houses"
 		orderby="id" sortProperty="id">
@@ -35,5 +40,6 @@
 		<property name="projectCost"></property>
 		<property name="houseType"></property>
 		<property name="houses"></property>
+		<property name="designPhotos"></property>
 	</properties>
 </root>

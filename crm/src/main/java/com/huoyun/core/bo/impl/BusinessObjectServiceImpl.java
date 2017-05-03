@@ -19,6 +19,7 @@ import com.huoyun.core.bo.BusinessObjectMapper;
 import com.huoyun.core.bo.BusinessObjectService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
+import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.query.BoSpecification;
 import com.huoyun.core.bo.query.CriteriaFactory;
 import com.huoyun.core.bo.query.criteria.Criteria;
@@ -53,7 +54,9 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 
 		BusinessObject bo = this.boFacade.newBo(namespace, name);
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
-			bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
+			if (propMeta.getType() != PropertyType.ImageList) {
+				bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
+			}
 		}
 		bo.create();
 

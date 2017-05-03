@@ -1,10 +1,17 @@
 package com.huoyun.business.finishwork;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.huoyun.business.employee.Employee;
@@ -15,6 +22,7 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
+import com.huoyun.core.bo.metadata.PropertyType;
 
 @BoEntity
 @Entity
@@ -30,30 +38,35 @@ public class FinishWork extends AbstractBusinessObjectImpl {
 
 	@Id
 	@GeneratedValue
-	@BoProperty(label = I18n_Label_Id)
+	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
 	@BusinessKey
 	@BoProperty(mandatory = true)
 	private String name;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty
 	private Employee desginer;
 
-	@BoProperty
+	@BoProperty(type = PropertyType.Price)
 	private Double projectCost;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty
 	private HouseType houseType;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty
 	private Houses houses;
+
+	@OneToMany(mappedBy = "finishWork", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OrderBy("id ASC")
+	@BoProperty(type = PropertyType.ImageList)
+	private final List<FinishWorkDesignPhoto> designPhotos = new ArrayList<>();
 
 	@Override
 	public Long getId() {
@@ -102,6 +115,10 @@ public class FinishWork extends AbstractBusinessObjectImpl {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public List<FinishWorkDesignPhoto> getDesignPhotos() {
+		return designPhotos;
 	}
 
 }

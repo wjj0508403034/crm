@@ -43,8 +43,8 @@ public class BusinessObjectAutoConfiguration {
 	}
 
 	@Bean
-	public BusinessObjectMapper businessObjectMapper() {
-		return new BusinessObjectMapperImpl();
+	public BusinessObjectMapper businessObjectMapper(BusinessObjectFacade boFacade) {
+		return new BusinessObjectMapperImpl(boFacade);
 	}
 
 	@Bean

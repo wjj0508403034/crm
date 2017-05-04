@@ -7,6 +7,7 @@ import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.query.converters.BoValueConverter;
 import com.huoyun.core.bo.query.converters.BooleanValueConverter;
 import com.huoyun.core.bo.query.converters.DateTimeValueConverter;
+import com.huoyun.core.bo.query.converters.DateValueConverter;
 import com.huoyun.core.bo.query.converters.DoubleValueConverter;
 import com.huoyun.core.bo.query.converters.LongValueConverter;
 import com.huoyun.core.bo.query.converters.StringValueConverter;
@@ -17,6 +18,10 @@ public class ValueConverterFactory {
 	public static ValueConverter getValueConverter(PropertyMeta propMeta) throws BusinessException {
 		if (propMeta.getRuntimeType() == String.class) {
 			return new StringValueConverter(propMeta);
+		}
+
+		if (propMeta.getType() == PropertyType.Date) {
+			return new DateValueConverter(propMeta);
 		}
 
 		if (propMeta.getRuntimeType() == DateTime.class) {

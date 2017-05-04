@@ -12,15 +12,13 @@ import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.query.ErrorCode;
 import com.huoyun.exception.BusinessException;
 
-public class DateTimeValueConverter extends AbstractDateValueConverter {
-
-	public DateTimeValueConverter(PropertyMeta propMeta) {
+public class DateValueConverter extends AbstractDateValueConverter {
+	public DateValueConverter(PropertyMeta propMeta) {
 		super(propMeta);
 
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DateTimeValueConverter.class);
-
 
 	@Override
 	public Object converter(String value) throws BusinessException {
@@ -75,6 +73,7 @@ public class DateTimeValueConverter extends AbstractDateValueConverter {
 			values.add(this.getLastMonthEndDate());
 			return values;
 		}
+
 		for (String item : value.split(",")) {
 			values.add(this.converter(item));
 		}

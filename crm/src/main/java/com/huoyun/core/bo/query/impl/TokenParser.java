@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.huoyun.core.bo.query.DateConstants;
 import com.huoyun.core.bo.query.ErrorCode;
 import com.huoyun.core.bo.query.Token;
 import com.huoyun.exception.BusinessException;
@@ -21,10 +22,12 @@ public class TokenParser extends AbstractParser {
 	private boolean isParsed = false;
 
 	static {
-		FunctionList.add("now");
-		FunctionList.add("yesterday");
-		FunctionList.add("tomorrow");
-		FunctionList.add("currentMonth");
+		FunctionList.add(DateConstants.Today);
+		FunctionList.add(DateConstants.Yesterday);
+		FunctionList.add(DateConstants.Last7Days);
+		FunctionList.add(DateConstants.Last30Days);
+		FunctionList.add(DateConstants.ThisMonth);
+		FunctionList.add(DateConstants.LastMonth);
 
 		CollectionFunctionList.add("in");
 		CollectionFunctionList.add("between");
@@ -46,14 +49,12 @@ public class TokenParser extends AbstractParser {
 	}
 
 	private void pushStringToken(String expr, Cursor cursor, List<Token> tokens) {
-		String subExpr = StringUtils.substring(expr, cursor.getStart(),
-				cursor.getValue());
+		String subExpr = StringUtils.substring(expr, cursor.getStart(), cursor.getValue());
 		tokens.add(new StringToken(subExpr));
 		cursor.resetStart();
 	}
 
-	private void parse(String expr, Cursor cursor, List<Token> tokens)
-			throws BusinessException {
+	private void parse(String expr, Cursor cursor, List<Token> tokens) throws BusinessException {
 		int quotesCounter = 0;
 
 		while (cursor.getValue() < expr.length()) {
@@ -86,8 +87,7 @@ public class TokenParser extends AbstractParser {
 			cursor.move(1);
 		}
 
-		if (cursor.getStart() < cursor.getValue()
-				&& cursor.getValue() <= expr.length()) {
+		if (cursor.getStart() < cursor.getValue() && cursor.getValue() <= expr.length()) {
 			this.pushStringToken(expr, cursor, tokens);
 		}
 	}
@@ -103,8 +103,7 @@ public class TokenParser extends AbstractParser {
 		cursor.resetStart();
 	}
 
-	private void parseBracket(String expr, Cursor cursor, List<Token> tokens)
-			throws BusinessException {
+	private void parseBracket(String expr, Cursor cursor, List<Token> tokens) throws BusinessException {
 		int start = cursor.getValue();
 		int end = -1;
 		int quotesCounter = 0;
@@ -131,10 +130,8 @@ public class TokenParser extends AbstractParser {
 		}
 
 		if (end != -1 && cursor.getValue() > start) {
-			String subExpr = StringUtils.substring(expr, start,
-					cursor.getValue());
-			String bracketContent = StringUtils.substring(subExpr, 1,
-					subExpr.length() - 1);
+			String subExpr = StringUtils.substring(expr, start, cursor.getValue());
+			String bracketContent = StringUtils.substring(subExpr, 1, subExpr.length() - 1);
 			int startIndex = cursor.getStart();
 			cursor.resetStart();
 			if (tokens.size() > 0) {
@@ -142,8 +139,7 @@ public class TokenParser extends AbstractParser {
 				Token lastToken = tokens.get(tokens.size() - 1);
 				if (lastToken instanceof StringToken) {
 					if (this.isCollection(lastToken.getExpr())) {
-						this.putCollectionStringToken(lastChar, tokens,
-								bracketContent);
+						this.putCollectionStringToken(lastChar, tokens, bracketContent);
 						return;
 					}
 
@@ -153,8 +149,7 @@ public class TokenParser extends AbstractParser {
 					}
 
 				} else {
-					throw new BusinessException(
-							ErrorCode.Query_Expression_Parse_Failed);
+					throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 				}
 			}
 
@@ -168,8 +163,7 @@ public class TokenParser extends AbstractParser {
 
 	}
 
-	private void putCollectionStringToken(char lastChar, List<Token> tokens,
-			String expr) throws BusinessException {
+	private void putCollectionStringToken(char lastChar, List<Token> tokens, String expr) throws BusinessException {
 		if (lastChar != WhiteSpace) {
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}
@@ -177,8 +171,7 @@ public class TokenParser extends AbstractParser {
 		tokens.add(new StringToken(expr));
 	}
 
-	private void putFunctionStringToken(Token lastToken, String expr)
-			throws BusinessException {
+	private void putFunctionStringToken(Token lastToken, String expr) throws BusinessException {
 		if (expr.length() != 2) {
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);
 		}

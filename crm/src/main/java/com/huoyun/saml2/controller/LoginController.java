@@ -25,6 +25,7 @@ import com.huoyun.saml2.configuration.SAML2Configuration;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationCustom;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
 import com.huoyun.session.Session;
+import com.sap.security.saml2.commons.Attribute;
 import com.sap.security.saml2.commons.SAML2Principal;
 import com.sap.security.saml2.lib.bindings.HTTPPostBinding;
 import com.sap.security.saml2.lib.common.SAML2Utils;
@@ -34,8 +35,7 @@ import com.sap.security.saml2.sp.sso.SAML2Authentication;
 @RequestMapping(value = "/saml2")
 public class LoginController {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(LoginController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
 	private SAML2SPConfigurationFactory saml2SPConfigurationFactory;
@@ -47,44 +47,35 @@ public class LoginController {
 	private SAML2Authentication saml2Authentication;
 
 	@RequestMapping(value = "/sp/acs", method = RequestMethod.POST)
-	public String acs(
-			@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
+	public String acs(@RequestParam(HTTPPostBinding.SAML_RESPONSE) String samlResponse,
 			@RequestParam(HTTPPostBinding.SAML_RELAY_STATE) String relayState,
-			@RequestParam(EndpointsConstatns.SSO_SESSION_INDEX) String sessionIndex,
-			HttpServletRequest req, HttpServletResponse res) {
-		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory
-				.getSAML2Configuration();
-		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory
-				.createSAML2SPConfiguration();
+			@RequestParam(EndpointsConstatns.SSO_SESSION_INDEX) String sessionIndex, HttpServletRequest req,
+			HttpServletResponse res) {
+		SAML2Configuration saml2Configuration = saml2SPConfigurationFactory.getSAML2Configuration();
+		SAML2SPConfigurationCustom spConfiguration = saml2SPConfigurationFactory.createSAML2SPConfiguration();
 		String acs = this.saml2SPConfigurationFactory.getAcsUrl(req);
 		try {
-			SAML2Principal saml2Principal = saml2Authentication
-					.validateResponse(spConfiguration,
-							SAML2Utils.decodeBase64AsString(samlResponse),
-							null, acs);
+			SAML2Principal saml2Principal = saml2Authentication.validateResponse(spConfiguration,
+					SAML2Utils.decodeBase64AsString(samlResponse), null, acs);
+
 			changeSessionId(req);
+			
+			Long tenantId = this.getTenantId(saml2Principal);
 
-			LOGGER.info("SSO authorization succeed for user {}.",
-					saml2Principal.getName());
+			LOGGER.info("SSO authorization succeed for user {}.", saml2Principal.getName());
 
-			req.getSession().setAttribute(
-					EndpointsConstatns.SSO_USER_SESSION_ATTR,
-					saml2Principal.getName());
-			req.getSession().setAttribute(
-					EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR,
-					saml2Principal);
-			req.getSession().setAttribute(EndpointsConstatns.SSO_SESSION_INDEX,
-					sessionIndex);
+			req.getSession().setAttribute(EndpointsConstatns.SSO_USER_SESSION_ATTR, saml2Principal.getName());
+			req.getSession().setAttribute(EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR, saml2Principal);
+			req.getSession().setAttribute(EndpointsConstatns.SSO_SESSION_INDEX, sessionIndex);
+			req.getSession().setAttribute(EndpointsConstatns.SSO_TENANT_ID, tenantId);
 
 			Session session = this.boFacade.getBean(LoginProcessor.class)
-					.process(Long.parseLong(saml2Principal.getName()));
-			req.getSession().setAttribute(
-					EndpointsConstatns.HuoYun_USER_SESSION,
-					session);
+					.process(Long.parseLong(saml2Principal.getName()),tenantId);
+			req.getSession().setAttribute(EndpointsConstatns.HuoYun_USER_SESSION, session);
+
 			if (!StringUtils.isEmpty(relayState)) {
 				if (!StringUtils.endsWithIgnoreCase(relayState, "/sp/logout")
-						&& !StringUtils.endsWithIgnoreCase(relayState,
-								"/sp/slo")) {
+						&& !StringUtils.endsWithIgnoreCase(relayState, "/sp/slo")) {
 					return "redirect:" + relayState;
 				}
 			}
@@ -94,6 +85,27 @@ public class LoginController {
 			LOGGER.error("Login occur error", ex);
 			return "redirect: loginerror";
 		}
+	}
+
+	private Long getTenantId(SAML2Principal saml2Principal) {
+		String tenantIdValue = null;
+		Set<Attribute> attributes = saml2Principal.getAttributes();
+		if (attributes != null) {
+			for (Attribute attribute : attributes) {
+				if (StringUtils.equals(attribute.getName(), "tenantId")) {
+					if (attribute.getValues() != null && attribute.getValues().size() > 0) {
+						tenantIdValue = attribute.getValues().get(0);
+						break;
+					}
+				}
+			}
+		}
+
+		if (!StringUtils.isEmpty(tenantIdValue)) {
+			return Long.parseLong(tenantIdValue);
+		}
+
+		return null;
 	}
 
 	/*

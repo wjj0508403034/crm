@@ -15,7 +15,7 @@ public class LoginProcessor {
 		this.boFacade = boFacade;
 	}
 
-	public Session process(Long userId) throws BusinessException {
+	public Session process(Long userId,Long tenantId) throws BusinessException {
 
 		Employee employee = this.boFacade.getBean(EmployeeService.class)
 				.getEmployeeByUserId(userId);

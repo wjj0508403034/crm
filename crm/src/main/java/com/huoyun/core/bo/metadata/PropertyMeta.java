@@ -33,4 +33,8 @@ public interface PropertyMeta {
 	boolean isSearchable();
 
 	Map<String, Object> getAdditionInfo();
+
+	boolean isNodeProperty();
+
+	void setNodeProperty(boolean isNodeProperty);
 }

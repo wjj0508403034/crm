@@ -26,6 +26,15 @@ public class UploadController {
 		this.uploadService.upload(boNamespace, boName, boId, propertyName, file);
 	}
 
+	@RequestMapping(value = "/upload/{boNamespace}/{boName}/{boId}/{propertyName}/imagelist", method = RequestMethod.POST)
+	@ResponseBody
+	public void uploadFileForImageList(@PathVariable("boNamespace") String boNamespace,
+			@PathVariable("boName") String boName, @PathVariable("boId") Long boId,
+			@PathVariable("propertyName") String propertyName, @RequestParam("file") MultipartFile file)
+			throws BusinessException {
+		this.uploadService.uploadFileForImageList(boNamespace, boName, boId, propertyName, file);
+	}
+
 	@RequestMapping(value = "/upload/{boNamespace}/{boName}/{boId}/{propertyName}", method = RequestMethod.GET)
 	public String getFileUrl(@PathVariable("boNamespace") String boNamespace, @PathVariable("boName") String boName,
 			@PathVariable("boId") Long boId, @PathVariable("propertyName") String propertyName)

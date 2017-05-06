@@ -111,6 +111,7 @@ public class UIProperty {
 		uiProp.setReadonly(propMeta.isReadonly());
 		uiProp.setSearchable(propMeta.isSearchable());
 		uiProp.setValidvalues(propMeta.getValidValues());
+		uiProp.setAdditionInfo(propMeta.getAdditionInfo());
 		if(propMeta.getType() == PropertyType.BoLabel){
 			Class<?> targetBoType = propMeta.getRuntimeType();
 			BoMeta bometa = boFacade.getMetadataRepository().getBoMeta(targetBoType);

@@ -10,4 +10,7 @@ public interface UploadService {
 			throws BusinessException;
 
 	String getFilePath(String boNamespace, String boName, Long boId, String propertyName) throws BusinessException;
+
+	void uploadFileForImageList(String boNamespace, String boName, Long boId, String propertyName, MultipartFile file)
+			throws BusinessException;
 }

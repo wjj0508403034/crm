@@ -88,6 +88,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 	private ValidationMeta validationMeta;
 	private List<Value> validValues = new ArrayList<>();
 	private Map<String, Object> additionInfo = new HashMap<>();
+	private boolean isNodeProperty;
 
 	@Override
 	public String getName() {
@@ -199,5 +200,16 @@ public class PropertyMetaImpl implements PropertyMeta {
 
 	public void setSearchable(boolean searchable) {
 		this.searchable = searchable;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isNodeProperty() {
+		return isNodeProperty;
+	}
+
+	@Override
+	public void setNodeProperty(boolean isNodeProperty) {
+		this.isNodeProperty = isNodeProperty;
 	}
 }

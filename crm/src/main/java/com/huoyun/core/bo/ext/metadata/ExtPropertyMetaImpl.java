@@ -149,4 +149,14 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 		return this.basePropertyMeta.getAdditionInfo();
 	}
 
+	@Override
+	public boolean isNodeProperty() {
+		return this.basePropertyMeta.isNodeProperty();
+	}
+
+	@Override
+	public void setNodeProperty(boolean isNodeProperty) {
+		this.basePropertyMeta.setNodeProperty(isNodeProperty);
+	}
+
 }

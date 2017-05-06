@@ -1,6 +1,8 @@
 package com.huoyun.core.bo.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,28 +23,50 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 		this.boFacade = boFacade;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> converterTo(BusinessObject bo, BoMeta boMeta) throws BusinessException {
 		if (bo == null) {
 			return null;
 		}
-		Map<String, Object> map = new HashMap<>();
 
+		Map<String, Object> map = new HashMap<>();
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			String propertyName = propMeta.getName();
-			if (propMeta.getType() == PropertyType.BoLabel) {
-				BusinessObject propertyValue = (BusinessObject) bo.getPropertyValue(propertyName);
-				if (propertyValue == null) {
-					map.put(propertyName, null);
-				} else {
-					map.put(propertyName, this.getSimpleValueOfBo(propMeta, propertyValue));
-				}
+			Object propertyValue = bo.getPropertyValue(propertyName);
+			if (propertyValue == null) {
+				map.put(propertyName, null);
+				continue;
+			}
+
+			if (propMeta.isNodeProperty()) {
+				BoMeta nodeBoMeta = boMeta.getSubNodeBoMeta(this.boFacade.getMetadataRepository(), propertyName);
+				map.put(propertyName, this.getNodePropertyValue(nodeBoMeta, (List<BusinessObject>) propertyValue));
+			} else if (propMeta.getType() == PropertyType.BoLabel) {
+				map.put(propertyName, this.getSimpleValueOfBo(propMeta, (BusinessObject) propertyValue));
 			} else {
 				map.put(propertyName, bo.getPropertyValue(propertyName));
 			}
 
 		}
 
+		return map;
+	}
+
+	private List<Map<String, Object>> getNodePropertyValue(BoMeta nodeBoMeta, List<BusinessObject> boList)
+			throws BusinessException {
+		List<Map<String, Object>> mapList = new ArrayList<>();
+		for (BusinessObject bo : boList) {
+			mapList.add(this.getBoValue(nodeBoMeta, bo));
+		}
+		return mapList;
+	}
+
+	private Map<String, Object> getBoValue(BoMeta boMeta, BusinessObject bo) throws BusinessException {
+		Map<String, Object> map = new HashMap<>();
+		for (PropertyMeta propMeta : boMeta.getProperties()) {
+			map.put(propMeta.getName(), bo.getPropertyValue(propMeta.getName()));
+		}
 		return map;
 	}
 

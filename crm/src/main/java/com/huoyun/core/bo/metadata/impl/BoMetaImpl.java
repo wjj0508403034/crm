@@ -100,28 +100,41 @@ public class BoMetaImpl implements BoMeta {
 	}
 
 	@SuppressWarnings("unchecked")
+	private Class<BusinessObject> getSubNodeClass(Field field) {
+		OneToMany oneToManyAnno = field.getAnnotation(OneToMany.class);
+		if (oneToManyAnno != null) {
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+				Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
+				if (actualTypes.length > 0) {
+					return (Class<BusinessObject>) actualTypes[0];
+				}
+			}
+		}
+
+		return null;
+	}
+
 	private void setProps(String boName, Class<?> klass) {
 		if (klass.getSuperclass() != null) {
 			this.setProps(boName, klass.getSuperclass());
 		}
 
 		for (Field field : klass.getDeclaredFields()) {
+			Class<BusinessObject> subNodeClass = this.getSubNodeClass(field);
 			PropertyMetaImpl propMeta = null;
-			OneToMany oneToManyAnno = field.getAnnotation(OneToMany.class);
-			if (oneToManyAnno != null) {
-				Type genericType = field.getGenericType();
-				if (genericType instanceof ParameterizedType) {
-					Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
-					if (actualTypes.length > 0) {
-						this.subNodeTypes.put(field.getName(), (Class<BusinessObject>) actualTypes[0]);
-					}
-				}
-			}
 
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
 				propMeta = new PropertyMetaImpl(boName, field, localeService);
 				this.propMap.put(propMeta.getName(), propMeta);
+
+				if (subNodeClass != null) {
+					this.subNodeTypes.put(propMeta.getName(), subNodeClass);
+					propMeta.setNodeProperty(true);
+					propMeta.getAdditionInfo().put("boNamespace", BusinessObjectUtils.getBoNamespace(subNodeClass));
+					propMeta.getAdditionInfo().put("boName", BusinessObjectUtils.getBoName(subNodeClass));
+				}
 
 				Id idAnnot = field.getAnnotation(Id.class);
 				if (idAnnot != null) {
@@ -200,6 +213,11 @@ public class BoMetaImpl implements BoMeta {
 	@Override
 	public Set<String> getSubNodePropNames() {
 		return this.subNodeTypes.keySet();
+	}
+
+	@Override
+	public Class<BusinessObject> getSubNodeType(String propertyName) {
+		return this.subNodeTypes.get(propertyName);
 	}
 
 	@Override

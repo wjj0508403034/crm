@@ -32,4 +32,6 @@ public interface BoMeta {
 	BoMeta getSubNodeBoMeta(MetadataRepository repository, String propertyName);
 
 	Set<String> getSubNodePropNames();
+
+	Class<BusinessObject> getSubNodeType(String propertyName);
 }

@@ -190,6 +190,11 @@ public class UIBoMetaImpl implements UIBoMeta {
 			}
 		}
 
+		for (String propertyName : boMeta.getSubNodePropNames()) {
+			uiBoMeta.nodeTypes
+					.add(parse(boMeta.getSubNodeBoMeta(boFacade.getMetadataRepository(), propertyName), boFacade));
+		}
+
 		return uiBoMeta;
 	}
 

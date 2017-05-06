@@ -106,4 +106,9 @@ public class ExtBoMetaImpl implements BoMeta {
 		return this.baseBoMeta.getSubNodePropNames();
 	}
 
+	@Override
+	public Class<BusinessObject> getSubNodeType(String propertyName) {
+		return this.baseBoMeta.getSubNodeType(propertyName);
+	}
+
 }

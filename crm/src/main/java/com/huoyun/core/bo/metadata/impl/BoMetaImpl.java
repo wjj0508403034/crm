@@ -1,12 +1,16 @@
 package com.huoyun.core.bo.metadata.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.util.StringUtils;
 
@@ -17,6 +21,7 @@ import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.metadata.BoMeta;
+import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
 import com.huoyun.locale.LocaleService;
@@ -28,13 +33,13 @@ public class BoMetaImpl implements BoMeta {
 	private String label;
 	private String labelI18nKey;
 	private LocaleService localeService;
-	// private List<PropertyMeta> properties = new ArrayList<>();
 	private String primaryKey;
 	private String businessKey;
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
 	private String extTableName;
 	private boolean allowCustomized;
+	private Map<String, Class<BusinessObject>> subNodeTypes = new HashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public BoMetaImpl(Class<?> boClass, LocaleService localeService) {
@@ -94,6 +99,7 @@ public class BoMetaImpl implements BoMeta {
 		return new ArrayList<>(this.propMap.values());
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setProps(String boName, Class<?> klass) {
 		if (klass.getSuperclass() != null) {
 			this.setProps(boName, klass.getSuperclass());
@@ -101,11 +107,21 @@ public class BoMetaImpl implements BoMeta {
 
 		for (Field field : klass.getDeclaredFields()) {
 			PropertyMetaImpl propMeta = null;
+			OneToMany oneToManyAnno = field.getAnnotation(OneToMany.class);
+			if (oneToManyAnno != null) {
+				Type genericType = field.getGenericType();
+				if (genericType instanceof ParameterizedType) {
+					Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
+					if (actualTypes.length > 0) {
+						this.subNodeTypes.put(field.getName(), (Class<BusinessObject>) actualTypes[0]);
+					}
+				}
+			}
+
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
 				propMeta = new PropertyMetaImpl(boName, field, localeService);
 				this.propMap.put(propMeta.getName(), propMeta);
-				// this.properties.add(propMeta);
 
 				Id idAnnot = field.getAnnotation(Id.class);
 				if (idAnnot != null) {
@@ -179,5 +195,19 @@ public class BoMetaImpl implements BoMeta {
 			return this.primaryKey;
 		}
 		return businessKey;
+	}
+
+	@Override
+	public Set<String> getSubNodePropNames() {
+		return this.subNodeTypes.keySet();
+	}
+
+	@Override
+	public BoMeta getSubNodeBoMeta(MetadataRepository repository, String propertyName) {
+		if (this.subNodeTypes.containsKey(propertyName)) {
+			Class<BusinessObject> boType = this.subNodeTypes.get(propertyName);
+			return repository.getBoMeta(boType);
+		}
+		return null;
 	}
 }

@@ -12,6 +12,7 @@ public class FtpProperties {
 	private String userName;
 	private String password;
 	private String serverType;
+	private String uploadFolder;
 
 	public String getHost() {
 		return host;
@@ -51,6 +52,14 @@ public class FtpProperties {
 
 	public void setServerType(String serverType) {
 		this.serverType = serverType;
+	}
+
+	public String getUploadFolder() {
+		return uploadFolder;
+	}
+
+	public void setUploadFolder(String uploadFolder) {
+		this.uploadFolder = uploadFolder;
 	}
 
 }

@@ -33,7 +33,7 @@ public class FinishType extends LiteBusinessObject {
 	private String name;
 
 	@BoProperty
-	private int orderNo;
+	private Integer orderNo = 0;
 
 	@Override
 	public Long getId() {
@@ -52,11 +52,11 @@ public class FinishType extends LiteBusinessObject {
 		this.id = id;
 	}
 
-	public int getOrderNo() {
+	public Integer getOrderNo() {
 		return orderNo;
 	}
 
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
 }

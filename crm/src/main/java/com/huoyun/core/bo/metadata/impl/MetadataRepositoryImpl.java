@@ -16,16 +16,14 @@ import com.huoyun.locale.LocaleService;
 public class MetadataRepositoryImpl implements MetadataRepository {
 
 	public static final String Name = "SystemMetadataRepository";
-	
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MetadataRepositoryImpl.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MetadataRepositoryImpl.class);
 
 	private LocaleService localeService;
 	private CachedClassLoader classLoader;
 	private final Map<String, BoMeta> boMetaCache = new HashMap<>();
 
-	public MetadataRepositoryImpl(LocaleService localeService,
-			CachedClassLoader classLoader) {
+	public MetadataRepositoryImpl(LocaleService localeService, CachedClassLoader classLoader) {
 		this.localeService = localeService;
 		this.classLoader = classLoader;
 		initialize();
@@ -34,8 +32,7 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 	private void initialize() {
 		LOGGER.info("========start to initialize BO metadata==========");
 		for (String key : this.classLoader.getBoClassCache().keySet()) {
-			Class<? extends BusinessObject> boClass = this.classLoader
-					.getBoClassCache().get(key);
+			Class<? extends BusinessObject> boClass = this.classLoader.getBoClassCache().get(key);
 			this.boMetaCache.put(key, new BoMetaImpl(boClass, this.localeService));
 		}
 		LOGGER.info("========end to initialize BO metadata==========");
@@ -43,8 +40,7 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 
 	@Override
 	public BoMeta getBoMeta(String namespace, String name) {
-		return this.boMetaCache.get(BusinessObjectUtils.getFullName(namespace,
-				name));
+		return this.boMetaCache.get(BusinessObjectUtils.getFullName(namespace, name));
 	}
 
 	@Override
@@ -55,8 +51,7 @@ public class MetadataRepositoryImpl implements MetadataRepository {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

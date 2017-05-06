@@ -33,7 +33,7 @@ public class CustomerStatus extends LiteBusinessObject {
 	private String name;
 
 	@BoProperty
-	private int orderNo;
+	private Integer orderNo;
 
 	@Override
 	public Long getId() {
@@ -53,11 +53,11 @@ public class CustomerStatus extends LiteBusinessObject {
 		this.id = id;
 	}
 
-	public int getOrderNo() {
+	public Integer getOrderNo() {
 		return orderNo;
 	}
 
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
 }

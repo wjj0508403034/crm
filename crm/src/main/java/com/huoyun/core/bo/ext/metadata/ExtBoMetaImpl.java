@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.ext.UserProperty;
 import com.huoyun.core.bo.metadata.BoMeta;
+import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 
 public class ExtBoMetaImpl implements BoMeta {
@@ -92,6 +94,16 @@ public class ExtBoMetaImpl implements BoMeta {
 	@Override
 	public String getPrimaryKey() {
 		return this.baseBoMeta.getPrimaryKey();
+	}
+
+	@Override
+	public BoMeta getSubNodeBoMeta(MetadataRepository repository, String propertyName) {
+		return this.baseBoMeta.getSubNodeBoMeta(repository, propertyName);
+	}
+
+	@Override
+	public Set<String> getSubNodePropNames() {
+		return this.baseBoMeta.getSubNodePropNames();
 	}
 
 }

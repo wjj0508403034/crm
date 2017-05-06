@@ -29,6 +29,7 @@ public class UIBoMetaImpl implements UIBoMeta {
 	private List<UISection> sections = new ArrayList<>();
 	private UIListView listview;
 	private List<UIProperty> properties = new ArrayList<>();
+	private List<UIBoMeta> nodeTypes = new ArrayList<>();
 
 	@Override
 	public String getBoName() {
@@ -100,6 +101,14 @@ public class UIBoMetaImpl implements UIBoMeta {
 
 	public void setBusinessKey(String businessKey) {
 		this.businessKey = businessKey;
+	}
+
+	public List<UIBoMeta> getNodeTypes() {
+		return nodeTypes;
+	}
+
+	public void setNodeTypes(List<UIBoMeta> nodeTypes) {
+		this.nodeTypes = nodeTypes;
 	}
 
 	public static UIBoMeta parse(BoMeta boMeta, BusinessObjectFacade boFacade) {

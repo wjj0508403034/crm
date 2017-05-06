@@ -34,7 +34,7 @@ public class FtpServiceImpl implements FtpService {
 		FTPClient ftpClient = this.newFTPClient();
 		this.connect(ftpClient);
 		this.login(ftpClient);
-		this.storeFile(ftpClient, sourceFile, targetFile);
+		this.storeFile(ftpClient, sourceFile, this.ftpProperties.getUploadFolder() + targetFile);
 		this.logout(ftpClient);
 	}
 

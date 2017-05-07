@@ -34,7 +34,5 @@ public interface PropertyMeta {
 
 	Map<String, Object> getAdditionInfo();
 
-	boolean isNodeProperty();
-
-	void setNodeProperty(boolean isNodeProperty);
+	NodeMeta getNodeMeta();
 }

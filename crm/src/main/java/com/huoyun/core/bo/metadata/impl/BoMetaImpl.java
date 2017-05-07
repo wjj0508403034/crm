@@ -1,8 +1,6 @@
 package com.huoyun.core.bo.metadata.impl;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -99,41 +95,20 @@ public class BoMetaImpl implements BoMeta {
 		return new ArrayList<>(this.propMap.values());
 	}
 
-	@SuppressWarnings("unchecked")
-	private Class<BusinessObject> getSubNodeClass(Field field) {
-		OneToMany oneToManyAnno = field.getAnnotation(OneToMany.class);
-		if (oneToManyAnno != null) {
-			Type genericType = field.getGenericType();
-			if (genericType instanceof ParameterizedType) {
-				Type[] actualTypes = ((ParameterizedType) genericType).getActualTypeArguments();
-				if (actualTypes.length > 0) {
-					return (Class<BusinessObject>) actualTypes[0];
-				}
-			}
-		}
-
-		return null;
-	}
-
 	private void setProps(String boName, Class<?> klass) {
 		if (klass.getSuperclass() != null) {
 			this.setProps(boName, klass.getSuperclass());
 		}
 
 		for (Field field : klass.getDeclaredFields()) {
-			Class<BusinessObject> subNodeClass = this.getSubNodeClass(field);
 			PropertyMetaImpl propMeta = null;
 
 			BoProperty boProp = field.getAnnotation(BoProperty.class);
 			if (boProp != null) {
 				propMeta = new PropertyMetaImpl(boName, field, localeService);
 				this.propMap.put(propMeta.getName(), propMeta);
-
-				if (subNodeClass != null) {
-					this.subNodeTypes.put(propMeta.getName(), subNodeClass);
-					propMeta.setNodeProperty(true);
-					propMeta.getAdditionInfo().put("boNamespace", BusinessObjectUtils.getBoNamespace(subNodeClass));
-					propMeta.getAdditionInfo().put("boName", BusinessObjectUtils.getBoName(subNodeClass));
+				if (propMeta.getNodeMeta() != null) {
+					this.subNodeTypes.put(propMeta.getName(), propMeta.getNodeMeta().getNodeClass());
 				}
 
 				Id idAnnot = field.getAnnotation(Id.class);

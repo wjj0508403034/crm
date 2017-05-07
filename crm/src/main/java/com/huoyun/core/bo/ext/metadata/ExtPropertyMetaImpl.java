@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huoyun.core.bo.ext.UserProperty;
 import com.huoyun.core.bo.ext.UserPropertyValidValue;
+import com.huoyun.core.bo.metadata.NodeMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.ValidationMeta;
@@ -150,13 +151,8 @@ public class ExtPropertyMetaImpl implements PropertyMeta {
 	}
 
 	@Override
-	public boolean isNodeProperty() {
-		return this.basePropertyMeta.isNodeProperty();
-	}
-
-	@Override
-	public void setNodeProperty(boolean isNodeProperty) {
-		this.basePropertyMeta.setNodeProperty(isNodeProperty);
+	public NodeMeta getNodeMeta() {
+		return this.basePropertyMeta.getNodeMeta();
 	}
 
 }

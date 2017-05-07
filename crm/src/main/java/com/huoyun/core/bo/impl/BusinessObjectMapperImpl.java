@@ -39,7 +39,7 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 				continue;
 			}
 
-			if (propMeta.isNodeProperty()) {
+			if (propMeta.getNodeMeta() != null) {
 				BoMeta nodeBoMeta = boMeta.getSubNodeBoMeta(this.boFacade.getMetadataRepository(), propertyName);
 				map.put(propertyName, this.getNodePropertyValue(nodeBoMeta, (List<BusinessObject>) propertyValue));
 			} else if (propMeta.getType() == PropertyType.BoLabel) {

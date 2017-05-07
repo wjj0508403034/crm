@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.OneToMany;
+
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +15,7 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BoPropertyRule;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.bo.metadata.NodeMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.metadata.ValidationMeta;
@@ -72,6 +75,13 @@ public class PropertyMetaImpl implements PropertyMeta {
 			}
 		}
 
+		OneToMany oneToManyAnno = field.getAnnotation(OneToMany.class);
+		if (oneToManyAnno != null) {
+			this.nodeMeta = new NodeMetaImpl(field);
+			this.additionInfo.put("boNamespace", BusinessObjectUtils.getBoNamespace(this.nodeMeta.getNodeClass()));
+			this.additionInfo.put("boName", BusinessObjectUtils.getBoName(this.nodeMeta.getNodeClass()));
+		}
+
 	}
 
 	private String name;
@@ -88,7 +98,7 @@ public class PropertyMetaImpl implements PropertyMeta {
 	private ValidationMeta validationMeta;
 	private List<Value> validValues = new ArrayList<>();
 	private Map<String, Object> additionInfo = new HashMap<>();
-	private boolean isNodeProperty;
+	private NodeMeta nodeMeta;
 
 	@Override
 	public String getName() {
@@ -202,14 +212,12 @@ public class PropertyMetaImpl implements PropertyMeta {
 		this.searchable = searchable;
 	}
 
-	@JsonIgnore
 	@Override
-	public boolean isNodeProperty() {
-		return isNodeProperty;
+	public NodeMeta getNodeMeta() {
+		return nodeMeta;
 	}
 
-	@Override
-	public void setNodeProperty(boolean isNodeProperty) {
-		this.isNodeProperty = isNodeProperty;
+	public void setNodeMeta(NodeMeta nodeMeta) {
+		this.nodeMeta = nodeMeta;
 	}
 }

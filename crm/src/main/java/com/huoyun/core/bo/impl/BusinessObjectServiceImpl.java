@@ -41,9 +41,11 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 	}
 
 	@Override
-	public BusinessObject initBo(String namespace, String name) throws BusinessException {
+	public Map<String, Object> initBo(String namespace, String name) throws BusinessException {
 		this.getBoMeta(namespace, name);
-		return this.boFacade.newBo(namespace, name);
+		BoMeta boMeta = this.getBoMeta(namespace, name);
+		BusinessObject bo = this.boFacade.newBo(namespace, name);
+		return this.boMapper.converterTo(bo, boMeta);
 	}
 
 	@Transactional

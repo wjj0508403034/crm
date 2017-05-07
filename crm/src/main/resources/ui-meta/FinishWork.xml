@@ -14,7 +14,7 @@
 				<property ref="houses"></property>
 			</properties>
 		</section>
-		<section label="uimeta.section.defaultLabel">
+		<section label="uimeta.FinishWork.section.photos">
 			<properties>
 				<property ref="designPhotos"></property>
 			</properties>

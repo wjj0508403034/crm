@@ -10,7 +10,7 @@ import com.huoyun.exception.BusinessException;
 
 public interface BusinessObjectService {
 
-	BusinessObject initBo(String namespace, String name) throws BusinessException;
+	Map<String, Object> initBo(String namespace, String name) throws BusinessException;
 
 	Map<String, Object> createBo(String namespace, String name, Map<String, Object> data) throws BusinessException;
 

@@ -27,7 +27,8 @@ public class BusinessObjectController {
 	@RequestMapping(value = "/batch({namespace},{name})", method = RequestMethod.POST)
 	@ResponseBody
 	public void batchUpdate(@PathVariable(value = "namespace") String namespace,
-			@PathVariable(value = "name") String name, @RequestBody List<Map<String, Object>> boList) throws BusinessException {
+			@PathVariable(value = "name") String name, @RequestBody List<Map<String, Object>> boList)
+			throws BusinessException {
 		this.businessObjectService.batchUpdate(namespace, name, boList);
 	}
 
@@ -53,7 +54,7 @@ public class BusinessObjectController {
 
 	@RequestMapping(value = "/bo({namespace},{name})/init", method = RequestMethod.GET)
 	@ResponseBody
-	public BusinessObject init(@PathVariable(value = "namespace") String namespace,
+	public Map<String, Object> init(@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name) throws BusinessException {
 		return this.businessObjectService.initBo(namespace, name);
 	}

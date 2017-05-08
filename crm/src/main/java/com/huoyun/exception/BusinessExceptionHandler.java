@@ -1,6 +1,9 @@
 package com.huoyun.exception;
 
+import javax.persistence.RollbackException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.transaction.TransactionSystemException;
 
 import com.huoyun.core.bo.BoErrorCode;
 import com.huoyun.locale.LocaleService;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @ControllerAdvice
 public class BusinessExceptionHandler extends ResponseEntityExceptionHandler {
@@ -25,6 +30,28 @@ public class BusinessExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> UnexpectedError(Exception exception) {
 		logger.error(exception);
 		logger.error(ExceptionUtils.getStackTrace(exception));
+		return this.BusinessError(new BusinessException(BoErrorCode.System_Error));
+	}
+
+	@ExceptionHandler(TransactionSystemException.class)
+	public ResponseEntity<Object> transactionSystemException(Exception exception) {
+		logger.error(exception);
+		if (exception.getCause() != null) {
+			if (exception.getCause() instanceof RollbackException) {
+				if (exception.getCause().getCause() != null
+						&& exception.getCause().getCause() instanceof DatabaseException) {
+
+					if (exception.getCause().getCause().getCause() != null) {
+						if (exception.getCause().getCause()
+								.getCause() instanceof MySQLIntegrityConstraintViolationException) {
+							return this.BusinessError(
+									new BusinessException(BoErrorCode.Delete_Failed_Due_To_Vaule_Is_Used));
+						}
+					}
+				}
+			}
+		}
+
 		return this.BusinessError(new BusinessException(BoErrorCode.System_Error));
 	}
 

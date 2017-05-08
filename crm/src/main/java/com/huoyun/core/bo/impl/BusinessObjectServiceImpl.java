@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,8 @@ import com.huoyun.core.bo.query.impl.BoSpecificationImpl;
 import com.huoyun.exception.BusinessException;
 
 public class BusinessObjectServiceImpl implements BusinessObjectService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BusinessObjectServiceImpl.class);
 
 	private BusinessObjectFacade boFacade;
 	private BusinessObjectMapper boMapper;
@@ -70,7 +74,9 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 
 		BusinessObject bo = this.boFacade.getBoRepository(namespace, name).load(id);
-
+		if (bo == null) {
+			throw new BusinessException(BoErrorCode.Bo_Record_Not_Found);
+		}
 		return this.boMapper.converterTo(bo, boMeta);
 	}
 

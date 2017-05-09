@@ -7,4 +7,6 @@ import com.huoyun.exception.BusinessException;
 public interface FtpService {
 
 	void uploadFile(MultipartFile sourceFile, String targetFile) throws BusinessException;
+	
+	void deleteFile(String file) throws BusinessException;
 }

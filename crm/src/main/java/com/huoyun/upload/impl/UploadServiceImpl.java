@@ -1,7 +1,10 @@
 package com.huoyun.upload.impl;
 
+import java.util.Random;
+
 import javax.transaction.Transactional;
 
+import org.joda.time.DateTime;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.huoyun.core.bo.BusinessObject;
@@ -17,6 +20,9 @@ import com.huoyun.upload.UploadErrorCode;
 import com.huoyun.upload.UploadService;
 
 public class UploadServiceImpl implements UploadService {
+
+	private static int MAX = 9999;
+	private static int MIN = 1000;
 
 	private FtpService ftpService;
 
@@ -70,7 +76,27 @@ public class UploadServiceImpl implements UploadService {
 		subNode.create();
 	}
 
-
+	@Transactional
+	@Override
+	public void deleteFileForImageList(String boNamespace, String boName, Long boId, String propertyName)
+			throws BusinessException {
+		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName).load(boId);
+		if (bo == null) {
+			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
+		}
+		BoMeta nodeMeta = this.boFacade.getMetadataRepository().getBoMeta(boNamespace, boName);
+		String imagePropName = this.getImagePropertyNameOfSubNode(nodeMeta);
+		if (nodeMeta == null || imagePropName == null) {
+			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
+		}
+		Attachment attachment = (Attachment) bo.getPropertyValue(imagePropName);
+		bo.delete();
+		if (attachment != null) {
+			attachment.setBoFacade(this.boFacade);
+			attachment.delete();
+			this.ftpService.deleteFile(attachment.getRelativePath());
+		}
+	}
 
 	@Override
 	public String getFilePath(String boNamespace, String boName, Long boId, String propertyName)
@@ -89,7 +115,7 @@ public class UploadServiceImpl implements UploadService {
 	}
 
 	private Attachment upload(MultipartFile file) throws BusinessException {
-		String targetFile = file.getOriginalFilename();
+		String targetFile = this.generateNo();
 		try {
 			this.ftpService.uploadFile(file, targetFile);
 		} catch (BusinessException ex) {
@@ -105,7 +131,7 @@ public class UploadServiceImpl implements UploadService {
 
 		return attachment;
 	}
-	
+
 	private String getImagePropertyNameOfSubNode(BoMeta boMeta) {
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			if (propMeta.getType() == PropertyType.Image && propMeta.getRuntimeType() == Attachment.class) {
@@ -116,4 +142,9 @@ public class UploadServiceImpl implements UploadService {
 		return null;
 	}
 
+	private String generateNo() {
+		Random random = new Random();
+		int randomNum = random.nextInt(MAX) % (MAX - MIN + 1) + MIN;
+		return DateTime.now().toString("yyyyMMddHHmmssSSS") + randomNum;
+	}
 }

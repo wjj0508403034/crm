@@ -13,4 +13,7 @@ public interface UploadService {
 
 	void uploadFileForImageList(String boNamespace, String boName, Long boId, String propertyName, MultipartFile file)
 			throws BusinessException;
+
+	void deleteFileForImageList(String boNamespace, String boName, Long boId, String propertyName)
+			throws BusinessException;
 }

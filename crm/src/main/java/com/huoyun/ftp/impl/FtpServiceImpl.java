@@ -38,6 +38,26 @@ public class FtpServiceImpl implements FtpService {
 		this.logout(ftpClient);
 	}
 
+	@Override
+	public void deleteFile(String file) throws BusinessException {
+		FTPClient ftpClient = this.newFTPClient();
+		this.connect(ftpClient);
+		this.login(ftpClient);
+		this.deleteFile(ftpClient, this.ftpProperties.getUploadFolder() + file);
+		this.logout(ftpClient);
+	}
+
+	private void deleteFile(FTPClient ftpClient, String file) throws BusinessException {
+		try {
+			ftpClient.deleteFile(file);
+			this.printFtpReply(ftpClient);
+		} catch (IOException ex) {
+			this.logout(ftpClient);
+			LOGGER.error(String.format("Delete file %s to ftp server failed", file), ex);
+			throw new BusinessException(FtpErrorCode.FtpUploadFailed);
+		}
+	}
+
 	private FTPClient newFTPClient() {
 		FTPClient ftpClient = new FTPClient();
 		ftpClient.setControlEncoding("UTF-8");

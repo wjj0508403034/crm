@@ -35,6 +35,14 @@ public class UploadController {
 		this.uploadService.uploadFileForImageList(boNamespace, boName, boId, propertyName, file);
 	}
 
+	@RequestMapping(value = "/upload/{boNamespace}/{boName}/{boId}/{propertyName}/imagelist", method = RequestMethod.DELETE)
+	@ResponseBody
+	public void deleteFileForImageList(@PathVariable("boNamespace") String boNamespace,
+			@PathVariable("boName") String boName, @PathVariable("boId") Long boId,
+			@PathVariable("propertyName") String propertyName) throws BusinessException {
+		this.uploadService.deleteFileForImageList(boNamespace, boName, boId, propertyName);
+	}
+
 	@RequestMapping(value = "/upload/{boNamespace}/{boName}/{boId}/{propertyName}", method = RequestMethod.GET)
 	public String getFileUrl(@PathVariable("boNamespace") String boNamespace, @PathVariable("boName") String boName,
 			@PathVariable("boId") Long boId, @PathVariable("propertyName") String propertyName)

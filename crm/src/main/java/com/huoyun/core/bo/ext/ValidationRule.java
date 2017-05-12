@@ -1,10 +1,13 @@
 package com.huoyun.core.bo.ext;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
@@ -67,5 +70,7 @@ public class ValidationRule extends LiteBusinessObject {
 	public void setRuleType(RuleType ruleType) {
 		this.ruleType = ruleType;
 	}
+
+
 
 }

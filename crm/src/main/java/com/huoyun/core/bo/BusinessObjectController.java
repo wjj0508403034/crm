@@ -68,7 +68,7 @@ public class BusinessObjectController {
 
 	@RequestMapping(value = "/bo({namespace},{name})/{id}", method = RequestMethod.PATCH)
 	@ResponseBody
-	public BusinessObject update(@PathVariable(value = "namespace") String namespace,
+	public Map<String, Object> update(@PathVariable(value = "namespace") String namespace,
 			@PathVariable(value = "name") String name, @PathVariable(value = "id") Long id,
 			@RequestBody Map<String, Object> data) throws BusinessException {
 		return this.businessObjectService.updateBo(namespace, name, id, data);

@@ -219,4 +219,10 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 					BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends BusinessObject> List<T> getNodeList(String nodeName) throws BusinessException {
+		return (List<T>)this.getPropertyValue(nodeName);
+	}
 }

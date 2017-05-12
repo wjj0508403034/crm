@@ -18,10 +18,10 @@ import com.huoyun.core.bo.BoErrorCode;
 import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.BusinessObjectMapper;
+import com.huoyun.core.bo.BusinessObjectNode;
 import com.huoyun.core.bo.BusinessObjectService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
-import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.query.BoSpecification;
 import com.huoyun.core.bo.query.CriteriaFactory;
 import com.huoyun.core.bo.query.criteria.Criteria;
@@ -58,12 +58,7 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 			throws BusinessException {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 
-		BusinessObject bo = this.boFacade.newBo(namespace, name);
-		for (PropertyMeta propMeta : boMeta.getProperties()) {
-			if (propMeta.getType() != PropertyType.ImageList) {
-				bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
-			}
-		}
+		BusinessObject bo = this.converterToBo(boMeta, data);
 		bo.create();
 
 		return this.boMapper.converterTo(bo, boMeta);
@@ -94,11 +89,13 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		bo.delete();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Modifying
 	@Transactional
 	@Override
-	public BusinessObject updateBo(String namespace, String name, Long id, Map<String, Object> data)
+	public Map<String, Object> updateBo(String namespace, String name, Long id, Map<String, Object> data)
 			throws BusinessException {
+		LOGGER.info("Update Bo {} {} value ...", namespace, name);
 		if (id == null) {
 			throw new BusinessException(BoErrorCode.Bo_Record_Not_Found);
 		}
@@ -112,13 +109,17 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			if (data.containsKey(propMeta.getName())) {
-				bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
+				if (propMeta.getNodeMeta() == null) {
+					bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
+				} else {
+					this.setNodeValue(propMeta, bo, (List<Map<String, Object>>) data.get(propMeta.getName()));
+				}
 			}
 		}
 
 		bo.update();
 
-		return bo;
+		return this.boMapper.converterTo(bo, boMeta);
 	}
 
 	@Modifying
@@ -160,6 +161,36 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 		BoSpecification spec = this.getBoSpec(boMeta, query, null);
 		return this.boFacade.getBoRepository(namespace, name).count(spec);
+	}
+
+	@SuppressWarnings("unchecked")
+	private BusinessObject converterToBo(BoMeta boMeta, Map<String, Object> data) throws BusinessException {
+		BusinessObject bo = this.boFacade.newBo(boMeta.getBoType());
+		for (PropertyMeta propMeta : boMeta.getProperties()) {
+			if (data.containsKey(propMeta.getName())) {
+				if (propMeta.getNodeMeta() == null) {
+					bo.setPropertyValue(propMeta.getName(), data.get(propMeta.getName()));
+				} else {
+					this.setNodeValue(propMeta, bo, (List<Map<String, Object>>) data.get(propMeta.getName()));
+				}
+			}
+
+		}
+
+		return bo;
+	}
+
+	private void setNodeValue(PropertyMeta propMeta, BusinessObject bo, List<Map<String, Object>> nodeListData)
+			throws BusinessException {
+		BoMeta nodeBoMeta = this.boFacade.getMetadataRepository().getBoMeta(propMeta.getNodeMeta().getNodeClass());
+		List<BusinessObject> nodeList = bo.getNodeList(propMeta.getName());
+		nodeList.clear();
+		for (Map<String, Object> nodeData : nodeListData) {
+			BusinessObjectNode node = (BusinessObjectNode) this.converterToBo(nodeBoMeta, nodeData);
+			node.setPropertyValue(nodeBoMeta.getPrimaryKey(), null);
+			node.setParent(bo);
+			nodeList.add(node);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

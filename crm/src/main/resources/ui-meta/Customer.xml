@@ -9,6 +9,7 @@
 			<properties>
 				<property ref="name"></property>
 				<property ref="status"></property>
+				<property ref="statusList"></property>
 				<property ref="salesSource"></property>
 				<property ref="consultationDate"></property>
 				<property ref="visitDate"></property>
@@ -118,6 +119,9 @@
 		<property name="startDate"></property>
 		<property name="endDate"></property>
 		<property name="status"></property>
+		<property name="statusList">
+			<option name="labelField" value="name"></option>
+		</property>
 		<property name="salesSource"></property>
 		<property name="contractDate"></property>
 

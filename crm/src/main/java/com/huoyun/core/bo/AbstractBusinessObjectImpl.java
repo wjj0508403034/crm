@@ -1,16 +1,19 @@
 package com.huoyun.core.bo;
 
+import java.util.List;
+
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.ext.UserEntity;
+import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.exception.BusinessException;
 
 @MappedSuperclass
-public abstract class AbstractBusinessObjectImpl extends AbstractBusinessObject
-		implements ExtensibleBusinessObject {
+public abstract class AbstractBusinessObjectImpl extends AbstractBusinessObject implements ExtensibleBusinessObject {
 
 	public AbstractBusinessObjectImpl() {
 	}
@@ -19,8 +22,7 @@ public abstract class AbstractBusinessObjectImpl extends AbstractBusinessObject
 		this.setBoFacade(boFacade);
 
 		if (this.boFacade != null) {
-			this.userEntity = this.boFacade.getExtensionService()
-					.createDynamicEntity(this.boMeta);
+			this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
 		}
 	}
 
@@ -66,34 +68,47 @@ public abstract class AbstractBusinessObjectImpl extends AbstractBusinessObject
 	}
 
 	@Override
-	public void setPropertyValue(String propertyName, Object propertyValue)
-			throws BusinessException {
+	public void setPropertyValue(String propertyName, Object propertyValue) throws BusinessException {
 		PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);
 		if (propMeta.isCustomField()) {
 			if (this.userEntity == null) {
-				this.userEntity = this.boFacade.getExtensionService().load(
-						this, this.boMeta);
+				this.userEntity = this.boFacade.getExtensionService().load(this, this.boMeta);
 			}
 
 			if (this.userEntity == null) {
-				this.userEntity = this.boFacade.getExtensionService()
-						.createDynamicEntity(this.boMeta);
+				this.userEntity = this.boFacade.getExtensionService().createDynamicEntity(this.boMeta);
 				this.boFacade.getExtensionService().persist(this);
 			}
 			this.userEntity.setPropertyValue(propertyName, propertyValue);
 			return;
 		}
+
+		if (propMeta.getNodeMeta() != null) {
+			List<BusinessObject> listProp = (List<BusinessObject>) this.getPropertyValue(propertyName);
+			this.setNodeValue(propMeta, listProp, (List) propertyValue);
+			return;
+		}
+
 		super.setPropertyValue(propertyName, propertyValue);
 	}
 
+	private void setNodeValue(PropertyMeta propMeta, List<BusinessObject> listProp, List nodeValues) {
+		listProp.clear();
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(propMeta.getNodeMeta().getNodeClass());
+		ObjectMapper mapper = new ObjectMapper();
+		for (Object nodeValue : nodeValues) {
+			BusinessObject bo = mapper.convertValue(nodeValue, propMeta.getNodeMeta().getNodeClass());
+			listProp.add(bo);
+		}
+
+	}
+
 	@Override
-	public Object getPropertyValue(String propertyName)
-			throws BusinessException {
+	public Object getPropertyValue(String propertyName) throws BusinessException {
 		PropertyMeta propMeta = this.boMeta.getPropertyMeta(propertyName);
 		if (propMeta.isCustomField()) {
 			if (this.userEntity == null) {
-				this.userEntity = this.boFacade.getExtensionService().load(
-						this, this.boMeta);
+				this.userEntity = this.boFacade.getExtensionService().load(this, this.boMeta);
 			}
 
 			if (this.userEntity != null) {

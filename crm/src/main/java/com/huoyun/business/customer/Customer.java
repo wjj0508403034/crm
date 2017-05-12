@@ -1,10 +1,17 @@
 package com.huoyun.business.customer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
@@ -15,6 +22,7 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
+import com.huoyun.core.bo.metadata.PropertyType;
 
 @BoEntity
 @Entity
@@ -165,6 +173,11 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@JoinColumn
 	@BoProperty
 	private CustomerStatus status;
+	
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OrderBy("id ASC")
+	@BoProperty(type = PropertyType.BoList)
+	private final List<CustomerStatusList> statusList = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn
@@ -501,6 +514,10 @@ public class Customer extends AbstractBusinessObjectImpl {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public List<CustomerStatusList> getStatusList() {
+		return statusList;
 	}
 
 }

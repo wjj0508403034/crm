@@ -1,5 +1,7 @@
 package com.huoyun.core.bo;
 
+import java.util.List;
+
 import com.huoyun.exception.BusinessException;
 
 public interface BusinessObject {
@@ -19,4 +21,6 @@ public interface BusinessObject {
 	void setBoFacade(BusinessObjectFacade boFacade);
 
 	Object getPropertyValue(String propertyName) throws BusinessException;
+
+	<T extends BusinessObject> List<T> getNodeList(String nodeName) throws BusinessException;
 }

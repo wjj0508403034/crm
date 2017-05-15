@@ -11,6 +11,10 @@ public class BusinessException extends Exception {
 		super(errorCode);
 		this.code = errorCode;
 	}
+	
+	public BusinessException(){
+		
+	}
 
 	public String getCode() {
 		return code;

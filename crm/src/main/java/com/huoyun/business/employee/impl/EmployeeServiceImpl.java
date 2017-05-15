@@ -12,6 +12,7 @@ import com.huoyun.business.employee.EmployeeErrorCodes;
 import com.huoyun.business.employee.EmployeeService;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.exception.BusinessException;
+import com.huoyun.thirdparty.idp.IdpClient;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -55,8 +56,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new BusinessException(EmployeeErrorCodes.Change_Password_Repeat_New_Password_Is_Empty);
 		}
 
-		if (StringUtils.equals(changePasswordParam.getNewPassword(), changePasswordParam.getRepeatNewPassword())) {
+		if (!StringUtils.equals(changePasswordParam.getNewPassword(), changePasswordParam.getRepeatNewPassword())) {
 			throw new BusinessException(EmployeeErrorCodes.Change_Password_Password_Not_Match);
 		}
+		Employee employee = this.boFacade.getCurrentEmployee();
+
+		this.boFacade.getBean(IdpClient.class).changePassword(employee.getUserId(),
+				changePasswordParam.getOldPassword(), changePasswordParam.getNewPassword());
 	}
 }

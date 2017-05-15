@@ -18,7 +18,7 @@ public class SAMLProperties {
 	private String sso;
 
 	private String slo;
-	
+
 	private String spSuccessUrl;
 
 	public String getPublicKey() {

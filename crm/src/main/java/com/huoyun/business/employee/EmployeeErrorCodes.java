@@ -11,4 +11,6 @@ public class EmployeeErrorCodes {
 	public static final String Change_Password_Repeat_New_Password_Is_Empty = "60003";
 
 	public static final String Change_Password_Password_Not_Match = "60004";
+
+	public final static String Change_Password_Error = "60005";
 }

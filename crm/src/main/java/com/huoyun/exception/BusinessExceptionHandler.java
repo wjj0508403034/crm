@@ -2,7 +2,7 @@ package com.huoyun.exception;
 
 import javax.persistence.RollbackException;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,6 @@ public class BusinessExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> UnexpectedError(Exception exception) {
 		logger.error(exception);
-		logger.error(ExceptionUtils.getStackTrace(exception));
 		return this.BusinessError(new BusinessException(BoErrorCode.System_Error));
 	}
 
@@ -57,16 +56,16 @@ public class BusinessExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<Object> BusinessError(BusinessException businessException) {
-		businessException.setMessage(this.localeService.getErrorMessage(businessException.getCode()));
+		if (StringUtils.isEmpty(businessException.getMessage())) {
+			businessException.setMessage(this.localeService.getErrorMessage(businessException.getCode()));
+		}
 		LOGGER.error("Internal System Error.", businessException);
-		logger.error(ExceptionUtils.getStackTrace(businessException));
 		return new ResponseEntity<Object>(new BusinessExceptionResponse(businessException), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(LocatableBusinessException.class)
 	public ResponseEntity<Object> LocatableBusinessError(LocatableBusinessException businessException) {
 		LOGGER.error("Internal System Error.", businessException);
-		logger.error(ExceptionUtils.getStackTrace(businessException));
 		return new ResponseEntity<Object>(new LocatableBusinessExceptionResponse(businessException),
 				HttpStatus.BAD_REQUEST);
 	}

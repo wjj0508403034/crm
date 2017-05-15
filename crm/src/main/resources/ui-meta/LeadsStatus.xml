@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="LeadsStatus">
+	<header>
+		<title ref="name"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="name"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,name,orderNo" orderby="orderNo"
+		enableSort="true" sortProperty="orderNo">
+		<columns>
+			<column ref="name"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="name"></property>
+	</properties>
+</root>

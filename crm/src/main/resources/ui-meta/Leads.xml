@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Leads">
+	<header>
+		<title ref="name"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="name"></property>
+				<property ref="telephone"></property>
+				<property ref="houses"></property>
+				<property ref="salesSource"></property>
+				<property ref="status"></property>
+				<property ref="description"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,name" orderby="id" sortProperty="id">
+		<columns>
+			<column ref="name"></column>
+			<column ref="telephone"></column>
+			<column ref="houses"></column>
+			<column ref="salesSource"></column>
+			<column ref="status"></column>
+			<column ref="description"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="name"></property>
+		<property name="houses"></property>
+		<property name="telephone"></property>
+		<property name="description"></property>
+		<property name="status"></property>
+		<property name="salesSource"></property>
+	</properties>
+</root>

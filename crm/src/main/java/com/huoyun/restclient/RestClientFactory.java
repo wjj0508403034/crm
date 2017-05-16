@@ -52,13 +52,13 @@ public class RestClientFactory {
 		return this.create(RestClient.builder(new HttpHost(hostname, port, scheme)));
 	}
 
-	public RestResponse POST(String domain, String url, Object entity) throws BusinessException {
+	public RestResponse POST(String domain, String url, Object entity, Header... headers) throws BusinessException {
 		long startTime = System.currentTimeMillis();
 		RestClient restClient = this.create(domain);
 		try {
 			LOGGER.info("Sending POST request {}{} ...", domain, url);
 			Response response = restClient.performRequest(HttpMethodConstants.POST, url, new HashMap<>(),
-					this.getPayload(entity));
+					this.getPayload(entity), headers);
 			LOGGER.info("Sending POST request {}{} successfully.", domain, url);
 			return this.getRestResponse(response);
 		} catch (ResponseException ex) {

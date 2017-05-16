@@ -11,6 +11,8 @@ public class IdpHostConfiguration {
 
 	private String prefix;
 
+	private String serviceToken;
+
 	public String getDomain() {
 		return domain;
 	}
@@ -25,6 +27,14 @@ public class IdpHostConfiguration {
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	public String getServiceToken() {
+		return serviceToken;
+	}
+
+	public void setServiceToken(String serviceToken) {
+		this.serviceToken = serviceToken;
 	}
 
 }

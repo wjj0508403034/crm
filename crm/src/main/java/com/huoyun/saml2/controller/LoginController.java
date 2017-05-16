@@ -59,18 +59,18 @@ public class LoginController {
 					SAML2Utils.decodeBase64AsString(samlResponse), null, acs);
 
 			changeSessionId(req);
-			
-			Long tenantId = this.getTenantId(saml2Principal);
+
+			String tenantCode = this.getTenantCode(saml2Principal);
 
 			LOGGER.info("SSO authorization succeed for user {}.", saml2Principal.getName());
 
 			req.getSession().setAttribute(EndpointsConstatns.SSO_USER_SESSION_ATTR, saml2Principal.getName());
 			req.getSession().setAttribute(EndpointsConstatns.SSO_PRINCIPAL_SESSION_ATTR, saml2Principal);
 			req.getSession().setAttribute(EndpointsConstatns.SSO_SESSION_INDEX, sessionIndex);
-			req.getSession().setAttribute(EndpointsConstatns.SSO_TENANT_ID, tenantId);
+			req.getSession().setAttribute(EndpointsConstatns.SSO_TENANT_CODE, tenantCode);
 
 			Session session = this.boFacade.getBean(LoginProcessor.class)
-					.process(Long.parseLong(saml2Principal.getName()),tenantId);
+					.process(Long.parseLong(saml2Principal.getName()), tenantCode);
 			req.getSession().setAttribute(EndpointsConstatns.HuoYun_USER_SESSION, session);
 
 			if (!StringUtils.isEmpty(relayState)) {
@@ -87,22 +87,16 @@ public class LoginController {
 		}
 	}
 
-	private Long getTenantId(SAML2Principal saml2Principal) {
-		String tenantIdValue = null;
+	private String getTenantCode(SAML2Principal saml2Principal) {
 		Set<Attribute> attributes = saml2Principal.getAttributes();
 		if (attributes != null) {
 			for (Attribute attribute : attributes) {
-				if (StringUtils.equals(attribute.getName(), "tenantId")) {
+				if (StringUtils.equals(attribute.getName(), "tenantCode")) {
 					if (attribute.getValues() != null && attribute.getValues().size() > 0) {
-						tenantIdValue = attribute.getValues().get(0);
-						break;
+						return attribute.getValues().get(0);
 					}
 				}
 			}
-		}
-
-		if (!StringUtils.isEmpty(tenantIdValue)) {
-			return Long.parseLong(tenantIdValue);
 		}
 
 		return null;

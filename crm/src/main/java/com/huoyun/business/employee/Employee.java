@@ -70,7 +70,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	private Attachment avatar;
 
 	@Transient
-	private Long tenantId;
+	private String tenantCode;
 
 	@Override
 	public Long getId() {
@@ -145,12 +145,13 @@ public class Employee extends AbstractBusinessObjectImpl {
 		this.avatar = avatar;
 	}
 
-	public Long getTenantId() {
-		return tenantId;
+	public String getTenantCode() {
+		return tenantCode;
 	}
 
-	public void setTenantId(Long tenantId) {
-		this.tenantId = tenantId;
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
 	}
+
 
 }

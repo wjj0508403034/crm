@@ -1,5 +1,7 @@
 package com.huoyun.thirdparty.idp.impl;
 
+import org.apache.http.Header;
+import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,9 @@ import com.huoyun.thirdparty.idp.IdpHostConfiguration;
 public class IdpClientImpl implements IdpClient {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(IdpClientImpl.class);
+
+	private final static String HTTP_Header_X_VIA = "X-VIA";
+	private final static String HTTP_Header_X_SERVER_TOKEN = "X-SERVER-TOKEN";
 
 	private IdpHostConfiguration idpHostConfig;
 	private RestClientFactory restClientFactory;
@@ -31,7 +36,7 @@ public class IdpClientImpl implements IdpClient {
 		param.setOldPassword(oldPassword);
 		param.setNewPassword(newPassword);
 		RestResponse restResponse = this.restClientFactory.POST(idpHostConfig.getDomain(),
-				this.getRequestEndPoint("changePassword"), param);
+				this.getRequestEndPoint("changePassword"), param, this.getDefaultHeaders());
 		if (restResponse.getStatusCode() == 200) {
 			LOGGER.info("Change password successfully.");
 			return;
@@ -48,6 +53,13 @@ public class IdpClientImpl implements IdpClient {
 
 	private String getRequestEndPoint(String url) {
 		return this.idpHostConfig.getPrefix() + url;
+	}
+
+	private Header[] getDefaultHeaders() {
+		Header[] headers = new Header[2];
+		headers[0] = new BasicHeader(HTTP_Header_X_VIA, "CRM");
+		headers[0] = new BasicHeader(HTTP_Header_X_SERVER_TOKEN, this.idpHostConfig.getServiceToken());
+		return headers;
 	}
 
 }

@@ -78,6 +78,7 @@ public class UserPropertyValidValue extends LiteBusinessObject {
 		this.disable = disable;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

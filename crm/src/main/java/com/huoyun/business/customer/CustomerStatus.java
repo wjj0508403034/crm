@@ -58,6 +58,7 @@ public class CustomerStatus extends LiteBusinessObject {
 	}
 
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

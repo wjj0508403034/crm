@@ -1,5 +1,6 @@
 package com.huoyun.business.customer;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
@@ -23,6 +25,7 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
 
@@ -78,6 +81,8 @@ public class Customer extends AbstractBusinessObjectImpl {
 	private HouseType houseType;
 
 	@BoProperty
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime completionDate;
 
 	@ManyToOne
@@ -118,6 +123,7 @@ public class Customer extends AbstractBusinessObjectImpl {
 		return this.id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

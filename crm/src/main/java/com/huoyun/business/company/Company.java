@@ -59,6 +59,7 @@ public class Company extends LiteBusinessObject {
 		return this.id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

@@ -60,6 +60,7 @@ public class ValidationRule extends LiteBusinessObject {
 		this.expr = expr;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

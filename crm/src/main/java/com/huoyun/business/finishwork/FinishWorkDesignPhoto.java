@@ -63,6 +63,7 @@ public class FinishWorkDesignPhoto extends LiteBusinessObject {
 		this.photo = photo;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

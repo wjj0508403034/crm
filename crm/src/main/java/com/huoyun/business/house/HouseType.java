@@ -54,6 +54,7 @@ public class HouseType extends LiteBusinessObject {
 		this.name = name;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

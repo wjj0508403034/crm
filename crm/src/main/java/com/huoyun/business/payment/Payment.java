@@ -1,5 +1,6 @@
 package com.huoyun.business.payment;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
@@ -16,11 +18,13 @@ import org.joda.time.DateTime;
 
 import com.huoyun.business.contract.Contract;
 import com.huoyun.business.employee.Employee;
+import com.huoyun.core.UUIDGenerate;
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
 
@@ -42,16 +46,18 @@ public class Payment extends AbstractBusinessObjectImpl {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
-	
-	@BoProperty(readonly= true)
+
+	@BoProperty(readonly = true)
 	private String paymentNo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
-	@BoProperty(readonly= true)
+	@BoProperty(readonly = true, mandatory = true)
 	private Contract contract;
 
-	@BoProperty(type = PropertyType.Date)
+	@BoProperty(type = PropertyType.Date, mandatory = true)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime paymentDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -61,10 +67,10 @@ public class Payment extends AbstractBusinessObjectImpl {
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private PaymentTerm paymentTerm;
 
-	@BoProperty(type = PropertyType.Price)
+	@BoProperty(type = PropertyType.Price, mandatory = true)
 	private double amount;
 
 	@BoProperty(type = PropertyType.Text)
@@ -123,6 +129,7 @@ public class Payment extends AbstractBusinessObjectImpl {
 		this.memo = memo;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -134,10 +141,10 @@ public class Payment extends AbstractBusinessObjectImpl {
 	public void setPaymentNo(String paymentNo) {
 		this.paymentNo = paymentNo;
 	}
-	
+
 	@Override
 	protected void preCreate() {
-		
+		this.setPaymentNo(this.boFacade.getBean(UUIDGenerate.class).generate());
 	}
 
 }

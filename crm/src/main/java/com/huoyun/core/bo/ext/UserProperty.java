@@ -166,6 +166,7 @@ public class UserProperty extends LiteBusinessObject {
 		this.readonly = readonly;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

@@ -74,6 +74,7 @@ public class CustomerTraceRecord extends LiteBusinessObject {
 		this.customer = customer;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

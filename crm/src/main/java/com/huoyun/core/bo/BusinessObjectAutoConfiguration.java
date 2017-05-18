@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.huoyun.core.UUIDGenerate;
 import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.ext.impl.ExtensionServiceImpl;
 import com.huoyun.core.bo.impl.BusinessObjectFacadeImpl;
@@ -18,8 +19,7 @@ import com.huoyun.core.bo.validator.ValidatorFactory;
 import com.huoyun.core.bo.validator.impl.ValidatorFactoryImpl;
 import com.huoyun.core.jpa.JpaAutoConfiguration;
 
-@AutoConfigureAfter({ MetadataAutoConfiguration.class,
-		JpaAutoConfiguration.class })
+@AutoConfigureAfter({ MetadataAutoConfiguration.class, JpaAutoConfiguration.class })
 @Configuration
 public class BusinessObjectAutoConfiguration {
 
@@ -29,14 +29,13 @@ public class BusinessObjectAutoConfiguration {
 	}
 
 	@Bean
-	public BusinessObjectService businessObjectService(
-			BusinessObjectFacade boFacade, BusinessObjectMapper boMapper,CriteriaFactory criteriaFactory) {
-		return new BusinessObjectServiceImpl(boFacade, boMapper,criteriaFactory);
+	public BusinessObjectService businessObjectService(BusinessObjectFacade boFacade, BusinessObjectMapper boMapper,
+			CriteriaFactory criteriaFactory) {
+		return new BusinessObjectServiceImpl(boFacade, boMapper, criteriaFactory);
 	}
 
 	@Bean
-	public ExtensionService extensionService(BusinessObjectFacade boFacade,
-			MetadataChangedPublisher publisher) {
+	public ExtensionService extensionService(BusinessObjectFacade boFacade, MetadataChangedPublisher publisher) {
 		ExtensionService service = new ExtensionServiceImpl(boFacade);
 		service.setMetadataChangedPublisher(publisher);
 		return service;
@@ -55,5 +54,10 @@ public class BusinessObjectAutoConfiguration {
 	@Bean
 	public CriteriaFactory criteriaFactory() {
 		return new CriteriaFactoryImpl();
+	}
+
+	@Bean
+	public UUIDGenerate uuidGenerate() {
+		return new UUIDGenerate();
 	}
 }

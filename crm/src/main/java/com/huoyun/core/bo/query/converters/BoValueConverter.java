@@ -25,7 +25,7 @@ public class BoValueConverter extends AbstractValueConverter {
 			Constructor<BusinessObject> constructor = (Constructor<BusinessObject>) this.propMeta.getRuntimeType()
 					.getConstructor();
 			BusinessObject bo = constructor.newInstance();
-			bo.setPropertyValue("id", id);
+			bo.setId(id);
 			return bo;
 		} catch (Exception ex) {
 			throw new BusinessException(ErrorCode.Query_Expression_Parse_Failed);

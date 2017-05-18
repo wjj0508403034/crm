@@ -65,6 +65,7 @@ public class PaymentTerm extends LiteBusinessObject {
 		this.orderNo = orderNo;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

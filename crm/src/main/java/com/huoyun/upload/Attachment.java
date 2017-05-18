@@ -88,6 +88,7 @@ public class Attachment extends LiteBusinessObject {
 		this.relativePath = relativePath;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

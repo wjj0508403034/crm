@@ -68,6 +68,7 @@ public class Project extends AbstractBusinessObjectImpl {
 		this.customer = customer;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

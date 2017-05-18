@@ -113,6 +113,7 @@ public class Leads extends AbstractBusinessObjectImpl {
 		this.salesSource = salesSource;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

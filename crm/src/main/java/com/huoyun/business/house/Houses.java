@@ -1,11 +1,13 @@
 package com.huoyun.business.house;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
@@ -17,6 +19,7 @@ import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
 
@@ -44,6 +47,8 @@ public class Houses extends LiteBusinessObject {
 	private String name;
 
 	@BoProperty(type = PropertyType.Date)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime deliveryTime;
 	
 	@BoProperty
@@ -78,6 +83,7 @@ public class Houses extends LiteBusinessObject {
 		this.address = address;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

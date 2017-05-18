@@ -1,5 +1,6 @@
 package com.huoyun.business.contract;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
@@ -20,7 +22,9 @@ import com.huoyun.core.bo.AbstractBusinessObjectImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
 
@@ -43,25 +47,28 @@ public class Contract extends AbstractBusinessObjectImpl {
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
-	@BoProperty
+	@BusinessKey
+	@BoProperty(mandatory = true)
 	private String contractNo;
 
-	@BoProperty(type = PropertyType.Date)
+	@BoProperty(type = PropertyType.Date, mandatory = true)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime contractDate;
 
-	@BoProperty(type = PropertyType.Price)
+	@BoProperty(type = PropertyType.Price, mandatory = true)
 	private Double amount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private Customer customer;
 
 	@ManyToOne
 	@JoinColumn
 	@BoProperty
 	private Employee agent;
-	
+
 	@BoProperty(type = PropertyType.Text)
 	private String memo;
 
@@ -110,6 +117,7 @@ public class Contract extends AbstractBusinessObjectImpl {
 		this.agent = agent;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

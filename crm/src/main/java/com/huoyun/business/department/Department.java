@@ -113,6 +113,7 @@ public class Department extends LiteBusinessObject {
 		this.status = status;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

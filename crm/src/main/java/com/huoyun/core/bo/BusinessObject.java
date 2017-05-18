@@ -6,7 +6,9 @@ import com.huoyun.exception.BusinessException;
 
 public interface BusinessObject {
 
-	public Long getId();
+	Long getId();
+
+	void setId(Long id);
 
 	void init() throws BusinessException;
 

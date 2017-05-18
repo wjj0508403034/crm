@@ -87,6 +87,7 @@ public class UDEAllocInfo extends LiteBusinessObject {
 		this.txtColumns = txtColumns;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

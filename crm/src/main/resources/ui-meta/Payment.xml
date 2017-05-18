@@ -7,11 +7,12 @@
 	<sections>
 		<section label="uimeta.section.defaultLabel">
 			<properties>
-				<property ref="contractNo"></property>
+				<property ref="contract"></property>
 				<property ref="paymentNo"></property>
 				<property ref="paymentDate"></property>
 				<property ref="paymentTerm"></property>
 				<property ref="amount"></property>
+				<property ref="payee"></property>
 				<property ref="memo"></property>
 			</properties>
 		</section>

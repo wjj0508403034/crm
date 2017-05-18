@@ -122,6 +122,7 @@ public class FinishWork extends AbstractBusinessObjectImpl {
 		this.houses = houses;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

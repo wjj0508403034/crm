@@ -13,7 +13,7 @@ public class BusinessObjectUtils {
 	public static final String EXT_TABLE_NAME_SUFFIX = "_EXT";
     public final static String EXT_TABLE_ID = "ID";
     public final static String EXT_TABLE_PID = "PARENT_ID";
-    public final static String EXT_TABLE_TENANT_ID = "TENANT_ID";
+    public final static String EXT_TABLE_TENANT_CODE = "TENANT_CODE";
 
 	public static String getBoFullName(Class<?> clazz) {
 		String name = getBoName(clazz);

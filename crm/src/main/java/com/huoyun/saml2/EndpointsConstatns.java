@@ -8,10 +8,4 @@ public class EndpointsConstatns {
 	public static final String SSO_TENANT_CODE = "_SSO_TENANT_CODE_ATTR_";
 
 	public static final String HuoYun_USER_SESSION = "_HuoYun_USER_SESSION_";
-
-	public static final String OAUTH_TOKEN_ATTR = "_OAUTH_TOKEN_KEY_ATTR_";
-
-	public static final String LOGGER_USER_NAME = "$LOGGER_USER_NAME$";
-
-	public static final String LOGGER_TENANT_ID = "$LOGGER_TENANT_ID$";
 }

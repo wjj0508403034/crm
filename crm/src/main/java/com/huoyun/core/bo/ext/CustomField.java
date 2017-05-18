@@ -29,7 +29,7 @@ public enum CustomField {
 			return Long.class;
 		}
 	},
-	TENANT_ID(BusinessObjectUtils.EXT_TABLE_TENANT_ID, 1) {
+	TENANT_CODE(BusinessObjectUtils.EXT_TABLE_TENANT_CODE, 1) {
 		@Override
 		public Class<?> getFieldType() {
 			return Long.class;

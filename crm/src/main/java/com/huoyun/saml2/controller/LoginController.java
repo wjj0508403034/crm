@@ -83,7 +83,7 @@ public class LoginController {
 			return "redirect:" + saml2Configuration.getHomePage();
 		} catch (Exception ex) {
 			LOGGER.error("Login occur error", ex);
-			return "redirect: loginerror";
+			return "redirect:/saml2/sp/logout";
 		}
 	}
 

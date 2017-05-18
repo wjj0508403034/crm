@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -24,26 +25,24 @@ import com.huoyun.core.bo.ext.ExtensionService;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.validator.ValidatorFactory;
+import com.huoyun.core.multitenant.MultiTenantProperties;
 import com.huoyun.locale.LocaleService;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.session.Session;
 
 public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BusinessObjectFacadeImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BusinessObjectFacadeImpl.class);
 	private ApplicationContext context;
 	private MetadataRepository metadataRepository;
 	private EntityManager entityManager;
 	private LocaleService localeService;
 	private EntityManagerFactory emf;
 	private final ThreadLocal<EntityManager> threadLocal = new ThreadLocal<EntityManager>();
-	private final ThreadLocal<Session> sessionThreadLocal = new ThreadLocal<Session>();
 
 	public BusinessObjectFacadeImpl(ApplicationContext context) {
 		this.context = context;
-		this.metadataRepository = this.context
-				.getBean(MetadataRepository.class);
+		this.metadataRepository = this.context.getBean(MetadataRepository.class);
 		this.entityManager = this.context.getBean(EntityManager.class);
 		this.localeService = this.context.getBean(LocaleService.class);
 		this.emf = this.context.getBean(EntityManagerFactory.class);
@@ -53,8 +52,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	public <T extends BusinessObject> T newBo(Class<T> boType) {
 		T bo = null;
 		try {
-			bo = boType.getConstructor(BusinessObjectFacade.class).newInstance(
-					this);
+			bo = boType.getConstructor(BusinessObjectFacade.class).newInstance(this);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -72,8 +70,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	public BusinessObject newBo(String namespace, String name) {
 		BoMeta boMeta = this.metadataRepository.getBoMeta(namespace, name);
 		if (boMeta == null) {
-			throw new RuntimeException(String.format(
-					"Entity {0} {1} not found", namespace, name));
+			throw new RuntimeException(String.format("Entity {0} {1} not found", namespace, name));
 		}
 
 		return this.newBo(boMeta.getBoType());
@@ -85,12 +82,10 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	}
 
 	@Override
-	public <T extends BusinessObject> BoRepository<T> getBoRepository(
-			Class<T> boType) {
+	public <T extends BusinessObject> BoRepository<T> getBoRepository(Class<T> boType) {
 		BoMeta boMeta = this.metadataRepository.getBoMeta(boType);
 		if (boMeta == null) {
-			throw new RuntimeException(String.format("Entity {0} not found",
-					boType));
+			throw new RuntimeException(String.format("Entity {0} not found", boType));
 		}
 		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boType)) {
 			return new BoRepositoryImpl(boType, this, boMeta);
@@ -102,18 +97,14 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	}
 
 	@Override
-	public <T extends BusinessObject> BoRepository<T> getBoRepository(
-			String namespace, String name) {
+	public <T extends BusinessObject> BoRepository<T> getBoRepository(String namespace, String name) {
 		BoMeta boMeta = this.metadataRepository.getBoMeta(namespace, name);
 		if (boMeta == null) {
-			throw new RuntimeException(String.format(
-					"Entity {0} {1} not found", namespace, name));
+			throw new RuntimeException(String.format("Entity {0} {1} not found", namespace, name));
 		}
-		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boMeta
-				.getBoType())) {
+		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boMeta.getBoType())) {
 			return new BoRepositoryImpl(boMeta.getBoType(), this, boMeta);
-		} else if (LiteBusinessObject.class
-				.isAssignableFrom(boMeta.getBoType())) {
+		} else if (LiteBusinessObject.class.isAssignableFrom(boMeta.getBoType())) {
 			return new BoRepositoryImpl(boMeta.getBoType(), this, boMeta);
 		}
 		return null;
@@ -121,29 +112,24 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 
 	@Override
 	public EntityManager getEntityManager() {
-		return this.entityManager;
-	}
-
-	@Override
-	public EntityManager getCurrentEntityManager() {
+		if (StringUtils.isEmpty(this.getTenantCode())) {
+			return this.entityManager;
+		}
+		
 		EntityManager manager = threadLocal.get();
 		if (manager == null || !manager.isOpen()) {
 			try {
 				Map<String, Object> properties = new HashMap<String, Object>();
-				// emProperties.put(MultitenantProperties.MULTITENANT_CONTEXT_PROPERTY,
-				// this.tenantId);
+				properties.put(MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY, this.getTenantCode());
 				manager = emf.createEntityManager(properties);
 			} catch (Exception e) {
 				Throwable cause = e.getCause();
 				if (cause instanceof SQLInvalidAuthorizationSpecException) {
 					LOGGER.error(cause.getMessage());
-					Object jdbcUrl = emf.getProperties().get(
-							"javax.persistence.jdbc.url");
+					Object jdbcUrl = emf.getProperties().get("javax.persistence.jdbc.url");
 					LOGGER.error("javax.persistence.jdbc.url: {}", jdbcUrl);
-					Object databaseUser = emf.getProperties().get(
-							"javax.persistence.jdbc.user");
-					LOGGER.error("javax.persistence.jdbc.user: {}",
-							databaseUser);
+					Object databaseUser = emf.getProperties().get("javax.persistence.jdbc.user");
+					LOGGER.error("javax.persistence.jdbc.user: {}", databaseUser);
 				}
 				throw e;
 			}
@@ -181,8 +167,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 
 	@Override
 	public Employee getCurrentEmployee() {
-		Session session = (Session) this.getHttpSsession().getAttribute(
-				EndpointsConstatns.HuoYun_USER_SESSION);
+		Session session = (Session) this.getHttpSsession().getAttribute(EndpointsConstatns.HuoYun_USER_SESSION);
 
 		if (session != null) {
 			return session.getEmployee();
@@ -200,9 +185,12 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	}
 
 	private HttpSession getHttpSsession() {
-		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
-				.currentRequestAttributes();
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		return attr.getRequest().getSession(true);
+	}
+
+	private String getTenantCode() {
+		return (String) this.getHttpSsession().getAttribute(EndpointsConstatns.SSO_TENANT_CODE);
 	}
 
 }

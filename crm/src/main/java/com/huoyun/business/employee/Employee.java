@@ -7,7 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.MultitenantType;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import com.huoyun.business.department.Department;
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
@@ -18,11 +20,15 @@ import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
 import com.huoyun.core.bo.metadata.PropertyType;
+import com.huoyun.core.multitenant.MultiTenantConstants;
+import com.huoyun.core.multitenant.MultiTenantProperties;
 import com.huoyun.upload.Attachment;
 
 @BoEntity
 @Entity
 @Table
+@Multitenant(value = MultitenantType.SINGLE_TABLE)
+@TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
 public class Employee extends AbstractBusinessObjectImpl {
 
 	public Employee() {
@@ -68,9 +74,6 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@JoinColumn
 	@BoProperty(type = PropertyType.Image, searchable = false)
 	private Attachment avatar;
-
-	@Transient
-	private String tenantCode;
 
 	@Override
 	public Long getId() {
@@ -145,13 +148,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 		this.avatar = avatar;
 	}
 
-	public String getTenantCode() {
-		return tenantCode;
-	}
 
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
-	}
 
 
 }

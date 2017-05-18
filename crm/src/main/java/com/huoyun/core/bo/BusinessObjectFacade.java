@@ -29,7 +29,7 @@ public interface BusinessObjectFacade {
 
 	ExtensionService getExtensionService();
 
-	EntityManager getCurrentEntityManager();
+	//EntityManager getCurrentEntityManager();
 	
 	ValidatorFactory getValidatorFactory();
 	

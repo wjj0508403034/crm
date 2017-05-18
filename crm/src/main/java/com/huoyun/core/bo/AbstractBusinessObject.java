@@ -23,6 +23,7 @@ import com.huoyun.core.bo.metadata.PropertyMeta;
 import com.huoyun.core.bo.validator.Validator;
 import com.huoyun.core.bo.validator.ValidatorFactory;
 import com.huoyun.core.converters.JodaDateConverter;
+import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.exception.BusinessException;
 import com.huoyun.exception.LocatableBusinessException;
 
@@ -30,8 +31,7 @@ import com.huoyun.exception.LocatableBusinessException;
 @MappedSuperclass
 public abstract class AbstractBusinessObject implements BusinessObject {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AbstractBusinessObject.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBusinessObject.class);
 
 	protected static final String I18n_Label_Id = "common.bo.id";
 	protected static final String I18n_Label_Create_Time = "common.bo.createTime";
@@ -65,15 +65,16 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime updateTime;
 
+	@Column(name = MultiTenantConstants.CoulmnName, nullable = false, insertable = false, updatable = false)
+	private String tenantCode;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void setBoFacade(BusinessObjectFacade boFacade) {
 		if (null == this.boFacade) {
 			this.boFacade = boFacade;
-			this.boRepository = (BoRepository<BusinessObject>) this.boFacade
-					.getBoRepository(this.getClass());
-			this.boMeta = this.boFacade.getMetadataRepository().getBoMeta(
-					this.getClass());
+			this.boRepository = (BoRepository<BusinessObject>) this.boFacade.getBoRepository(this.getClass());
+			this.boMeta = this.boFacade.getMetadataRepository().getBoMeta(this.getClass());
 			this.validatorFactory = this.boFacade.getValidatorFactory();
 		}
 	}
@@ -102,6 +103,14 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 		this.updateTime = updateTime;
 	}
 
+	public String getTenantCode() {
+		return tenantCode;
+	}
+
+	public void setTenantCode(String tenantCode) {
+		this.tenantCode = tenantCode;
+	}
+
 	protected void preCreate() {
 
 	}
@@ -115,16 +124,14 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	}
 
 	protected void onValid() throws BusinessException {
-		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
-				this.getClass());
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(this.getClass());
 		if (boMeta == null) {
 			throw new BusinessException(BoErrorCode.Unkown_Bo_Entity);
 		}
 
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			Object propertyValue = this.getPropertyValue(propMeta.getName());
-			List<Validator> validators = this.validatorFactory.getValidators(
-					propMeta, propertyValue);
+			List<Validator> validators = this.validatorFactory.getValidators(propMeta, propertyValue);
 			if (validators != null && validators.size() > 0) {
 				for (Validator validator : validators) {
 					validator.validator();
@@ -176,53 +183,44 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	}
 
 	@Override
-	public void setPropertyValue(String propertyName, Object propertyValue)
-			throws BusinessException {
-		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
-				this.getClass(), propertyName);
+	public void setPropertyValue(String propertyName, Object propertyValue) throws BusinessException {
+		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(this.getClass(), propertyName);
 		if (prop == null) {
-			throw new LocatableBusinessException(
-					BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		Method setter = prop.getWriteMethod();
 		if (setter == null) {
-			throw new LocatableBusinessException(
-					BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			setter.invoke(this,
-					mapper.convertValue(propertyValue, prop.getPropertyType()));
+			setter.invoke(this, mapper.convertValue(propertyValue, prop.getPropertyType()));
 		} catch (Exception e) {
-			throw new LocatableBusinessException(
-					BoErrorCode.Bo_Property_Set_Value_Failed, propertyName);
+			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Set_Value_Failed, propertyName);
 		}
 	}
 
 	@Override
-	public Object getPropertyValue(String propertyName)
-			throws BusinessException {
-		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(
-				this.getClass(), propertyName);
+	public Object getPropertyValue(String propertyName) throws BusinessException {
+		PropertyDescriptor prop = BeanUtils.getPropertyDescriptor(this.getClass(), propertyName);
 		Method getter = prop.getReadMethod();
 		if (getter == null) {
-			throw new LocatableBusinessException(
-					BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 
 		try {
 			return getter.invoke(this);
 		} catch (Exception e) {
-			throw new LocatableBusinessException(
-					BoErrorCode.Bo_Property_Not_Exist, propertyName);
+			throw new LocatableBusinessException(BoErrorCode.Bo_Property_Not_Exist, propertyName);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends BusinessObject> List<T> getNodeList(String nodeName) throws BusinessException {
-		return (List<T>)this.getPropertyValue(nodeName);
+		return (List<T>) this.getPropertyValue(nodeName);
 	}
+
 }

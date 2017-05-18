@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.util.HttpSessionMutexListener;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.core.multitenant.TenantInterceptor;
 import com.huoyun.login.LoginProcessor;
 import com.huoyun.login.LoginRequiredFilter;
 import com.huoyun.saml2.configuration.SAML2SPConfigurationFactory;
@@ -59,6 +60,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		// registry.addInterceptor(new LoginRequiredInterceptor());
+		registry.addInterceptor(new TenantInterceptor());
 	}
 }

@@ -3,10 +3,12 @@ package com.huoyun.business.employee;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
@@ -39,7 +41,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
@@ -56,8 +58,10 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty(mandatory = true)
 	private String email;
 
-	@ValidValues(validValues = { @ValidValue(value = "general"), @ValidValue(value = "business_director"),
-			@ValidValue(value = "design_director"), @ValidValue(value = "department_manager") })
+	@ValidValues(validValues = { @ValidValue(value = "general"),
+			@ValidValue(value = "business_director"),
+			@ValidValue(value = "design_director"),
+			@ValidValue(value = "department_manager") })
 	@BoProperty
 	private String title;
 
@@ -66,7 +70,8 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private Department department;
 
-	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
+	@ValidValues(validValues = { @ValidValue(value = "enable"),
+			@ValidValue(value = "disable") })
 	@BoProperty
 	private String status;
 
@@ -147,8 +152,5 @@ public class Employee extends AbstractBusinessObjectImpl {
 	public void setAvatar(Attachment avatar) {
 		this.avatar = avatar;
 	}
-
-
-
 
 }

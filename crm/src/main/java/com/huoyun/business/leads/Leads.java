@@ -1,8 +1,8 @@
 package com.huoyun.business.leads;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,7 +37,7 @@ public class Leads extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 

@@ -6,20 +6,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.MultitenantType;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
+import com.huoyun.core.multitenant.MultiTenantConstants;
+import com.huoyun.core.multitenant.MultiTenantProperties;
 
 @BoEntity(allowCustomized = false)
 @Entity
-@Table(indexes = { @Index(name = "UNIQUDEALLOCINFO", columnList = "tableName", unique = true) })
+@Table(indexes = { @Index(name = "UNIQUDEALLOCINFO", columnList = "tableName,tenantCode", unique = true) })
+@Multitenant(value = MultitenantType.SINGLE_TABLE)
+@TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
 public class UDEAllocInfo extends LiteBusinessObject {
 
 	public UDEAllocInfo() {
@@ -31,9 +37,7 @@ public class UDEAllocInfo extends LiteBusinessObject {
 	}
 
 	@Id
-	//@SequenceGenerator(name = "UDEAllocInfo_SEQ", sequenceName = "UDE_ALLOCINFO_SEQ")
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UDEAllocInfo_SEQ")
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 

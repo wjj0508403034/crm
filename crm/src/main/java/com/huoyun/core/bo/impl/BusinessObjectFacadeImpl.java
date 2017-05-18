@@ -1,9 +1,5 @@
 package com.huoyun.core.bo.impl;
 
-import java.sql.SQLInvalidAuthorizationSpecException;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpSession;
@@ -26,6 +22,7 @@ import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.validator.ValidatorFactory;
 import com.huoyun.core.multitenant.MultiTenantProperties;
+import com.huoyun.core.multitenant.TenantContext;
 import com.huoyun.locale.LocaleService;
 import com.huoyun.saml2.EndpointsConstatns;
 import com.huoyun.session.Session;
@@ -37,15 +34,12 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 	private MetadataRepository metadataRepository;
 	private EntityManager entityManager;
 	private LocaleService localeService;
-	private EntityManagerFactory emf;
-	private final ThreadLocal<EntityManager> threadLocal = new ThreadLocal<EntityManager>();
 
 	public BusinessObjectFacadeImpl(ApplicationContext context) {
 		this.context = context;
 		this.metadataRepository = this.context.getBean(MetadataRepository.class);
 		this.entityManager = this.context.getBean(EntityManager.class);
 		this.localeService = this.context.getBean(LocaleService.class);
-		this.emf = this.context.getBean(EntityManagerFactory.class);
 	}
 
 	@Override
@@ -81,6 +75,7 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		return this.metadataRepository;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public <T extends BusinessObject> BoRepository<T> getBoRepository(Class<T> boType) {
 		BoMeta boMeta = this.metadataRepository.getBoMeta(boType);
@@ -89,13 +84,13 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		}
 		if (AbstractBusinessObjectImpl.class.isAssignableFrom(boType)) {
 			return new BoRepositoryImpl(boType, this, boMeta);
-			// this.repoCache.put(boType, repo);
 		} else if (LiteBusinessObject.class.isAssignableFrom(boType)) {
 			return new BoRepositoryImpl(boType, this, boMeta);
 		}
 		return null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public <T extends BusinessObject> BoRepository<T> getBoRepository(String namespace, String name) {
 		BoMeta boMeta = this.metadataRepository.getBoMeta(namespace, name);
@@ -112,32 +107,11 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 
 	@Override
 	public EntityManager getEntityManager() {
-		if (StringUtils.isEmpty(this.getTenantCode())) {
-			return this.entityManager;
+		if (!StringUtils.isEmpty(TenantContext.getCurrentTenantCode())) {
+			this.entityManager.setProperty(MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY, TenantContext.getCurrentTenantCode());
+			
 		}
-		
-		EntityManager manager = threadLocal.get();
-		if (manager == null || !manager.isOpen()) {
-			try {
-				Map<String, Object> properties = new HashMap<String, Object>();
-				properties.put(MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY, this.getTenantCode());
-				manager = emf.createEntityManager(properties);
-			} catch (Exception e) {
-				Throwable cause = e.getCause();
-				if (cause instanceof SQLInvalidAuthorizationSpecException) {
-					LOGGER.error(cause.getMessage());
-					Object jdbcUrl = emf.getProperties().get("javax.persistence.jdbc.url");
-					LOGGER.error("javax.persistence.jdbc.url: {}", jdbcUrl);
-					Object databaseUser = emf.getProperties().get("javax.persistence.jdbc.user");
-					LOGGER.error("javax.persistence.jdbc.user: {}", databaseUser);
-				}
-				throw e;
-			}
-
-			threadLocal.set(manager);
-
-		}
-		return manager;
+		return this.entityManager;
 	}
 
 	@Override
@@ -188,9 +162,4 @@ public class BusinessObjectFacadeImpl implements BusinessObjectFacade {
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		return attr.getRequest().getSession(true);
 	}
-
-	private String getTenantCode() {
-		return (String) this.getHttpSsession().getAttribute(EndpointsConstatns.SSO_TENANT_CODE);
-	}
-
 }

@@ -4,9 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.MultitenantType;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.AbstractBusinessObjectImpl;
@@ -15,10 +18,14 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BoPropertyRule;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.validator.RuleType;
+import com.huoyun.core.multitenant.MultiTenantConstants;
+import com.huoyun.core.multitenant.MultiTenantProperties;
 
 @BoEntity
 @Entity
 @Table
+@Multitenant(value = MultitenantType.SINGLE_TABLE)
+@TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
 public class Contact extends AbstractBusinessObjectImpl {
 
 	public Contact() {
@@ -29,9 +36,7 @@ public class Contact extends AbstractBusinessObjectImpl {
 	}
 
 	@Id
-	//@SequenceGenerator(name = "Contact_SEQ", sequenceName = "CONTACT_SEQ")
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Contact_SEQ")
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 

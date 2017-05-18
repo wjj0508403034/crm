@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -15,16 +16,24 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Index;
 
+import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.MultitenantType;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
+
 import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.bo.utils.BusinessObjectUtils;
+import com.huoyun.core.multitenant.MultiTenantConstants;
+import com.huoyun.core.multitenant.MultiTenantProperties;
 
 @BoEntity(allowCustomized = false)
 @Entity
-@Table(indexes = { @Index(name = "UNIQUSERPROPETY", columnList = "boNamespace,boName,name", unique = true) })
+@Table(indexes = { @Index(name = "UNIQUSERPROPETY", columnList = "boNamespace,boName,name,tenantCode", unique = true) })
+@Multitenant(value = MultitenantType.SINGLE_TABLE)
+@TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
 public class UserProperty extends LiteBusinessObject {
 
 	public UserProperty() {
@@ -36,7 +45,7 @@ public class UserProperty extends LiteBusinessObject {
 	}
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 

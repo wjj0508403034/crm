@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Payment">
+	<header>
+		<title ref="contractNo"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="contractNo"></property>
+				<property ref="paymentNo"></property>
+				<property ref="paymentDate"></property>
+				<property ref="paymentTerm"></property>
+				<property ref="amount"></property>
+				<property ref="memo"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,paymentNo,paymentDate,paymentTerm,amount,payee,memo" orderby="id">
+		<columns>
+			<column ref="paymentNo"></column>
+			<column ref="paymentDate"></column>
+			<column ref="paymentTerm"></column>
+			<column ref="amount"></column>
+			<column ref="payee"></column>
+			<column ref="memo"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="paymentNo"></property>
+		<property name="contract"></property>
+		<property name="paymentDate"></property>
+		<property name="payee"></property>
+		<property name="paymentTerm"></property>
+		<property name="amount"></property>
+		<property name="memo"></property>
+	</properties>
+</root>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="Contract">
+	<header>
+		<title ref="contractNo"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="contractNo"></property>
+				<property ref="customer"></property>
+				<property ref="contractDate"></property>
+				<property ref="amount"></property>
+				<property ref="agent"></property>
+				<property ref="memo"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,contractNo,contractDate,customer,amount,agent" orderby="id">
+		<columns>
+			<column ref="contractNo"></column>
+			<column ref="customer"></column>
+			<column ref="contractDate"></column>
+			<column ref="amount"></column>
+			<column ref="agent"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="contractNo"></property>
+		<property name="contractDate"></property>
+		<property name="amount"></property>
+		<property name="customer"></property>
+		<property name="agent"></property>
+		<property name="memo"></property>
+	</properties>
+</root>

@@ -18,7 +18,8 @@ public interface BusinessObjectService {
 
 	void delete(String namespace, String name, Long id) throws BusinessException;
 
-	Map<String, Object> updateBo(String namespace, String name, Long id, Map<String, Object> data) throws BusinessException;
+	Map<String, Object> updateBo(String namespace, String name, Long id, Map<String, Object> data)
+			throws BusinessException;
 
 	Page<Map<String, Object>> query(String namespace, String name, Pageable pageable, String query, String orderby)
 			throws BusinessException;
@@ -26,4 +27,7 @@ public interface BusinessObjectService {
 	Long count(String namespace, String name, String query) throws BusinessException;
 
 	void batchUpdate(String namespace, String name, List<Map<String, Object>> boList) throws BusinessException;
+
+	List<Map<String, Object>> queryAll(String namespace, String name, String query, String orderby)
+			throws BusinessException;
 }

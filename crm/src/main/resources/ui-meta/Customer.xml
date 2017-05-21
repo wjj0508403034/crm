@@ -9,8 +9,9 @@
 			<properties>
 				<property ref="name"></property>
 				<property ref="telephone"></property>
-				<property ref="status"></property>
+				<property ref="stage"></property>
 				<property ref="salesSource"></property>
+				<property ref="status"></property>
 				<property ref="salesman"></property>
 				<property ref="designer"></property>
 				<property ref="finishType"></property>

@@ -109,6 +109,27 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 
 		return page;
 	}
+	
+	@Override
+	public List<T> queryAll(BoSpecification<T> spec)
+			throws BusinessException {
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
+		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
+
+		Root<T> root = applySpecificationToCriteria(spec, criteriaQuery);
+		criteriaQuery.select(root);
+
+		TypedQuery<T> query = this.boFacade.getEntityManager().createQuery(
+				criteriaQuery);
+		List<T> list = query.getResultList();
+
+		for (T bo : list) {
+			bo.setBoFacade(this.boFacade);
+		}
+
+		return list;
+	}
 
 	@Override
 	public Long count(BoSpecification<T> spec) throws BusinessException {

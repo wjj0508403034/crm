@@ -45,6 +45,15 @@ public class BusinessObjectController {
 		return this.businessObjectService.query(namespace, name, pageable, query, orderby);
 	}
 
+	@RequestMapping(value = "/bo({namespace},{name})/queryAll", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> queryAll(@PathVariable(value = "namespace") String namespace,
+			@PathVariable(value = "name") String name, @RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "select", required = false) String select,
+			@RequestParam(value = "orderby", required = false) String orderby) throws BusinessException {
+		return this.businessObjectService.queryAll(namespace, name, query, orderby);
+	}
+
 	@RequestMapping(value = "/bo({namespace},{name})/count", method = RequestMethod.GET)
 	@ResponseBody
 	public Long count(@PathVariable(value = "namespace") String namespace, @PathVariable(value = "name") String name,

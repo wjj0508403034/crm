@@ -154,6 +154,21 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		return new PageImpl<Map<String, Object>>(resultList, pageable, pageData.getTotalElements());
 
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public List<Map<String, Object>> queryAll(String namespace, String name, String query,
+			String orderby) throws BusinessException {
+		BoMeta boMeta = this.getBoMeta(namespace, name);
+		BoSpecification spec = this.getBoSpec(boMeta, query, orderby);
+		List<BusinessObject> listData = this.boFacade.getBoRepository(namespace, name).queryAll(spec);
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for (BusinessObject bo : listData) {
+			resultList.add(this.boMapper.converterTo(bo, boMeta));
+		}
+
+		return resultList;
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override

@@ -41,10 +41,10 @@ public class Leads extends AbstractBusinessObjectImpl {
 	@BoProperty(label = I18n_Label_Id, searchable = false)
 	private Long id;
 
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private String name;
 
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private String telephone;
 
 	@BoProperty(type = PropertyType.Text, searchable = false)
@@ -52,7 +52,7 @@ public class Leads extends AbstractBusinessObjectImpl {
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private LeadsStatus status;
 
 	@ManyToOne

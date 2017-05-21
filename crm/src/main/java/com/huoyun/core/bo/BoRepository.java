@@ -31,4 +31,6 @@ public interface BoRepository<T extends BusinessObject> {
 	TypedQuery<Long> newCountQuery(String sql);
 	
 	TypedQuery<T> newQuery(String sql);
+
+	List<T> queryAll(BoSpecification<T> spec) throws BusinessException;
 }

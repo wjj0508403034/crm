@@ -9,11 +9,11 @@
 			<properties>
 				<property ref="departmentCode"></property>
 				<property ref="departmentName"></property>
-				<property ref="description"></property>
 				<property ref="category"></property>
 				<property ref="status"></property>
 				<property ref="createTime"></property>
 				<property ref="updateTime"></property>
+				<property ref="description"></property>
 			</properties>
 		</section>
 	</sections>

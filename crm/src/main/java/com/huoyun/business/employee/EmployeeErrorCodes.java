@@ -13,4 +13,10 @@ public class EmployeeErrorCodes {
 	public static final String Change_Password_Password_Not_Match = "60004";
 
 	public final static String Change_Password_Error = "60005";
+	
+	public final static String Create_User_Error = "60006";
+	
+	public final static String Delete_User_Error = "60007";
+	
+	public final static String Not_Allow_Delete_Self = "60008";
 }

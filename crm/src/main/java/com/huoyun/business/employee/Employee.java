@@ -24,6 +24,7 @@ import com.huoyun.core.bo.annotation.ValidValues;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
+import com.huoyun.exception.BusinessException;
 import com.huoyun.upload.Attachment;
 
 @BoEntity
@@ -55,7 +56,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty(mandatory = true)
 	private String phone;
 
-	@BoProperty(mandatory = true)
+	@BoProperty(mandatory = true, type = PropertyType.Email)
 	private String email;
 
 	@ValidValues(validValues = { @ValidValue(value = "general"),
@@ -152,6 +153,19 @@ public class Employee extends AbstractBusinessObjectImpl {
 
 	public void setAvatar(Attachment avatar) {
 		this.avatar = avatar;
+	}
+
+	@Override
+	protected void preCreate() throws BusinessException {
+		this.boFacade.getBean(EmployeeService.class).createIdpUser(this);
+	}
+
+	@Override
+	protected void preDelete() throws BusinessException {
+		if (this.boFacade.getCurrentEmployee().getId() == this.getId()) {
+			throw new BusinessException(EmployeeErrorCodes.Not_Allow_Delete_Self);
+		}
+		this.boFacade.getBean(EmployeeService.class).deleteIdpUser(this);
 	}
 
 }

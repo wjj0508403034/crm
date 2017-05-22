@@ -9,6 +9,7 @@
 			<properties>
 				<property ref="logo"></property>
 				<property ref="companyName"></property>
+				<property ref="address"></property>
 				<property ref="description"></property>
 			</properties>
 		</section>
@@ -27,5 +28,6 @@
 		<property name="logo"></property>
 		<property name="companyName"></property>
 		<property name="description"></property>
+		<property name="address"></property>
 	</properties>
 </root>

@@ -9,4 +9,8 @@ public interface EmployeeService {
 	Employee getEmployeeById(Long id);
 
 	void changePasswordParam(ChangePasswordParam changePasswordParam) throws BusinessException;
+
+	void createIdpUser(Employee employee) throws BusinessException;
+
+	void deleteIdpUser(Employee employee) throws BusinessException;
 }

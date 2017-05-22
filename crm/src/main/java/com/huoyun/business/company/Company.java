@@ -45,8 +45,12 @@ public class Company extends LiteBusinessObject {
 	@BusinessKey
 	@BoProperty(mandatory = true)
 	private String companyName;
-
+	
+	@BusinessKey
 	@BoProperty
+	private String address;
+
+	@BoProperty(type = PropertyType.Text)
 	private String description;
 
 	@ManyToOne

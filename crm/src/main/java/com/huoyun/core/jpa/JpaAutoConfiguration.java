@@ -26,6 +26,7 @@ public class JpaAutoConfiguration extends JpaBaseConfiguration{
 		map.put("eclipselink.cache.shared.default", "false");
 		map.put("eclipselink.jdbc.cache-statements", "true");
 		map.put("org.hibernate.flushMode", "COMMIT");
+		map.put("eclipselink.jdbc.allow-native-sql-queries", "true");
 		//create-or-extend-tables
 		//drop-and-create-tables
 		map.put("eclipselink.ddl-generation", "create-or-extend-tables");

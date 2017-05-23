@@ -6,4 +6,6 @@ public interface UIMetadataRepository {
 
 	UIBoMeta getUIMeta(String namespace, String name) throws BusinessException;
 
+	void updateTableColumns(TableColumnsParam tableColumnsParam) throws BusinessException;
+
 }

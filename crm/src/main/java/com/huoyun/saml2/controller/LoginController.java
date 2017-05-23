@@ -61,6 +61,10 @@ public class LoginController {
 			changeSessionId(req);
 
 			String tenantCode = this.getTenantCode(saml2Principal);
+			if (StringUtils.isEmpty(tenantCode)) {
+				LOGGER.error("Login occur error, because the tenant code is null");
+				return "redirect:/saml2/sp/logout";
+			}
 
 			LOGGER.info("SSO authorization succeed for user {}.", saml2Principal.getName());
 

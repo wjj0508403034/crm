@@ -66,7 +66,7 @@ public class Department extends LiteBusinessObject {
 	@ValidValues(validValues = { @ValidValue(value = "enable"),
 			@ValidValue(value = "disable") })
 	@BoProperty
-	private String status;
+	private String status = "enable";
 
 	@Override
 	public Long getId() {

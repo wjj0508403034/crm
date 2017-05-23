@@ -49,6 +49,7 @@ public class BusinessObjectServiceImpl implements BusinessObjectService {
 		this.getBoMeta(namespace, name);
 		BoMeta boMeta = this.getBoMeta(namespace, name);
 		BusinessObject bo = this.boFacade.newBo(namespace, name);
+		bo.init();
 		return this.boMapper.converterTo(bo, boMeta);
 	}
 

@@ -53,16 +53,14 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty(mandatory = true)
 	private String userName;
 
-	@BoProperty(mandatory = true)
+	@BoProperty(mandatory = true, type = PropertyType.Phone)
 	private String phone;
 
 	@BoProperty(mandatory = true, type = PropertyType.Email)
 	private String email;
 
-	@ValidValues(validValues = { @ValidValue(value = "general"),
-			@ValidValue(value = "business_director"),
-			@ValidValue(value = "design_director"),
-			@ValidValue(value = "department_manager") })
+	@ValidValues(validValues = { @ValidValue(value = "general"), @ValidValue(value = "business_director"),
+			@ValidValue(value = "design_director"), @ValidValue(value = "department_manager") })
 	@BoProperty
 	private String title;
 
@@ -71,8 +69,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private Department department;
 
-	@ValidValues(validValues = { @ValidValue(value = "enable"),
-			@ValidValue(value = "disable") })
+	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
 	@BoProperty
 	private String status;
 

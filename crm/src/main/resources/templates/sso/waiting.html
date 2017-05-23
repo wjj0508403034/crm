@@ -12,7 +12,7 @@
 	<form th:action="${destination}" method="post">
 		<input name="SAMLRequest" type="hidden" th:value="${SAMLRequest}"></input>
 		<input name="RelayState" type="hidden" th:value="${RelayState}"></input>
-		<button type="submit" class="btn">登录</button>
+		<button type="submit" class="btn" style="display:none;">登录</button>
 	</form>
 </body>
 </html>

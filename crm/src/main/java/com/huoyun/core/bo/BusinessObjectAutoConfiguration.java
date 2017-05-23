@@ -60,4 +60,9 @@ public class BusinessObjectAutoConfiguration {
 	public UUIDGenerate uuidGenerate() {
 		return new UUIDGenerate();
 	}
+	
+	@Bean
+	public BusinessObjectFacadeContext businessObjectFacadeContext(BusinessObjectFacade boFacade){
+		return new BusinessObjectFacadeContext(boFacade);
+	}
 }

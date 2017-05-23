@@ -37,11 +37,7 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 
 	@Override
 	public T load(Long id) {
-		T bo = this.boFacade.getEntityManager().find(this.boType, id);
-		if (bo != null) {
-			bo.setBoFacade(this.boFacade);
-		}
-		return bo;
+		return this.boFacade.getEntityManager().find(this.boType, id);
 	}
 
 	@Override
@@ -103,10 +99,6 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		Page<T> page = pageable == null ? new PageImpl<T>(query.getResultList())
 				: readPage(query, pageable, spec);
 
-		for (T bo : page.getContent()) {
-			bo.setBoFacade(this.boFacade);
-		}
-
 		return page;
 	}
 	
@@ -122,13 +114,7 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 
 		TypedQuery<T> query = this.boFacade.getEntityManager().createQuery(
 				criteriaQuery);
-		List<T> list = query.getResultList();
-
-		for (T bo : list) {
-			bo.setBoFacade(this.boFacade);
-		}
-
-		return list;
+		return query.getResultList();
 	}
 
 	@Override

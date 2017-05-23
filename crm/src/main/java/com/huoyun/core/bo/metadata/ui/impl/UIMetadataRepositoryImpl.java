@@ -84,7 +84,6 @@ public class UIMetadataRepositoryImpl implements UIMetadataRepository {
 			return;
 		}
 
-		listViewColumns.setBoFacade(boFacade);
 		listViewColumns.setColumns(tableColumnsParam.getColumns());
 		listViewColumns.update();
 	}

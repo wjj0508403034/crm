@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostLoad;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
@@ -145,11 +146,11 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 		}
 	}
 
-	protected void preUpdate() throws BusinessException{
+	protected void preUpdate() throws BusinessException {
 
 	}
 
-	protected void postUpdate() throws BusinessException{
+	protected void postUpdate() throws BusinessException {
 
 	}
 
@@ -157,7 +158,7 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 
 	}
 
-	protected void postDelete() throws BusinessException{
+	protected void postDelete() throws BusinessException {
 
 	}
 
@@ -247,6 +248,15 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 	public <T extends BusinessObject> List<T> getNodeList(String nodeName)
 			throws BusinessException {
 		return (List<T>) this.getPropertyValue(nodeName);
+	}
+
+	@PostLoad
+	public void initBoFacade() {
+		if (null == this.boFacade) {
+			BusinessObjectFacade facade = BusinessObjectFacadeContext
+					.getBoFacade();
+			setBoFacade(facade);
+		}
 	}
 
 }

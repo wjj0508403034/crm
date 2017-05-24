@@ -25,6 +25,7 @@ import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
+import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
@@ -56,7 +57,7 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty(searchable = false)
 	private String stage = "init";
 
-	@BoProperty
+	@BoProperty(type=PropertyType.Phone)
 	private String telephone;
 
 	@ManyToOne

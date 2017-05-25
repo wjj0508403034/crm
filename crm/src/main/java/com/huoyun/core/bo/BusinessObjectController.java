@@ -39,7 +39,7 @@ public class BusinessObjectController {
 			@RequestParam(value = "select", required = false) String select,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
-			@RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize)
+			@RequestParam(value = "pageSize", required = false, defaultValue = "20") int pageSize)
 			throws BusinessException {
 		Pageable pageable = new PageRequest(pageIndex, pageSize);
 		return this.businessObjectService.query(namespace, name, pageable, query, orderby);

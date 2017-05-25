@@ -92,4 +92,12 @@ public class Company extends LiteBusinessObject {
 		this.logo = logo;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }

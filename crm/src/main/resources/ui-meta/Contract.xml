@@ -10,13 +10,18 @@
 				<property ref="contractNo"></property>
 				<property ref="customer"></property>
 				<property ref="contractDate"></property>
+				<property ref="contractBeignDate"></property>
+				<property ref="contractEndDate"></property>
 				<property ref="amount"></property>
+				<property ref="payedAmount"></property>
+				<property ref="unpayAmount"></property>
 				<property ref="agent"></property>
 				<property ref="memo"></property>
 			</properties>
 		</section>
 	</sections>
-	<listview select="id,contractNo,contractDate,customer,amount,agent" orderby="id">
+	<listview select="id,contractNo,contractDate,customer,amount,agent"
+		orderby="id">
 		<columns>
 			<column ref="contractNo"></column>
 			<column ref="customer"></column>
@@ -35,6 +40,10 @@
 		<property name="amount"></property>
 		<property name="customer"></property>
 		<property name="agent"></property>
+		<property name="contractBeignDate"></property>
+		<property name="contractEndDate"></property>
+		<property name="payedAmount"></property>
+		<property name="unpayAmount"></property>
 		<property name="memo"></property>
 	</properties>
 </root>

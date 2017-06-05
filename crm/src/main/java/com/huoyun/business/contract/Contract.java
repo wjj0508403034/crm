@@ -1,5 +1,7 @@
 package com.huoyun.business.contract;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,8 +58,24 @@ public class Contract extends AbstractBusinessObjectImpl {
 	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime contractDate;
 
-	@BoProperty(type = PropertyType.Price, mandatory = true)
-	private Double amount;
+	@BoProperty(type = PropertyType.Date, mandatory = true)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
+	private DateTime contractBeignDate;
+
+	@BoProperty(type = PropertyType.Date, mandatory = true)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
+	private DateTime contractEndDate;
+
+	@BoProperty(type = PropertyType.Price, mandatory = true, searchable = false, readonly = true)
+	private BigDecimal payedAmount;
+
+	@BoProperty(type = PropertyType.Price, mandatory = true, searchable = false, readonly = true)
+	private BigDecimal unpayAmount;
+
+	@BoProperty(type = PropertyType.Price, mandatory = true, searchable = false)
+	private BigDecimal amount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
@@ -69,7 +87,7 @@ public class Contract extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private Employee agent;
 
-	@BoProperty(type = PropertyType.Text)
+	@BoProperty(type = PropertyType.Text, searchable = false)
 	private String memo;
 
 	@Override
@@ -93,11 +111,11 @@ public class Contract extends AbstractBusinessObjectImpl {
 		this.contractDate = contractDate;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -128,6 +146,49 @@ public class Contract extends AbstractBusinessObjectImpl {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+
+	public DateTime getContractBeignDate() {
+		return contractBeignDate;
+	}
+
+	public void setContractBeignDate(DateTime contractBeignDate) {
+		this.contractBeignDate = contractBeignDate;
+	}
+
+	public DateTime getContractEndDate() {
+		return contractEndDate;
+	}
+
+	public void setContractEndDate(DateTime contractEndDate) {
+		this.contractEndDate = contractEndDate;
+	}
+
+	public BigDecimal getPayedAmount() {
+		return payedAmount;
+	}
+
+	public void setPayedAmount(BigDecimal payedAmount) {
+		this.payedAmount = payedAmount;
+	}
+
+	public BigDecimal getUnpayAmount() {
+		return unpayAmount;
+	}
+
+	public void setUnpayAmount(BigDecimal unpayAmount) {
+		this.unpayAmount = unpayAmount;
+	}
+
+	@Override
+	protected void preCreate() {
+		this.setPayedAmount(BigDecimal.ZERO);
+		this.setUnpayAmount(this.getAmount());
+	}
+
+	@Override
+	protected void preUpdate() {
+		this.getBoFacade().getBean(ContractService.class).beforeAmountChanged(this);
 	}
 
 }

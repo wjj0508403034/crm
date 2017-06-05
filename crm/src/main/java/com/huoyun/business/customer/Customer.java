@@ -50,19 +50,19 @@ public class Customer extends AbstractBusinessObjectImpl {
 	private Long id;
 
 	@BusinessKey
-	@BoProperty
+	@BoProperty(mandatory = true)
 	private String name;
 
-	@ValidValues(validValues = { @ValidValue(value = "init"), @ValidValue(value = "processing") })
+	@ValidValues(validValues = { @ValidValue(value = "design"), @ValidValue(value = "construction") })
 	@BoProperty(searchable = false)
-	private String stage = "init";
+	private String stage;
 
-	@BoProperty(type=PropertyType.Phone)
+	@BoProperty(type = PropertyType.Phone)
 	private String telephone;
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty
+	@BoProperty(searchable = false)
 	private SalesSource salesSource;
 
 	@ManyToOne
@@ -73,18 +73,23 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty(searchable = false)
 	private String address;
 
-	@BoProperty
-	private String houseArea;
+	@BoProperty(searchable = false)
+	private Double houseArea;
 
 	@ManyToOne
 	@JoinColumn
 	@BoProperty(searchable = false)
 	private HouseType houseType;
 
-	@BoProperty
+	@BoProperty(type = PropertyType.Date, searchable = false)
 	@Convert(JodaDateConverter.Name)
 	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
 	private DateTime completionDate;
+
+	@BoProperty(type = PropertyType.Date, searchable = false)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
+	private DateTime measureDate;
 
 	@ManyToOne
 	@JoinColumn
@@ -98,12 +103,12 @@ public class Customer extends AbstractBusinessObjectImpl {
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty
+	@BoProperty(searchable = false)
 	private Employee cadDrawer;
 
 	@ManyToOne
 	@JoinColumn
-	@BoProperty
+	@BoProperty(searchable = false)
 	private Employee effectDrawer;
 
 	@ManyToOne
@@ -116,7 +121,32 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private CustomerStatus status;
 
+	@ManyToOne
+	@JoinColumn
 	@BoProperty
+	private ConstructionStatus constructionStatus;
+
+	@ManyToOne
+	@JoinColumn
+	@BoProperty(searchable = false)
+	private Employee projectManager;
+
+	@ManyToOne
+	@JoinColumn
+	@BoProperty(searchable = false)
+	private Employee constructionLeader;
+
+	@BoProperty(type = PropertyType.Date, searchable = false)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
+	private DateTime constructionStartDate;
+
+	@BoProperty(type = PropertyType.Date, searchable = false)
+	@Convert(JodaDateConverter.Name)
+	@Column(columnDefinition = JodaDateConverter.ColumnDefinition)
+	private DateTime constructionEndDate;
+
+	@BoProperty(searchable = false)
 	private Boolean deleted = false;
 
 	@Override
@@ -177,11 +207,11 @@ public class Customer extends AbstractBusinessObjectImpl {
 		this.telephone = telephone;
 	}
 
-	public String getHouseArea() {
+	public Double getHouseArea() {
 		return houseArea;
 	}
 
-	public void setHouseArea(String houseArea) {
+	public void setHouseArea(Double houseArea) {
 		this.houseArea = houseArea;
 	}
 
@@ -255,6 +285,54 @@ public class Customer extends AbstractBusinessObjectImpl {
 
 	public void setHouseType(HouseType houseType) {
 		this.houseType = houseType;
+	}
+
+	public DateTime getMeasureDate() {
+		return measureDate;
+	}
+
+	public void setMeasureDate(DateTime measureDate) {
+		this.measureDate = measureDate;
+	}
+
+	public ConstructionStatus getConstructionStatus() {
+		return constructionStatus;
+	}
+
+	public void setConstructionStatus(ConstructionStatus constructionStatus) {
+		this.constructionStatus = constructionStatus;
+	}
+
+	public Employee getProjectManager() {
+		return projectManager;
+	}
+
+	public void setProjectManager(Employee projectManager) {
+		this.projectManager = projectManager;
+	}
+
+	public Employee getConstructionLeader() {
+		return constructionLeader;
+	}
+
+	public void setConstructionLeader(Employee constructionLeader) {
+		this.constructionLeader = constructionLeader;
+	}
+
+	public DateTime getConstructionStartDate() {
+		return constructionStartDate;
+	}
+
+	public void setConstructionStartDate(DateTime constructionStartDate) {
+		this.constructionStartDate = constructionStartDate;
+	}
+
+	public DateTime getConstructionEndDate() {
+		return constructionEndDate;
+	}
+
+	public void setConstructionEndDate(DateTime constructionEndDate) {
+		this.constructionEndDate = constructionEndDate;
 	}
 
 }

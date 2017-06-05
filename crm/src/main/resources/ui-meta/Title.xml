@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root namespace="com.huoyun.sbo" name="LeadsStatus">
+<root namespace="com.huoyun.sbo" name="Title">
 	<header>
 		<title ref="name"></title>
 		<subtitle ref=""></subtitle>
@@ -8,7 +8,6 @@
 		<section label="uimeta.section.defaultLabel">
 			<properties>
 				<property ref="name"></property>
-				<property ref="background"></property>
 			</properties>
 		</section>
 	</sections>
@@ -16,7 +15,6 @@
 		enableSort="true" sortProperty="orderNo">
 		<columns>
 			<column ref="name"></column>
-			<column ref="background"></column>
 		</columns>
 	</listview>
 	<filters>
@@ -25,6 +23,5 @@
 	<properties>
 		<property name="id"></property>
 		<property name="name"></property>
-		<property name="background"></property>
 	</properties>
 </root>

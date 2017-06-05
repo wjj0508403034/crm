@@ -246,4 +246,13 @@ public abstract class AbstractBusinessObject implements BusinessObject {
 		}
 	}
 
+	protected BusinessObjectFacade getBoFacade() {
+		if (null == this.boFacade) {
+			BusinessObjectFacade facade = BusinessObjectFacadeContext.getBoFacade();
+			setBoFacade(facade);
+		}
+
+		return this.boFacade;
+	}
+
 }

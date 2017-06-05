@@ -53,16 +53,16 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty(mandatory = true)
 	private String userName;
 
-	@BoProperty(mandatory = true, type = PropertyType.Phone)
+	@BoProperty(mandatory = true, type = PropertyType.Phone, searchable = false)
 	private String phone;
 
-	@BoProperty(mandatory = true, type = PropertyType.Email)
+	@BoProperty(mandatory = true, type = PropertyType.Email, searchable = false)
 	private String email;
 
-	@ValidValues(validValues = { @ValidValue(value = "general"), @ValidValue(value = "business_director"),
-			@ValidValue(value = "design_director"), @ValidValue(value = "department_manager") })
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn
 	@BoProperty
-	private String title;
+	private Title title;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
@@ -70,8 +70,8 @@ public class Employee extends AbstractBusinessObjectImpl {
 	private Department department;
 
 	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
-	@BoProperty
-	private String status;
+	@BoProperty(searchable = false)
+	private String status = "enable";
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
@@ -120,11 +120,11 @@ public class Employee extends AbstractBusinessObjectImpl {
 		this.email = email;
 	}
 
-	public String getTitle() {
+	public Title getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(Title title) {
 		this.title = title;
 	}
 

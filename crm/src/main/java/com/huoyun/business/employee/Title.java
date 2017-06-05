@@ -1,4 +1,4 @@
-package com.huoyun.business.department;
+package com.huoyun.business.employee;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +15,6 @@ import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
-import com.huoyun.core.bo.annotation.ValidValue;
-import com.huoyun.core.bo.annotation.ValidValues;
-import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
 
@@ -26,13 +23,12 @@ import com.huoyun.core.multitenant.MultiTenantProperties;
 @Table
 @Multitenant(value = MultitenantType.SINGLE_TABLE)
 @TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
-public class Department extends LiteBusinessObject {
-
-	public Department() {
-
+public class Title extends LiteBusinessObject {
+	
+	public Title() {
 	}
 
-	public Department(BusinessObjectFacade boFacade) {
+	public Title(BusinessObjectFacade boFacade) {
 		super(boFacade);
 	}
 
@@ -43,42 +39,22 @@ public class Department extends LiteBusinessObject {
 
 	@BusinessKey
 	@BoProperty(mandatory = true)
-	private String departmentName;
+	private String name;
 
-	@BoProperty(type = PropertyType.Text, searchable = false)
-	private String description;
-
-	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
 	@BoProperty
-	private String status = "enable";
+	private Integer orderNo;
 
 	@Override
 	public Long getId() {
 		return this.id;
 	}
 
-	public String getDepartmentName() {
-		return departmentName;
+	public String getName() {
+		return name;
 	}
 
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -86,4 +62,11 @@ public class Department extends LiteBusinessObject {
 		this.id = id;
 	}
 
+	public Integer getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
 }

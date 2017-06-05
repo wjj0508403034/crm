@@ -27,6 +27,7 @@ import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.converters.JodaDateConverter;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
+import com.huoyun.exception.BusinessException;
 
 @BoEntity
 @Entity
@@ -145,6 +146,21 @@ public class Payment extends AbstractBusinessObjectImpl {
 	@Override
 	protected void preCreate() {
 		this.setPaymentNo(this.boFacade.getBean(UUIDGenerate.class).generate());
+	}
+
+	@Override
+	protected void postCreate() throws BusinessException {
+		this.boFacade.getBean(PaymentService.class).afterPayment(this);
+	}
+
+	@Override
+	protected void postUpdate() throws BusinessException {
+		this.boFacade.getBean(PaymentService.class).afterPayment(this);
+	}
+
+	@Override
+	protected void postDelete() throws BusinessException {
+		this.boFacade.getBean(PaymentService.class).afterPayment(this);
 	}
 
 }

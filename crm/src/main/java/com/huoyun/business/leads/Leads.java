@@ -65,7 +65,7 @@ public class Leads extends AbstractBusinessObjectImpl {
 	@BoProperty(searchable = false)
 	private Houses houses;
 
-	@BoProperty
+	@BoProperty(readonly = true, searchable = false)
 	private boolean transform;
 
 	@Override

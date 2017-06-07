@@ -12,6 +12,7 @@
 				<property ref="houses"></property>
 				<property ref="salesSource"></property>
 				<property ref="status"></property>
+				<property ref="transform"></property>
 				<property ref="description"></property>
 			</properties>
 		</section>
@@ -23,6 +24,7 @@
 			<column ref="houses"></column>
 			<column ref="salesSource"></column>
 			<column ref="status"></column>
+			<column ref="transform"></column>
 			<column ref="description"></column>
 		</columns>
 	</listview>
@@ -37,5 +39,6 @@
 		<property name="description"></property>
 		<property name="status"></property>
 		<property name="salesSource"></property>
+		<property name="transform"></property>
 	</properties>
 </root>

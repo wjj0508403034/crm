@@ -16,6 +16,7 @@ import com.huoyun.core.bo.ExtensibleBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
+import com.huoyun.core.bo.annotation.DisplayField;
 import com.huoyun.core.bo.metadata.BoMeta;
 import com.huoyun.core.bo.metadata.MetadataRepository;
 import com.huoyun.core.bo.metadata.PropertyMeta;
@@ -31,6 +32,7 @@ public class BoMetaImpl implements BoMeta {
 	private LocaleService localeService;
 	private String primaryKey;
 	private String businessKey;
+	private List<String> displayFields = new ArrayList<>();
 	private Class<BusinessObject> boType;
 	private Map<String, PropertyMeta> propMap = new HashMap<>();
 	private String extTableName;
@@ -121,6 +123,11 @@ public class BoMetaImpl implements BoMeta {
 				if (busKeyAnno != null) {
 					this.businessKey = propMeta.getName();
 				}
+
+				DisplayField displayField = field.getAnnotation(DisplayField.class);
+				if (displayField != null) {
+					this.displayFields.add(propMeta.getName());
+				}
 			}
 
 		}
@@ -183,6 +190,11 @@ public class BoMetaImpl implements BoMeta {
 			return this.primaryKey;
 		}
 		return businessKey;
+	}
+
+	@Override
+	public List<String> getDisplayFields() {
+		return this.displayFields;
 	}
 
 	@Override

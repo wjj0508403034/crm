@@ -111,4 +111,9 @@ public class ExtBoMetaImpl implements BoMeta {
 		return this.baseBoMeta.getSubNodeType(propertyName);
 	}
 
+	@Override
+	public List<String> getDisplayFields() {
+		return this.baseBoMeta.getDisplayFields();
+	}
+
 }

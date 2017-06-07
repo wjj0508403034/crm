@@ -1,5 +1,7 @@
 package com.huoyun.business.leads.impl;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.huoyun.business.customer.Customer;
 import com.huoyun.business.leads.Leads;
 import com.huoyun.business.leads.LeadsService;
@@ -15,18 +17,23 @@ public class LeadsServiceImpl implements LeadsService {
 		this.boFacade = boFacade;
 	}
 
+	@Transactional
 	@Override
 	public Customer generateToCustomer(Long leadsId) throws BusinessException {
 		Leads leads = this.boFacade.getBoRepository(Leads.class).load(leadsId);
 		if (leads == null) {
 			throw new BusinessException(BoErrorCode.Bo_Record_Not_Found);
 		}
-		
+
 		Customer customer = this.boFacade.newBo(Customer.class);
 		customer.setName(leads.getName());
 		customer.setSalesSource(leads.getSalesSource());
 		customer.setHouses(leads.getHouses());
 		customer.setTelephone(leads.getTelephone());
+		customer.create();
+
+		leads.setTransform(true);
+		leads.update();
 		return customer;
 	}
 

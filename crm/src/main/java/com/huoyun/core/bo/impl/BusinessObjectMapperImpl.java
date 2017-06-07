@@ -84,6 +84,10 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 			map.put(businessKey, bo.getPropertyValue(businessKey));
 		}
 
+		for (String displayField : boMeta.getDisplayFields()) {
+			map.put(displayField, bo.getPropertyValue(displayField));
+		}
+
 		return map;
 	}
 

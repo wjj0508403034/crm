@@ -34,4 +34,6 @@ public interface BoMeta {
 	Set<String> getSubNodePropNames();
 
 	Class<BusinessObject> getSubNodeType(String propertyName);
+
+	List<String> getDisplayFields();
 }

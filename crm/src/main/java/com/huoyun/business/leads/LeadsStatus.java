@@ -15,6 +15,7 @@ import com.huoyun.core.bo.LiteBusinessObject;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
+import com.huoyun.core.bo.annotation.DisplayField;
 import com.huoyun.core.bo.metadata.PropertyType;
 import com.huoyun.core.multitenant.MultiTenantConstants;
 import com.huoyun.core.multitenant.MultiTenantProperties;
@@ -45,6 +46,7 @@ public class LeadsStatus extends LiteBusinessObject {
 	@BoProperty
 	private int orderNo;
 
+	@DisplayField
 	@BoProperty(type = PropertyType.Color)
 	private String background;
 

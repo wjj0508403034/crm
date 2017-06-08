@@ -7,6 +7,7 @@ import javax.persistence.TypedQuery;
 import com.huoyun.business.contract.Contract;
 import com.huoyun.business.contract.ContractService;
 import com.huoyun.core.bo.BusinessObjectFacade;
+import com.huoyun.core.utils.BigDecimalUtils;
 
 public class ContractServiceImpl implements ContractService {
 
@@ -22,7 +23,7 @@ public class ContractServiceImpl implements ContractService {
 		TypedQuery<BigDecimal> query = this.boFacade.getEntityManager().createQuery(sql, BigDecimal.class);
 		query.setParameter("contract", contract);
 		BigDecimal payedAmount = query.getSingleResult();
-		BigDecimal unpayedAmount = contract.getAmount().subtract(payedAmount);
+		BigDecimal unpayedAmount = BigDecimalUtils.subtract(contract.getAmount(), payedAmount);
 		contract.setPayedAmount(payedAmount);
 		contract.setUnpayAmount(unpayedAmount);
 	}

@@ -64,14 +64,12 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	public TypedQuery<T> newQuery(String sql) {
 		return this.boFacade.getEntityManager().createQuery(sql, this.boType);
 	}
-	
-	
+
 	@Override
 	public TypedQuery<Long> newCountQuery(String sql) {
-		return this.boFacade.getEntityManager()
-				.createQuery(sql, Long.class);
+		return this.boFacade.getEntityManager().createQuery(sql, Long.class);
 	}
-	
+
 	@Override
 	public List<T> queryForList() {
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
@@ -101,10 +99,9 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 
 		return page;
 	}
-	
+
 	@Override
-	public List<T> queryAll(BoSpecification<T> spec)
-			throws BusinessException {
+	public List<T> queryAll(BoSpecification<T> spec) throws BusinessException {
 		CriteriaBuilder builder = this.boFacade.getEntityManager()
 				.getCriteriaBuilder();
 		CriteriaQuery<T> criteriaQuery = builder.createQuery(this.boType);
@@ -120,6 +117,12 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 	@Override
 	public Long count(BoSpecification<T> spec) throws BusinessException {
 		return executeCountQuery(getCountQuery(spec));
+	}
+
+	@Override
+	public Object sum(String propertyName, BoSpecification<T> spec) throws BusinessException {
+		TypedQuery<Object> query = this.getSumQuery(propertyName, spec);
+		return query.getSingleResult();
 	}
 
 	private <S> Root<T> applySpecificationToCriteria(BoSpecification<T> spec,
@@ -170,6 +173,19 @@ public abstract class AbstractBoRepository<T extends BusinessObject> implements
 		} else {
 			query.select(builder.count(root));
 		}
+
+		return this.boFacade.getEntityManager().createQuery(query);
+	}
+
+	private TypedQuery<Object> getSumQuery(String propertyName,
+			BoSpecification<T> spec) throws BusinessException {
+
+		CriteriaBuilder builder = this.boFacade.getEntityManager()
+				.getCriteriaBuilder();
+		CriteriaQuery<Object> query = builder.createQuery(Object.class);
+
+		Root<T> root = applySpecificationToCriteria(spec, query);
+		query.select(builder.sum(root.get(propertyName)));
 
 		return this.boFacade.getEntityManager().createQuery(query);
 	}

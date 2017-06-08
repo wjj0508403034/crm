@@ -1,5 +1,7 @@
 package com.huoyun.business.payment;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -72,7 +74,7 @@ public class Payment extends AbstractBusinessObjectImpl {
 	private PaymentTerm paymentTerm;
 
 	@BoProperty(type = PropertyType.Price, mandatory = true)
-	private double amount;
+	private BigDecimal amount;
 
 	@BoProperty(type = PropertyType.Text)
 	private String memo;
@@ -114,11 +116,11 @@ public class Payment extends AbstractBusinessObjectImpl {
 		this.paymentTerm = paymentTerm;
 	}
 
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

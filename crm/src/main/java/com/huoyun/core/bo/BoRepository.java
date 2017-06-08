@@ -24,13 +24,17 @@ public interface BoRepository<T extends BusinessObject> {
 
 	Long count(BoSpecification<T> spec) throws BusinessException;
 
-	Page<T> query(BoSpecification<T> spec, Pageable pageable) throws BusinessException;
-	
+	Page<T> query(BoSpecification<T> spec, Pageable pageable)
+			throws BusinessException;
+
 	List<T> queryForList();
-	
+
 	TypedQuery<Long> newCountQuery(String sql);
-	
+
 	TypedQuery<T> newQuery(String sql);
 
 	List<T> queryAll(BoSpecification<T> spec) throws BusinessException;
+
+	Object sum(String propertyName, BoSpecification<T> spec)
+			throws BusinessException;
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.huoyun.core.bo.params.SumRequestParams;
 import com.huoyun.exception.BusinessException;
 
 @Controller
@@ -59,6 +60,13 @@ public class BusinessObjectController {
 	public Long count(@PathVariable(value = "namespace") String namespace, @PathVariable(value = "name") String name,
 			@RequestParam(value = "query", required = false) String query) throws BusinessException {
 		return this.businessObjectService.count(namespace, name, query);
+	}
+	
+	@RequestMapping(value = "/bo({namespace},{name})/sum", method = RequestMethod.POST)
+	@ResponseBody
+	public Object sum(@PathVariable(value = "namespace") String namespace, @PathVariable(value = "name") String name,
+			@RequestBody SumRequestParams sumRequestParams) throws BusinessException {
+		return this.businessObjectService.sum(namespace, name, sumRequestParams);
 	}
 
 	@RequestMapping(value = "/bo({namespace},{name})/init", method = RequestMethod.GET)

@@ -19,9 +19,9 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public void beforeAmountChanged(Contract contract) {
 		String sql = "select sum(t.amount) from Payment t where t.contract = :contract";
-		TypedQuery<Double> query = this.boFacade.getEntityManager().createQuery(sql, Double.class);
+		TypedQuery<BigDecimal> query = this.boFacade.getEntityManager().createQuery(sql, BigDecimal.class);
 		query.setParameter("contract", contract);
-		BigDecimal payedAmount = new BigDecimal(query.getSingleResult());
+		BigDecimal payedAmount = query.getSingleResult();
 		BigDecimal unpayedAmount = contract.getAmount().subtract(payedAmount);
 		contract.setPayedAmount(payedAmount);
 		contract.setUnpayAmount(unpayedAmount);

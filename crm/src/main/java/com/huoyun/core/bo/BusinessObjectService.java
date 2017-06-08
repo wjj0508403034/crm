@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.huoyun.core.bo.params.SumRequestParams;
 import com.huoyun.exception.BusinessException;
 
 public interface BusinessObjectService {
@@ -30,4 +31,6 @@ public interface BusinessObjectService {
 
 	List<Map<String, Object>> queryAll(String namespace, String name, String query, String orderby)
 			throws BusinessException;
+
+	Object sum(String namespace, String name, SumRequestParams sumRequestParams) throws BusinessException;
 }

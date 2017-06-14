@@ -25,7 +25,8 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> converterTo(BusinessObject bo, BoMeta boMeta) throws BusinessException {
+	public Map<String, Object> converterTo(BusinessObject bo, BoMeta boMeta)
+			throws BusinessException {
 		if (bo == null) {
 			return null;
 		}
@@ -40,10 +41,13 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 			}
 
 			if (propMeta.getNodeMeta() != null) {
-				BoMeta nodeBoMeta = boMeta.getSubNodeBoMeta(this.boFacade.getMetadataRepository(), propertyName);
-				map.put(propertyName, this.getNodePropertyValue(nodeBoMeta, (List<BusinessObject>) propertyValue));
+				BoMeta nodeBoMeta = boMeta.getSubNodeBoMeta(
+						this.boFacade.getMetadataRepository(), propertyName);
+				map.put(propertyName, this.getNodePropertyValue(nodeBoMeta,
+						(List<BusinessObject>) propertyValue));
 			} else if (propMeta.getType() == PropertyType.BoLabel) {
-				map.put(propertyName, this.getSimpleValueOfBo(propMeta, (BusinessObject) propertyValue));
+				map.put(propertyName, this.getSimpleValueOfBo(propMeta,
+						(BusinessObject) propertyValue));
 			} else {
 				map.put(propertyName, bo.getPropertyValue(propertyName));
 			}
@@ -53,16 +57,17 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 		return map;
 	}
 
-	private List<Map<String, Object>> getNodePropertyValue(BoMeta nodeBoMeta, List<BusinessObject> boList)
-			throws BusinessException {
+	private List<Map<String, Object>> getNodePropertyValue(BoMeta nodeBoMeta,
+			List<BusinessObject> boList) throws BusinessException {
 		List<Map<String, Object>> mapList = new ArrayList<>();
 		for (BusinessObject bo : boList) {
-			mapList.add(this.getBoValue(nodeBoMeta, bo));
+			mapList.add(this.converterTo(bo, nodeBoMeta));
 		}
 		return mapList;
 	}
 
-	private Map<String, Object> getBoValue(BoMeta boMeta, BusinessObject bo) throws BusinessException {
+	private Map<String, Object> getBoValue(BoMeta boMeta, BusinessObject bo)
+			throws BusinessException {
 		Map<String, Object> map = new HashMap<>();
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
 			map.put(propMeta.getName(), bo.getPropertyValue(propMeta.getName()));
@@ -70,10 +75,12 @@ public class BusinessObjectMapperImpl implements BusinessObjectMapper {
 		return map;
 	}
 
-	private Map<String, Object> getSimpleValueOfBo(PropertyMeta propMeta, BusinessObject bo) throws BusinessException {
+	private Map<String, Object> getSimpleValueOfBo(PropertyMeta propMeta,
+			BusinessObject bo) throws BusinessException {
 		Map<String, Object> map = new HashMap<>();
 		bo.setBoFacade(boFacade);
-		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(propMeta.getRuntimeType());
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
+				propMeta.getRuntimeType());
 		String primaryKey = boMeta.getPrimaryKey();
 		if (!StringUtils.isEmpty(primaryKey)) {
 			map.put(primaryKey, bo.getPropertyValue(primaryKey));

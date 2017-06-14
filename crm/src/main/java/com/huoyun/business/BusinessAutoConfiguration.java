@@ -13,6 +13,8 @@ import com.huoyun.business.leads.LeadsService;
 import com.huoyun.business.leads.impl.LeadsServiceImpl;
 import com.huoyun.business.payment.PaymentService;
 import com.huoyun.business.payment.impl.PaymentServiceImpl;
+import com.huoyun.business.permission.PermissionService;
+import com.huoyun.business.permission.impl.PermissionServiceImpl;
 import com.huoyun.core.bo.BusinessObjectFacade;
 
 @Configuration
@@ -41,5 +43,10 @@ public class BusinessAutoConfiguration {
 	@Bean
 	public ContractService contractService(BusinessObjectFacade boFacade){
 		return new ContractServiceImpl(boFacade);
+	}
+	
+	@Bean
+	public PermissionService permissionService(BusinessObjectFacade boFacade){
+		return new PermissionServiceImpl(boFacade);
 	}
 }

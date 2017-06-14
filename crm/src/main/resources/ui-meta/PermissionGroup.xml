@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root namespace="com.huoyun.sbo" name="PermissionGroup">
+	<header>
+		<title ref="name"></title>
+		<subtitle ref=""></subtitle>
+	</header>
+	<sections>
+		<section label="uimeta.section.defaultLabel">
+			<properties>
+				<property ref="name"></property>
+			</properties>
+		</section>
+		<section label="uimeta.PermissionGroup.section.states">
+			<properties>
+				<property ref="states"></property>
+			</properties>
+		</section>
+		<section label="uimeta.PermissionGroup.section.members">
+			<properties>
+				<property ref="members"></property>
+			</properties>
+		</section>
+	</sections>
+	<listview select="id,name" orderby="id"
+		enableSort="true" sortProperty="id">
+		<columns>
+			<column ref="name"></column>
+			<column ref="states"></column>
+		</columns>
+	</listview>
+	<filters>
+		<filter label="ALL" expression=""></filter>
+	</filters>
+	<properties>
+		<property name="id"></property>
+		<property name="name"></property>
+		<property name="states"></property>
+		<property name="members"></property>
+	</properties>
+</root>

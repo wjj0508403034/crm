@@ -19,6 +19,7 @@ import com.huoyun.core.bo.BusinessObjectFacade;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.bo.annotation.BusinessKey;
+import com.huoyun.core.bo.annotation.DisplayField;
 import com.huoyun.core.bo.annotation.ValidValue;
 import com.huoyun.core.bo.annotation.ValidValues;
 import com.huoyun.core.bo.metadata.PropertyType;
@@ -73,6 +74,7 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty(searchable = false)
 	private String status = "enable";
 
+	@DisplayField
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
 	@BoProperty(type = PropertyType.Image, searchable = false)

@@ -15,11 +15,6 @@
 				<property ref="states"></property>
 			</properties>
 		</section>
-		<section label="uimeta.PermissionGroup.section.members">
-			<properties>
-				<property ref="members"></property>
-			</properties>
-		</section>
 	</sections>
 	<listview select="id,name" orderby="id"
 		enableSort="true" sortProperty="id">

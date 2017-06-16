@@ -14,8 +14,9 @@ import org.eclipse.persistence.annotations.MultitenantType;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import com.huoyun.business.employee.Employee;
+import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.core.bo.BusinessObjectFacade;
-import com.huoyun.core.bo.LiteBusinessObject;
+import com.huoyun.core.bo.LiteBusinessObjectNode;
 import com.huoyun.core.bo.annotation.BoEntity;
 import com.huoyun.core.bo.annotation.BoProperty;
 import com.huoyun.core.multitenant.MultiTenantConstants;
@@ -26,7 +27,7 @@ import com.huoyun.core.multitenant.MultiTenantProperties;
 @Table
 @Multitenant(value = MultitenantType.SINGLE_TABLE)
 @TenantDiscriminatorColumn(name = MultiTenantConstants.CoulmnName, contextProperty = MultiTenantProperties.MULTITENANT_CONTEXT_PROPERTY)
-public class PermissionGroupMember extends LiteBusinessObject{
+public class PermissionGroupMember extends LiteBusinessObjectNode{
 
 	public PermissionGroupMember() {
 	}
@@ -75,5 +76,10 @@ public class PermissionGroupMember extends LiteBusinessObject{
 
 	public void setGroup(PermissionGroup group) {
 		this.group = group;
+	}
+
+	@Override
+	public void setParent(BusinessObject bo) {
+		this.setGroup((PermissionGroup) bo);
 	}
 }

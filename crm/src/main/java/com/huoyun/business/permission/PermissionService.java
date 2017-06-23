@@ -8,4 +8,6 @@ public interface PermissionService {
 
 	void addGroupMember(Long groupId, List<Long> employeeIds) throws BusinessException;
 
+	List<PermissionGroup> getCurrentPermissionGroups() throws BusinessException;
+
 }

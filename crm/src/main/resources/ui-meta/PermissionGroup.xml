@@ -20,7 +20,6 @@
 		enableSort="true" sortProperty="id">
 		<columns>
 			<column ref="name"></column>
-			<column ref="states"></column>
 		</columns>
 	</listview>
 	<filters>

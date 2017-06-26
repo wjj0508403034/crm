@@ -8,7 +8,7 @@ import com.huoyun.core.bo.BusinessObject;
 import com.huoyun.exception.BusinessException;
 
 public enum PropertyType {
-	None, String, Text, Email, Phone, DateTime, Date, Number, BoLabel, Image, ImageList, Price, BoList, Color, Boolean;
+	None, String, Text, Email, Phone, DateTime, Date, Number, BoLabel, Image, ImageList, Price, BoList, Color, Boolean, Area;
 
 	public static PropertyType parse(Class<?> klass) {
 

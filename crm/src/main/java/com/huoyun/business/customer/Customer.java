@@ -73,7 +73,7 @@ public class Customer extends AbstractBusinessObjectImpl {
 	@BoProperty(searchable = false)
 	private String address;
 
-	@BoProperty(searchable = false)
+	@BoProperty(searchable = false, type = PropertyType.Area)
 	private Double houseArea;
 
 	@ManyToOne

@@ -42,7 +42,7 @@
 			</properties>
 		</section>
 	</sections>
-	<listview select="id,name,contact" orderby="id">
+	<listview select="id,name,contact" orderby="createTime desc">
 		<columns>
 			<column ref="name"></column>
 			<column ref="telephone"></column>

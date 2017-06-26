@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ViewController {
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String root() {
+		return "redirect:/index.html";
+	}
 
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public String waiting(Model model) {

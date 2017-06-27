@@ -14,15 +14,6 @@
 				<property ref="finishType"></property>
 			</properties>
 		</section>
-		<section label="uimeta.Customer.section.houseInfo">
-			<properties>
-				<property ref="houseArea"></property>
-				<property ref="houseType"></property>
-				<property ref="completionDate"></property>
-				<property ref="houses"></property>
-				<property ref="address"></property>
-			</properties>
-		</section>
 		<section label="uimeta.Customer.section.designInfo">
 			<properties>
 				<property ref="status"></property>
@@ -39,6 +30,15 @@
 				<property ref="constructionLeader"></property>
 				<property ref="constructionStartDate"></property>
 				<property ref="constructionEndDate"></property>
+			</properties>
+		</section>
+		<section label="uimeta.Customer.section.houseInfo">
+			<properties>
+				<property ref="houseArea"></property>
+				<property ref="houseType"></property>
+				<property ref="completionDate"></property>
+				<property ref="houses"></property>
+				<property ref="address"></property>
 			</properties>
 		</section>
 	</sections>

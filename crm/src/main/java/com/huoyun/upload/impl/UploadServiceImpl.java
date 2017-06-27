@@ -30,7 +30,8 @@ public class UploadServiceImpl implements UploadService {
 
 	private ResourceServerProperties resourceServer;
 
-	public UploadServiceImpl(FtpService ftpService, BusinessObjectFacade boFacade) {
+	public UploadServiceImpl(FtpService ftpService,
+			BusinessObjectFacade boFacade) {
 		this.ftpService = ftpService;
 		this.boFacade = boFacade;
 		this.resourceServer = boFacade.getBean(ResourceServerProperties.class);
@@ -38,9 +39,10 @@ public class UploadServiceImpl implements UploadService {
 
 	@Transactional
 	@Override
-	public void upload(String boNamespace, String boName, Long boId, String propertyName, MultipartFile file)
-			throws BusinessException {
-		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName).load(boId);
+	public void upload(String boNamespace, String boName, Long boId,
+			String propertyName, MultipartFile file) throws BusinessException {
+		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName)
+				.load(boId);
 		if (bo == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
@@ -53,24 +55,30 @@ public class UploadServiceImpl implements UploadService {
 
 	@Transactional
 	@Override
-	public void uploadFileForImageList(String boNamespace, String boName, Long boId, String propertyName,
-			MultipartFile file) throws BusinessException {
-		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName).load(boId);
+	public void uploadFileForImageList(String boNamespace, String boName,
+			Long boId, String propertyName, MultipartFile file)
+			throws BusinessException {
+		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName)
+				.load(boId);
 		if (bo == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
 
-		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(boNamespace, boName);
+		BoMeta boMeta = this.boFacade.getMetadataRepository().getBoMeta(
+				boNamespace, boName);
 		PropertyMeta propMeta = boMeta.getPropertyMeta(propertyName);
-		BoMeta nodeMeta = this.boFacade.getMetadataRepository().getBoMeta(propMeta.getNodeMeta().getNodeClass());
+		BoMeta nodeMeta = this.boFacade.getMetadataRepository().getBoMeta(
+				propMeta.getNodeMeta().getNodeClass());
 		String imagePropName = this.getImagePropertyNameOfSubNode(nodeMeta);
-		if (propMeta == null || propMeta.getNodeMeta() == null || imagePropName == null) {
+		if (propMeta == null || propMeta.getNodeMeta() == null
+				|| imagePropName == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
 
 		Attachment attachment = this.upload(file);
 
-		BusinessObject subNode = this.boFacade.newBo(propMeta.getNodeMeta().getNodeClass());
+		BusinessObject subNode = this.boFacade.newBo(propMeta.getNodeMeta()
+				.getNodeClass());
 		subNode.setPropertyValue(imagePropName, attachment);
 		subNode.setPropertyValue(propMeta.getNodeMeta().getMappedBy(), bo);
 		subNode.create();
@@ -78,13 +86,15 @@ public class UploadServiceImpl implements UploadService {
 
 	@Transactional
 	@Override
-	public void deleteFileForImageList(String boNamespace, String boName, Long boId, String propertyName)
-			throws BusinessException {
-		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName).load(boId);
+	public void deleteFileForImageList(String boNamespace, String boName,
+			Long boId, String propertyName) throws BusinessException {
+		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName)
+				.load(boId);
 		if (bo == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
-		BoMeta nodeMeta = this.boFacade.getMetadataRepository().getBoMeta(boNamespace, boName);
+		BoMeta nodeMeta = this.boFacade.getMetadataRepository().getBoMeta(
+				boNamespace, boName);
 		String imagePropName = this.getImagePropertyNameOfSubNode(nodeMeta);
 		if (nodeMeta == null || imagePropName == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
@@ -99,14 +109,26 @@ public class UploadServiceImpl implements UploadService {
 	}
 
 	@Override
-	public String getFilePath(String boNamespace, String boName, Long boId, String propertyName)
-			throws BusinessException {
-		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName).load(boId);
+	public String getFilePath(String boNamespace, String boName, Long boId,
+			String propertyName) throws BusinessException {
+		BusinessObject bo = this.boFacade.getBoRepository(boNamespace, boName)
+				.load(boId);
 		if (bo == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
 
 		Attachment attachment = (Attachment) bo.getPropertyValue(propertyName);
+		if (attachment == null) {
+			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
+		}
+
+		return this.resourceServer.getRoot() + attachment.getRelativePath();
+	}
+
+	@Override
+	public String getResourceUrl(Long boId) throws BusinessException {
+		Attachment attachment = this.boFacade.getBoRepository(Attachment.class)
+				.load(boId);
 		if (attachment == null) {
 			throw new BusinessException(UploadErrorCode.NotFoundBusinessObject);
 		}
@@ -134,7 +156,8 @@ public class UploadServiceImpl implements UploadService {
 
 	private String getImagePropertyNameOfSubNode(BoMeta boMeta) {
 		for (PropertyMeta propMeta : boMeta.getProperties()) {
-			if (propMeta.getType() == PropertyType.Image && propMeta.getRuntimeType() == Attachment.class) {
+			if (propMeta.getType() == PropertyType.Image
+					&& propMeta.getRuntimeType() == Attachment.class) {
 				return propMeta.getName();
 			}
 		}

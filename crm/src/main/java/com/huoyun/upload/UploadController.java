@@ -50,4 +50,10 @@ public class UploadController {
 		String url = this.uploadService.getFilePath(boNamespace, boName, boId, propertyName);
 		return "redirect:" + url;
 	}
+	
+	@RequestMapping(value = "/resource/{boId}", method = RequestMethod.GET)
+	public String getResourceUrl(@PathVariable("boId") Long boId) throws BusinessException{
+		String url = this.uploadService.getResourceUrl(boId);
+		return "redirect:" + url;
+	}
 }

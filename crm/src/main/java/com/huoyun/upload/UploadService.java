@@ -16,4 +16,6 @@ public interface UploadService {
 
 	void deleteFileForImageList(String boNamespace, String boName, Long boId, String propertyName)
 			throws BusinessException;
+
+	String getResourceUrl(Long boId) throws BusinessException;
 }

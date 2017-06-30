@@ -17,6 +17,7 @@ import com.huoyun.thirdparty.idp.IdpClient;
 import com.huoyun.thirdparty.idp.impl.CreateUserParam;
 import com.huoyun.thirdparty.idp.impl.CreateUserResponse;
 import com.huoyun.thirdparty.idp.impl.DeleteUserParam;
+import com.huoyun.thirdparty.idp.impl.UpdateUserParam;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -87,6 +88,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		CreateUserResponse user = this.boFacade.getBean(IdpClient.class)
 				.createUser(param);
 		employee.setUserId(user.getId());
+	}
+
+	@Override
+	public void updateIdpUser(Employee employee) throws BusinessException {
+		UpdateUserParam param = new UpdateUserParam();
+		param.setUserId(employee.getUserId());
+		param.setLocked(StringUtils.equalsIgnoreCase(employee.getStatus(),
+				"disable"));
+		this.boFacade.getBean(IdpClient.class).updateUser(param);
 	}
 
 	@Override

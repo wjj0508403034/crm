@@ -60,6 +60,12 @@ public class RestClientFactory {
 		return this.performRequest(HttpMethodConstants.POST, domain, url,
 				entity, headers);
 	}
+	
+	public RestResponse patch(String domain, String url, Object entity,
+			Header... headers) throws BusinessException {
+		return this.performRequest(HttpMethodConstants.PATCH, domain, url,
+				entity, headers);
+	}
 
 	public RestResponse delete(String domain, String url, Object entity,
 			Header... headers) throws BusinessException {

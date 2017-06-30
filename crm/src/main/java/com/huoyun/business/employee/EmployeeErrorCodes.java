@@ -16,7 +16,10 @@ public class EmployeeErrorCodes {
 	
 	public final static String Create_User_Error = "60006";
 	
+	
 	public final static String Delete_User_Error = "60007";
 	
 	public final static String Not_Allow_Delete_Self = "60008";
+	
+	public final static String Update_User_Error = "60009";
 }

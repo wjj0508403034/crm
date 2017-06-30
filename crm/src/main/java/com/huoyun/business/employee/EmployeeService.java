@@ -13,4 +13,6 @@ public interface EmployeeService {
 	void createIdpUser(Employee employee) throws BusinessException;
 
 	void deleteIdpUser(Employee employee) throws BusinessException;
+
+	void updateIdpUser(Employee employee) throws BusinessException;
 }

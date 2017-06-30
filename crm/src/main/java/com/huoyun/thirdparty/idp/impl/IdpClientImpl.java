@@ -79,6 +79,27 @@ public class IdpClientImpl implements IdpClient {
 	}
 
 	@Override
+	public CreateUserResponse updateUser(UpdateUserParam param)
+			throws BusinessException {
+		RestResponse restResponse = this.restClientFactory.patch(
+				idpHostConfig.getDomain(), this.getRequestEndPoint("users"),
+				param, this.getDefaultHeaders());
+		if (restResponse.getStatusCode() == 200) {
+			LOGGER.info("Update user successfully.");
+			return restResponse.toEntity(CreateUserResponse.class);
+		}
+
+		LOGGER.info("Update user failed.");
+		if (restResponse.getStatusCode() == 400) {
+			IdpErrorResponse idpError = restResponse
+					.toEntity(IdpErrorResponse.class);
+			throw idpError.idpException();
+		}
+
+		throw new BusinessException(EmployeeErrorCodes.Update_User_Error);
+	}
+
+	@Override
 	public void deleteUser(DeleteUserParam deleteUserParam)
 			throws BusinessException {
 		RestResponse restResponse = this.restClientFactory.delete(

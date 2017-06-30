@@ -9,8 +9,6 @@
 			<properties>
 				<property ref="departmentName"></property>
 				<property ref="status"></property>
-				<property ref="createTime"></property>
-				<property ref="updateTime"></property>
 				<property ref="description"></property>
 			</properties>
 		</section>
@@ -20,8 +18,6 @@
 		orderby="id">
 		<columns>
 			<column ref="departmentName"></column>
-			<column ref="description"></column>
-			<column ref="status"></column>
 		</columns>
 	</listview>
 	<filters>
@@ -32,7 +28,5 @@
 		<property name="departmentName"></property>
 		<property name="description"></property>
 		<property name="status"></property>
-		<property name="createTime"></property>
-		<property name="updateTime"></property>
 	</properties>
 </root>

@@ -70,7 +70,8 @@ public class Employee extends AbstractBusinessObjectImpl {
 	@BoProperty
 	private Department department;
 
-	@ValidValues(validValues = { @ValidValue(value = "enable"), @ValidValue(value = "disable") })
+	@ValidValues(validValues = { @ValidValue(value = "enable"),
+			@ValidValue(value = "disable") })
 	@BoProperty(searchable = false)
 	private String status = "enable";
 
@@ -160,9 +161,15 @@ public class Employee extends AbstractBusinessObjectImpl {
 	}
 
 	@Override
+	protected void postUpdate() throws BusinessException {
+		this.boFacade.getBean(EmployeeService.class).updateIdpUser(this);
+	}
+
+	@Override
 	protected void preDelete() throws BusinessException {
 		if (this.boFacade.getCurrentEmployee().getId() == this.getId()) {
-			throw new BusinessException(EmployeeErrorCodes.Not_Allow_Delete_Self);
+			throw new BusinessException(
+					EmployeeErrorCodes.Not_Allow_Delete_Self);
 		}
 		this.boFacade.getBean(EmployeeService.class).deleteIdpUser(this);
 	}

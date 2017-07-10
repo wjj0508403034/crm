@@ -95,12 +95,13 @@ public class FtpServiceImpl implements FtpService {
 	}
 
 	private void storeFile(FTPClient ftpClient, MultipartFile sourceFile, String targetFile) throws BusinessException {
+		boolean success = false;
 		try {
 			ftpClient.setBufferSize(BufferSize);
 			this.printFtpReply(ftpClient);
 			ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
 			this.printFtpReply(ftpClient);
-			ftpClient.storeFile(targetFile, sourceFile.getInputStream());
+			success = ftpClient.storeFile(targetFile, sourceFile.getInputStream());
 			this.printFtpReply(ftpClient);
 			sourceFile.getInputStream().close();
 		} catch (IOException ex) {
@@ -108,6 +109,13 @@ public class FtpServiceImpl implements FtpService {
 			LOGGER.error("Upload file to ftp server failed", ex);
 			throw new BusinessException(FtpErrorCode.FtpUploadFailed);
 		}
+		
+		if(!success){
+			LOGGER.error("Upload file to ftp server failed");
+			this.logout(ftpClient);
+			throw new BusinessException(FtpErrorCode.FtpUploadFailed);
+		}
+		
 	}
 
 	private void logout(FTPClient ftpClient) throws BusinessException {

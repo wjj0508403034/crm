@@ -112,20 +112,21 @@ public class LoginRequiredFilter implements Filter, SAML2SPConfigurationFactoryA
 	}
 
 	private String getRealyState(HttpServletRequest httpRequest) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());
-		if ((httpRequest.getScheme().equals("https") && httpRequest.getServerPort() != 443)
-				|| (httpRequest.getScheme().equals("http") && httpRequest.getServerPort() != 80)) {
-			sb.append(":").append(httpRequest.getServerPort());
-		}
-		sb.append(httpRequest.getContextPath()).append(httpRequest.getServletPath());
-
-		if (httpRequest.getMethod().equalsIgnoreCase("POST")) {
-			return sb.toString();
-		}
-		if (httpRequest.getQueryString() != null)
-			sb.append("?").append(httpRequest.getQueryString());
-		return sb.toString();
+		return "http://crm.fccfc.com/";
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());
+//		if ((httpRequest.getScheme().equals("https") && httpRequest.getServerPort() != 443)
+//				|| (httpRequest.getScheme().equals("http") && httpRequest.getServerPort() != 80)) {
+//			sb.append(":").append(httpRequest.getServerPort());
+//		}
+//		sb.append(httpRequest.getContextPath()).append(httpRequest.getServletPath());
+//
+//		if (httpRequest.getMethod().equalsIgnoreCase("POST")) {
+//			return sb.toString();
+//		}
+//		if (httpRequest.getQueryString() != null)
+//			sb.append("?").append(httpRequest.getQueryString());
+//		return sb.toString();
 	}
 
 }

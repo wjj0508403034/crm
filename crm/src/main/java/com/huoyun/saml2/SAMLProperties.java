@@ -20,6 +20,8 @@ public class SAMLProperties {
 	private String slo;
 
 	private String spSuccessUrl;
+	
+	private String spDomain;
 
 	public String getPublicKey() {
 		return publicKey;
@@ -75,5 +77,13 @@ public class SAMLProperties {
 
 	public void setSpSuccessUrl(String spSuccessUrl) {
 		this.spSuccessUrl = spSuccessUrl;
+	}
+
+	public String getSpDomain() {
+		return spDomain;
+	}
+
+	public void setSpDomain(String spDomain) {
+		this.spDomain = spDomain;
 	}
 }

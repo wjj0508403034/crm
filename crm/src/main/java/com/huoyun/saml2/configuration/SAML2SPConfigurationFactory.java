@@ -14,6 +14,7 @@ public class SAML2SPConfigurationFactory {
 	private volatile SAML2Configuration saml2Configuration = new SAML2Configuration();
 	private volatile long lastCachedTimepstamp = 0;
 	private volatile long cachedTimeInmilliseconds = 600000;
+	private SAMLProperties samlProperties;
 
 	public SAML2SPConfigurationFactory(SAMLProperties samlProperties) throws SAML2ConfigurationException {
 		this.configurationLoader = new SAML2SPConfigurationLoader(samlProperties);
@@ -52,12 +53,15 @@ public class SAML2SPConfigurationFactory {
 
 	public String getAcsUrl(HttpServletRequest httpRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());
-		if ((httpRequest.getScheme().equals("https") && httpRequest.getServerPort() != 443)
-				|| (httpRequest.getScheme().equals("http") && httpRequest.getServerPort() != 80)) {
-			sb.append(":").append(httpRequest.getServerPort());
-		}
-		sb.append(httpRequest.getContextPath()).append(saml2Configuration.localACSEndpoint);
+		sb.append("http://crm.fccfc.com").append(saml2Configuration.localACSEndpoint);
 		return sb.toString();
+//		StringBuilder sb = new StringBuilder();
+//		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());
+//		if ((httpRequest.getScheme().equals("https") && httpRequest.getServerPort() != 443)
+//				|| (httpRequest.getScheme().equals("http") && httpRequest.getServerPort() != 80)) {
+//			sb.append(":").append(httpRequest.getServerPort());
+//		}
+//		sb.append(httpRequest.getContextPath()).append(saml2Configuration.localACSEndpoint);
+//		return sb.toString();
 	}
 }

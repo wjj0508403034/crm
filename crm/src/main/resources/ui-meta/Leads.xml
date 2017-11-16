@@ -17,7 +17,7 @@
 			</properties>
 		</section>
 	</sections>
-	<listview select="id,name" orderby="id" sortProperty="id">
+	<listview select="id,name" orderby="createTime desc">
 		<columns>
 			<column ref="name"></column>
 			<column ref="telephone"></column>

@@ -112,7 +112,7 @@ public class LoginRequiredFilter implements Filter, SAML2SPConfigurationFactoryA
 	}
 
 	private String getRealyState(HttpServletRequest httpRequest) {
-		return "http://crm.fccfc.com/";
+		return "http://localhost:8080/";
 //		StringBuilder sb = new StringBuilder();
 //		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());
 //		if ((httpRequest.getScheme().equals("https") && httpRequest.getServerPort() != 443)

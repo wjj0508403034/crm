@@ -53,7 +53,7 @@ public class SAML2SPConfigurationFactory {
 
 	public String getAcsUrl(HttpServletRequest httpRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("http://crm.fccfc.com").append(saml2Configuration.localACSEndpoint);
+		sb.append("http://localhost:8080").append(saml2Configuration.localACSEndpoint);
 		return sb.toString();
 //		StringBuilder sb = new StringBuilder();
 //		sb.append(httpRequest.getScheme()).append("://").append(httpRequest.getServerName());

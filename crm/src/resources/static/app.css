@@ -1,0 +1,38 @@
+.huoyun .content-wrapper,
+.right-side {
+  background: white;
+}
+
+.huoyun .content-wrapper .content-wrapper-container {
+  padding: 20px;
+}
+
+.huoyun .static-shell .flash-container {
+  position: fixed;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+}
+
+.huoyun .static-shell .flash-container .widget-flash {
+  width: 600px;
+  margin: 0 auto;
+}
+
+
+/**覆盖AdminLTE.min.css中样式**/
+
+@media (min-width: 768px) {
+  .huoyun.sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>a>span {
+    margin-left: -3px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .huoyun.sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>a>.pull-right-container {
+    top: -19px !important;
+  }
+}
+.sidebar-menu > li{
+  cursor: pointer;
+}
